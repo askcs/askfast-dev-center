@@ -9,9 +9,17 @@ define(
         '$scope', '$rootScope', 'AskFast', 'Session', 'Storage', 'Store',
         function ($scope, $rootScope, AskFast, Session, Storage, Store)
         {
-          // console.log('==>', Store);
+          var Store = Store('local');
 
-          // Store.save({name:'brian'});
+          Store.save({
+            info: {
+              name: 'Cengiz Ulusoy',
+              tel: '0620143143',
+              email: 'culusoy@ask-cs.com'
+            }
+          });
+
+          console.log('==>', Store.get('info'));
 
           $scope.login = {
             email: '',
