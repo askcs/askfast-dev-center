@@ -13,14 +13,18 @@ require.config (
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
       //signet:   '../vendors/signet/signet.min',
-      bxslider: '../vendors/bxslider-4/jquery.bxslider.min'
+      bxslider: '../vendors/bxslider-4/jquery.bxslider.min',
+      lawnchair: '../vendors/lawnchair/src/Lawnchair',
+      dom: '../vendors/lawnchair/src/adapters/dom'
     },
     shim: {
       angular:            { deps: ['jquery'], exports:  'angular' },
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
-      bxslider:           { deps: ['jquery'], exports:  'bxslider' }
+      bxslider:           { deps: ['jquery'], exports:  'bxslider' },
+      lawnchair:          { exports: 'lawnchair' },
+      dom:                { deps: ['lawnchair'], exports: 'dom' }
     }
   }
 );
@@ -49,10 +53,15 @@ require (
     'services/session',
     'services/md5',
     'services/storage',
+
+    'services/store',
+
     'services/strings',
     'bootstrap',
     //'signet',
-    'bxslider'
+    'bxslider',
+    'lawnchair',
+    'dom'
   ],
   function (angular, domReady)
   {

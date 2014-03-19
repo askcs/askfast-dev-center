@@ -6,9 +6,13 @@ define(
 
     controllers.controller ('login',
       [
-        '$scope', '$rootScope', 'AskFast', 'Session', 'Storage',
-        function ($scope, $rootScope, AskFast, Session, Storage)
+        '$scope', '$rootScope', 'AskFast', 'Session', 'Storage', 'Store',
+        function ($scope, $rootScope, AskFast, Session, Storage, Store)
         {
+          // console.log('==>', Store);
+
+          // Store.save({name:'brian'});
+
           $scope.login = {
             email: '',
             password: '',
