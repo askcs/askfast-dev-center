@@ -2,15 +2,8 @@ extends layout
 
 
 block brand
-  a.navbar-brand(href='#home') ASK-Fast
-
-
-
-block main-nav
-  ul.nav.navbar-nav
-    li(ng-repeat='item in config.app.nav.main',
-    ng-class="(location.path == item) && 'active'")
-      a(ng-href="{{'#' + item}}") {{ui.globals.nav.main[item]}}
+  a.navbar-brand(href='#home',
+  ng-click='collapseMenu()') ASK-Fast
 
 
 
@@ -18,78 +11,26 @@ block user-nav
   ul.nav.navbar-nav.navbar-right
     li(ng-repeat='item in config.app.nav.user',
     ng-class="(location.path == item) && 'active'")
-      a(ng-href="{{'#' + item}}") {{ui.globals.nav.user[item]}}
-
-
-
-block languages-nav
-  ul.sub-header-menu.pull-right
-    li(ng-repeat='item in config.app.languages',
-    ng-class="(app.language == item) && 'active'")
-      a(ng-click="setLanguage(item)") {{item.toUpperCase()}}
-
-
-
-block footer-nav
-  ul#footer-nav.list-inline
-    li(ng-repeat='item in config.app.nav.footer')
-      a(ng-href="{{'#' + item}}") {{ui.globals.nav.footer[item]}}
+      a(ng-href="{{'#' + item + (item == 'register' && '#step-1' || '')}}")
+        | {{ui.globals.nav.user[item]}}
 
 
 
 block navbar
-  .navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+  .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(role='navigation',
+  ng-hide='isInternPage()')
     .container
       .navbar-header
-        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+        button.navbar-toggle(type='button',
+        data-toggle='collapse',
+        data-target='.navbar-collapse')
           span.sr-only Toggle navigation
           span.icon-bar
           span.icon-bar
           span.icon-bar
         block brand
       .collapse.navbar-collapse
-        block main-nav
         block user-nav
-
-
-
-block footer
-  footer
-    .container
-      .row
-        .col-md-8.col-md-offset-1
-          block footer-nav
-        .col-md-2
-          block brand
-
-
-
-block tweets
-  ul
-    li
-      a(href='#') Virtual Phone numbers are available in Jordan
-    li
-      a(href='#') Say Hi to our new office in Berlin
-    li
-      a(href='#') Register for our webinar
-
-
-
-block sub-header-menu
-  .col-md-10
-    #tweets(ng-hide='config.app.nav.subs[location.path]')
-      block tweets
-    #sub-header-menu(ng-show='config.app.nav.subs[location.path]')
-      ul.sub-header-menu
-        li(ng-repeat='item in config.app.nav.subs[location.path]',
-        ng-class="(subView[item]) && 'active'")
-          a(ng-click="setSubView(item)") {{ui.globals.nav.subs[location.path][item]}}
-
-
-
-block languages
-  #languages.col-md-2
-    block languages-nav
 
 
 
@@ -103,27 +44,3 @@ block icons
   link(rel='apple-touch-icon-precomposed',
   href='icons/apple-touch-icon-57-precomposed.png')
   link(rel='shortcut icon', href='/favicon.png')
-
-
-
-block iestuff
-  //if lt IE 7
-    p.chromeframe
-      | You are using an outdated browser.
-      a(href='http://browsehappy.com/') Upgrade your browser today
-      | or
-      a(href='http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
-      | to better experience this site.
-  //if lt IE 9
-    script(src='vendors/es5-shim/es5-shim.js')
-    script(src='vendors/json3/lib/json3.min.js')
-
-
-
-//block analytics
-//  // Google Analytics: change UA-XXXXX-X to be your site's ID.
-//  script
-//    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-//    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-//    g.src='//www.google-analytics.com/ga.js';
-//    s.parentNode.insertBefore(g,s)}(document,'script'));

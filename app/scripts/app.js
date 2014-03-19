@@ -1,9 +1,9 @@
 'use strict';
 
-// The app/scripts/app.js file, which defines our AngularJS app
 define(
   [
     'angular',
+    'modals/modals',
     'controllers/controllers',
     'services/services',
     'filters/filters',
@@ -15,6 +15,7 @@ define(
   {
     return angular.module('DevCen',
       [
+        'modals',
         'controllers',
         'services',
         'filters',

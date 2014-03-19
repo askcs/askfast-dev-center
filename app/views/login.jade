@@ -1,1 +1,41 @@
-h2 Login
+section#login
+
+  .container(ng-hide='login.state')
+    .row
+      .col-md-4.col-md-offset-4
+        .panel.panel-default.boxed
+          .panel-heading
+            div.panel-icon
+            h3.text-pink Login
+            p Please login to continue.
+          .panel-body
+            form(role='form')
+              .form-group
+                label Email Adress
+                input.form-control(type='text',
+                ng-model='login.email')
+                p(ng-show="login.validation.email")
+                  small.text-danger This field is required
+              .form-group
+                label Password
+                input.form-control(type='password',
+                ng-model='login.password')
+                p(ng-show="login.validation.password")
+                  small.text-danger This field is required
+              .checkbox
+                label
+                  input(type='checkbox',
+                  ng-model='login.remember')
+                  | Remember me
+          .panel-footer.text-right
+            button.btn.btn-primary(ng-click='auth()') Login
+            p.text-right(ng-show="login.error.state")
+              small.text-danger(ng-show='login.error.code == 400') Wrong username or password!
+              small.text-danger(ng-show='login.error.code == 403') Wrong username or password!
+              small.text-danger(ng-show='login.error.code == 404') Something went wrong with login!
+              small.text-danger(ng-show='login.error.code == 500') Server error!
+
+  .container(ng-show='login.state')
+    .row
+      .col-md-4.col-md-offset-4
+        span You are successfully logged in.

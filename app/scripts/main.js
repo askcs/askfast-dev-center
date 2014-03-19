@@ -12,15 +12,17 @@ require.config (
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-      signet:   '../vendors/signet/signet.min',
-      bxslider: '../vendors/bxslider-4/jquery.bxslider.min'
+      //signet:   '../vendors/signet/signet.min',
+      lawnchair: '../vendors/lawnchair/src/Lawnchair',
+      dom: '../vendors/lawnchair/src/adapters/dom'
     },
     shim: {
       angular:            { deps: ['jquery'], exports:  'angular' },
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
-      bxslider:           { deps: ['jquery'], exports:  'bxslider' }
+      lawnchair:          { exports: 'lawnchair' },
+      dom:                { deps: ['lawnchair'], exports: 'dom' }
     }
   }
 );
@@ -29,43 +31,34 @@ require (
   [
     'angular',
     'domReady',
-
     'jquery',
-
     'angular-resource',
     'angular-route',
-
     'localization',
     'config',
     'app',
     'routes',
     'run',
-
-    //'modals/user',
-    //'modals/core',
-
-    'controllers/promotional',
+    'modals/askfast',
+    'controllers/home',
     'controllers/register',
     'controllers/login',
     'controllers/logout',
-
     'directives/appVersion',
-
     'filters/interpolate',
-    // 'filters/all',
-
+    //'filters/all',
     'services/version',
-    'services/user',
+    'services/session',
+    'services/md5',
+    'services/storage',
 
-    //'services/session',
-    //'services/md5',
-    //'services/storage',
-    //'services/strings',
-    //'services/generators',
+    'services/store',
 
+    'services/strings',
     'bootstrap',
-    'signet',
-    'bxslider'
+    //'signet',
+    'lawnchair',
+    'dom'
   ],
   function (angular, domReady)
   {

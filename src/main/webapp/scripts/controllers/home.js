@@ -1,1 +1,1 @@
-define(["controllers/controllers","jquery","config"],function(e,t,n){console.log("$ ->",t),t(".bxslider").bxSlider(),e.controller("home",["$scope",function(e){e.naming="Cengiz"}])});
+define(["controllers/controllers"],function(e){e.controller("home",["$rootScope","$scope",function(e,t){$("body").removeClass()}])});

@@ -21,6 +21,30 @@ define(
 
           $rootScope.config = config.app;
 
+          $rootScope.setMainView = function (view)
+          {
+            if ($rootScope.config.app.nav.subs[view])
+            {
+              $location.path(view).hash($rootScope.config.app.nav.subs[view][0]);
+
+              $rootScope.setSubView($rootScope.config.app.nav.subs[view][0]);
+            }
+            else
+            {
+              $location.path(view);
+            }
+
+            $rootScope.collapseMenu();
+          };
+
+          $rootScope.collapseMenu = function ()
+          {
+            if ($('.navbar .in').length > 0)
+            {
+              $('.navbar .navbar-collapse').removeClass('in').addClass('collapse');
+            }
+          };
+
           var parts = [];
 
           angular.forEach($rootScope.config.app.nav.subs, function (sub)
@@ -33,45 +57,66 @@ define(
 
           $rootScope.subView = {};
 
-          function resetSubViews ()
+          $rootScope.setSubView = function (view)
           {
             angular.forEach(parts, function (part)
             {
               $rootScope.subView[part] = false;
             });
-          }
 
-          $rootScope.setSubView = function (view)
-          {
-            resetSubViews();
+            $location.hash(view);
 
             $rootScope.subView[view] = true;
           };
 
+          $rootScope.redirectTo = function (main, sub)
+          {
+            $location.path(main).hash(sub);
+
+            $rootScope.setSubView(sub);
+
+            window.scrollTo(0, 0);
+
+            $rootScope.contact.subject.sales = true;
+          };
+
+          $location.hash() && $rootScope.setSubView($location.hash());
+
           $rootScope.location = {};
+
+          $rootScope.home = {
+            reference: {}
+          };
+
+          var i     = 0,
+              total = $rootScope.ui.pages.home.references.length;
+
+          $rootScope.home.reference = $rootScope.ui.pages.home.references[i];
+
+          setInterval(function ()
+          {
+            i = (i === total - 1) ? 0 : i + 1;
+
+            $rootScope.home.reference = $rootScope.ui.pages.home.references[i];
+
+            $rootScope.$apply();
+          }, 10 * 1000);
+
+          $rootScope.isInternPage = function ()
+          {
+            var interns = ['/login', '/register'];
+
+            return (interns.indexOf($location.path()) >= 0);
+          };
 
           $rootScope.$on('$routeChangeStart', function ()
           {
             $rootScope.location.path = $location.path().substring(1);
-
-            if ($rootScope.config.app.nav.subs[$rootScope.location.path])
-            {
-              $rootScope.subView[$rootScope.config.app.nav.subs[$rootScope.location.path][0]] = true;
-            }
-            else
-            {
-              resetSubViews();
-            }
           });
 
-          $rootScope.$on('$routeChangeSuccess', function ()
-          {
-          });
+          $rootScope.$on('$routeChangeSuccess', function () {});
 
-          $rootScope.$on('$routeChangeError', function ()
-          {
-            console.error('Error: changing routes!');
-          });
+          $rootScope.$on('$routeChangeError', function () {});
         }
       ]
     );

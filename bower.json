@@ -14,7 +14,9 @@
     "requirejs": "~2.1.10",
     "requirejs-domready": "~2.0.1",
     "signet": "~0.4.5",
-    "bxslider-4": "*"
+    "bxslider-4": "*",
+    "highlight.js": "https://github.com/isagalaev/highlight.js.git#~7.0.1",
+    "lawnchair": "~0.6.3"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.9",

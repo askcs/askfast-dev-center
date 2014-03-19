@@ -1,1 +1,165 @@
-h2 Register
+section#register
+
+
+  #register-step-1.container(ng-show='step.check(1)')
+    .row
+      .col-md-4.col-md-offset-4
+        .panel.panel-default.boxed
+          .panel-heading
+            div.panel-icon
+            h3.text-pink Sign up
+            p Currently we are open for developers.
+          .panel-body
+            form(name='registrationForm1',
+            role='form',
+            ng-submit='step.forward()')
+              .form-group
+                label First Name
+                input.form-control(type='text',
+                ng-model='data.user.name.first',
+                autofocus='autofocus')
+                p(ng-show="data.validation.name.first")
+                  small.text-danger This field is required
+              .form-group
+                label Last Name
+                input.form-control(type='text',
+                ng-model='data.user.name.last')
+                p(ng-show="data.validation.name.last")
+                  small.text-danger This field is required
+              .form-group
+                label Email Adress
+                input.form-control(name='email',
+                type='email',
+                ng-model='data.user.email',
+                ng-minlength='3',
+                ng-change='userExists()')
+                p(ng-show="data.validation.email")
+                  small.text-danger This field is required
+                p(ng-hide="registrationForm1.email.$valid")
+                  small.text-danger Please enter a valid email address.
+                p(ng-show="data.validation.userExists")
+                  small.text-danger
+                    | Please choose an another email adres. This email address has
+                    | already been registered.
+              .form-group
+                label Password
+                input.form-control(type='password',
+                ng-model='data.passwords.first')
+                p(ng-show="data.passwords.first == '' && data.submitted")
+                  small.text-danger This field is required
+                p(ng-show="data.validation.passwords")
+                  small.text-danger The supplied passwords does not match.
+              .form-group
+                label Retype Password
+                input.form-control(type='password',
+                ng-model='data.passwords.second')
+                p(ng-show="data.passwords.second == '' && data.submitted")
+                  small.text-danger This field is required
+              .checkbox
+                input(type='checkbox',
+                ng-model='data.agreed')
+                | I agree to the&nbsp;
+                a(href='#legal') Terms of Service
+                | &nbsp;and&nbsp;
+                a(href='') Privacy Policy
+                p(ng-show="!data.agreed && data.submitted")
+                  small.text-danger Please accept the terms to be able to signup.
+          .panel-footer.text-right
+            button.btn.btn-primary(type='submit',
+            ng-click='step.forward()') Sign Up
+
+
+
+
+  #register-step-2.container(ng-show='step.check(2)')
+    .row
+      .col-md-4.col-md-offset-4
+          .panel.panel-default.boxed
+            .panel-heading
+              div.panel-icon
+              h3.text-pink Sign up
+              p Currently we are open for developers.
+            .panel-body
+              form(role='form',
+              ng-submit='register();')
+                .form-group
+                  dl
+                    dt
+                      h4 We need to verify that you are a human.
+                    dd.
+                      We need to be very careful to protect our service and you from any spamming
+                      attempts.
+                  label Phone number
+                  input.form-control(type='text',
+                  ng-model='data.user.phone',
+                  autofocus='autofocus')
+                  p(ng-show="data.error.register")
+                    small.text-danger There has been a problem with registering your account.
+            .panel-footer.text-right
+              button.btn.btn-primary(ng-click='register(); step.forward()')
+                | Send verification code
+
+
+
+
+  #register-step-3.container(ng-show='step.check(3)')
+    .row
+      .col-md-4.col-md-offset-4
+        .panel.panel-default.boxed
+          .panel-heading
+            div.panel-icon
+            h3.text-pink Sign up
+            p Currently we are open for developers.
+          .panel-body
+            form(role='form',
+            ng-submit='verify()')
+              .form-group
+                dl
+                  dt
+                    h4
+                      span We just send you a verification code to &nbsp;
+                      br
+                      span {{data.user.phone}}
+                  dd.
+                    If you did not get the verification, please click resend the code button for a
+                    new one.
+                label Verification code
+                input.form-control(type='text',
+                ng-model='data.verification.code',
+                autofocus='autofocus')
+                p(ng-show="data.verification.resent")
+                  small.text-success Verification code has been sent again.
+                p(ng-show="data.error.resent")
+                  small.text-danger There has been a problem with resending the verification code.
+                p(ng-show="data.error.verify")
+                  small.text-danger There has been a problem with verifying. Please try again.
+          .panel-footer.text-right
+            button.btn.btn-link(ng-click='resend();') Resend the code
+            button.btn.btn-primary(ng-click='verify();') Verify
+
+
+
+  #register-step-4.container(ng-show='step.check(4)')
+    .row
+      .col-md-4.col-md-offset-4
+        .panel.panel-default.boxed
+          .panel-heading
+            div.panel-icon
+            h3.text-pink Sign up
+            p Currently we are open for developers.
+          .panel-body
+            form(role='form')
+              .form-group
+                dl.text-center
+                  dt
+                    h4 Thank you for choosing us.
+                  dd
+                    | Your account is ready to use.
+                    br
+                    | It is time to be creative and get your hands dirty :)
+                    br
+                    br
+                    strong Session ID: &nbsp;
+                    | {{session}}
+          .panel-footer.text-center
+            button.btn.btn-primary OK

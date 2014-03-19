@@ -23,12 +23,7 @@ html.no-js(lang='en')
   body
     block iestuff
     block navbar
-    #wrap
-      .container-fluid
-        #sub-header
-          .row
-            block sub-header-menu
-            block languages
-        div(ng-view='')
+    #wrap.ng-cloak
+      .container-fluid(ng-view='')
     block footer
     script(data-main='scripts/main', src='vendors/requirejs/require.js')

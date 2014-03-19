@@ -1,1 +1,155 @@
-<h2>Register</h2>
+<section id="register">
+  <div id="register-step-1" ng-show="step.check(1)" class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default boxed">
+          <div class="panel-heading">
+            <div class="panel-icon"></div>
+            <h3 class="text-pink">Sign up</h3>
+            <p>Currently we are open for developers.</p>
+          </div>
+          <div class="panel-body">
+            <form name="registrationForm1" role="form" ng-submit="step.forward()">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" ng-model="data.user.name.first" autofocus="autofocus" class="form-control">
+                <p ng-show="data.validation.name.first"><small class="text-danger">This field is required</small></p>
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" ng-model="data.user.name.last" class="form-control">
+                <p ng-show="data.validation.name.last"><small class="text-danger">This field is required</small></p>
+              </div>
+              <div class="form-group">
+                <label>Email Adress</label>
+                <input name="email" type="email" ng-model="data.user.email" ng-minlength="3" ng-change="userExists()" class="form-control">
+                <p ng-show="data.validation.email"><small class="text-danger">This field is required</small></p>
+                <p ng-hide="registrationForm1.email.$valid"><small class="text-danger">Please enter a valid email address.</small></p>
+                <p ng-show="data.validation.userExists"><small class="text-danger">
+                    Please choose an another email adres. This email address has
+                    already been registered.</small></p>
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" ng-model="data.passwords.first" class="form-control">
+                <p ng-show="data.passwords.first == '' &amp;&amp; data.submitted"><small class="text-danger">This field is required</small></p>
+                <p ng-show="data.validation.passwords"><small class="text-danger">The supplied passwords does not match.</small></p>
+              </div>
+              <div class="form-group">
+                <label>Retype Password</label>
+                <input type="password" ng-model="data.passwords.second" class="form-control">
+                <p ng-show="data.passwords.second == '' &amp;&amp; data.submitted"><small class="text-danger">This field is required</small></p>
+              </div>
+              <div class="checkbox">
+                <input type="checkbox" ng-model="data.agreed">I agree to the&nbsp;<a href="#legal">Terms of Service</a>&nbsp;and&nbsp;<a href="">Privacy Policy</a>
+                <p ng-show="!data.agreed &amp;&amp; data.submitted"><small class="text-danger">Please accept the terms to be able to signup.</small></p>
+              </div>
+            </form>
+          </div>
+          <div class="panel-footer text-right">
+            <button type="submit" ng-click="step.forward()" class="btn btn-primary">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="register-step-2" ng-show="step.check(2)" class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default boxed">
+          <div class="panel-heading">
+            <div class="panel-icon"></div>
+            <h3 class="text-pink">Sign up</h3>
+            <p>Currently we are open for developers.</p>
+          </div>
+          <div class="panel-body">
+            <form role="form" ng-submit="register();">
+              <div class="form-group">
+                <dl>
+                  <dt>
+                    <h4>We need to verify that you are a human.</h4>
+                  </dt>
+                  <dd>
+                    We need to be very careful to protect our service and you from any spamming
+                    attempts.
+                  </dd>
+                </dl>
+                <label>Phone number</label>
+                <input type="text" ng-model="data.user.phone" autofocus="autofocus" class="form-control">
+                <p ng-show="data.error.register"><small class="text-danger">There has been a problem with registering your account.</small></p>
+              </div>
+            </form>
+          </div>
+          <div class="panel-footer text-right">
+            <button ng-click="register(); step.forward()" class="btn btn-primary">Send verification code</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="register-step-3" ng-show="step.check(3)" class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default boxed">
+          <div class="panel-heading">
+            <div class="panel-icon"></div>
+            <h3 class="text-pink">Sign up</h3>
+            <p>Currently we are open for developers.</p>
+          </div>
+          <div class="panel-body">
+            <form role="form" ng-submit="verify()">
+              <div class="form-group">
+                <dl>
+                  <dt>
+                    <h4><span>We just send you a verification code to &nbsp;</span><br><span>{{data.user.phone}}</span></h4>
+                  </dt>
+                  <dd>
+                    If you did not get the verification, please click resend the code button for a
+                    new one.
+                  </dd>
+                </dl>
+                <label>Verification code</label>
+                <input type="text" ng-model="data.verification.code" autofocus="autofocus" class="form-control">
+                <p ng-show="data.verification.resent"><small class="text-success">Verification code has been sent again.</small></p>
+                <p ng-show="data.error.resent"><small class="text-danger">There has been a problem with resending the verification code.</small></p>
+                <p ng-show="data.error.verify"><small class="text-danger">There has been a problem with verifying. Please try again.</small></p>
+              </div>
+            </form>
+          </div>
+          <div class="panel-footer text-right">
+            <button ng-click="resend();" class="btn btn-link">Resend the code</button>
+            <button ng-click="verify();" class="btn btn-primary">Verify</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="register-step-4" ng-show="step.check(4)" class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default boxed">
+          <div class="panel-heading">
+            <div class="panel-icon"></div>
+            <h3 class="text-pink">Sign up</h3>
+            <p>Currently we are open for developers.</p>
+          </div>
+          <div class="panel-body">
+            <form role="form">
+              <div class="form-group">
+                <dl class="text-center">
+                  <dt>
+                    <h4>Thank you for choosing us.</h4>
+                  </dt>
+                  <dd>Your account is ready to use.<br>It is time to be creative and get your hands dirty :)<br><br><strong>Session ID: &nbsp;</strong>{{session}}</dd>
+                </dl>
+              </div>
+            </form>
+          </div>
+          <div class="panel-footer text-center">
+            <button class="btn btn-primary">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
