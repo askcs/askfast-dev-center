@@ -1,0 +1,1 @@
+define(["services/services"],function(e){e.factory("Store",["$rootScope",function(e){var t=new Lawnchair({name:"testing"},function(e){var t={key:"a",firstName:"Clark",lastName:"Kent"};e.save(t),e.get("a",function(e){console.log("got result ->",e.firstName+" "+e.lastName)})});return!0}])});
