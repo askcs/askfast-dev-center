@@ -14,7 +14,7 @@ require.config (
       'angular-route':    '../vendors/angular-route/angular-route.min',
       //signet:   '../vendors/signet/signet.min',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
-      dom: '../vendors/lawnchair/src/adapters/dom'
+      dom: '../vendors/lawnchair/src/adapters/dom',
       //,
       //'indexed-db': '../vendors/lawnchair/src/adapters/indexed-db'
     },
@@ -58,9 +58,12 @@ require (
 
     'services/store',
 
+    'services/offline',
+
     'services/strings',
     'bootstrap',
     //'signet',
+
     'lawnchair',
     'dom'
     //,

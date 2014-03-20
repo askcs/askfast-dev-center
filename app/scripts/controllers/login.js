@@ -6,12 +6,14 @@ define(
 
     controllers.controller ('login',
       [
-        '$scope', '$rootScope', 'AskFast', 'Session', 'Storage', 'Store',
-        function ($scope, $rootScope, AskFast, Session, Storage, Store)
+        '$scope', '$rootScope', 'AskFast', 'Session', 'Storage', 'Store', 'Offline',
+        function ($scope, $rootScope, AskFast, Session, Storage, Store, Offline)
         {
-          var Store = Store('local');
+          // console.log('Offline ->', Offline );
 
-          Store.save({
+          var Storer = Store('local');
+
+          Storer.save({
             info: {
               name: 'Cengiz Ulusoy',
               tel: '0620143143',
@@ -19,7 +21,7 @@ define(
             }
           });
 
-          console.log('==>', Store.get('info'));
+          console.log('==>', Storer.get('info'));
 
           $scope.login = {
             email: '',

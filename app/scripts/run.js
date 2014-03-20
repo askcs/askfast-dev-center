@@ -6,9 +6,33 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location',
-        function($rootScope, $location)
+        '$rootScope', '$location', 'Offline',
+        function($rootScope, $location, Offline)
         {
+
+          new Offline();
+
+          $rootScope.$on('connection', function ()
+          {
+            if (!arguments[1])
+            {
+              console.log('connection restored');
+            }
+            else
+            {
+              console.log('connection lost :[');
+            }
+          });
+
+          // console.log('Heyoffline ->', Heyoffline);
+
+//          new Heyoffline({
+//            monitorFields: true,
+//            elements: ['.monitoredFields']
+//          });
+
+
+
           $rootScope.app = $rootScope.app || {};
 
           $rootScope.setLanguage = function (language)
