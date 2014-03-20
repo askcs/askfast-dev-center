@@ -9,7 +9,6 @@ define(
         '$rootScope', '$location', 'Offline',
         function($rootScope, $location, Offline)
         {
-
           new Offline();
 
           $rootScope.$on('connection', function ()
@@ -23,15 +22,6 @@ define(
               console.log('connection lost :[');
             }
           });
-
-          // console.log('Heyoffline ->', Heyoffline);
-
-//          new Heyoffline({
-//            monitorFields: true,
-//            elements: ['.monitoredFields']
-//          });
-
-
 
           $rootScope.app = $rootScope.app || {};
 
