@@ -1,8 +1,8 @@
-define ["services/services"], (services) ->
+define ['services/services'], (services) ->
 
-  "use strict"
+  'use strict'
 
-  services.factory "MD5", ->
+  services.factory 'MD5', ->
     (string) ->
 
       RotateLeft = (lValue, iShiftBits) ->
@@ -78,21 +78,21 @@ define ["services/services"], (services) ->
         lWordArray
 
       WordToHex = (lValue) ->
-        WordToHexValue = ""
-        WordToHexValue_temp = ""
+        WordToHexValue = ''
+        WordToHexValue_temp = ''
         lByte = undefined
         lCount = undefined
         lCount = 0
         while lCount <= 3
           lByte = (lValue >>> (lCount * 8)) & 255
-          WordToHexValue_temp = "0" + lByte.toString(16)
+          WordToHexValue_temp = '0' + lByte.toString(16)
           WordToHexValue = WordToHexValue + WordToHexValue_temp.substr(WordToHexValue_temp.length - 2, 2)
           lCount++
         WordToHexValue
 
       Utf8Encode = (string) ->
-        string = string.replace(/\r\n/g, "\n")
-        utftext = ""
+        string = string.replace(/\r\n/g, '\n')
+        utftext = ''
         n = 0
 
         while n < string.length

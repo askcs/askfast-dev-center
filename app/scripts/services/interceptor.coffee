@@ -1,27 +1,23 @@
-define ["services/services"], (services) ->
+define ['services/services'], (services) ->
 
-  "use strict"
+  'use strict'
 
-  services.factory "Interceptor", ($q) ->
-
+  services.factory 'Interceptor', ($q) ->
 
     # Log request
     request: (config) ->
       # console.log 'request ->', config
       config or $q.when(config)
 
-
     # On request error
     requestError: (rejection) ->
       console.warn 'request error ->', rejection
       $q.reject rejection
 
-
     # Log response
     response: (response) ->
       # console.log 'response', response
       response or $q.when(response)
-
 
     # On response error
     responseError: (rejection) ->
