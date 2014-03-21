@@ -6,8 +6,8 @@ define(
 
     modals.factory('AskFast',
       [
-        '$resource', '$q', '$location', '$rootScope', 'Storage', 'Session', 'MD5',
-        function ($resource, $q, $location, $rootScope, Storage, Session, MD5)
+        '$resource', '$q', '$location', '$rootScope', 'Store', 'Session', 'MD5',
+        function ($resource, $q, $location, $rootScope, Store, Session, MD5)
         {
           var AskFast = $resource(
             $rootScope.config.host + '/:action/:level',
@@ -160,14 +160,6 @@ define(
 
 
           /**
-           * /user_exists?username={preferred_username}
-
-           returns a 200 if it doesn't exists and a 409 if it does.
-           * @type {*}
-           */
-
-
-          /**
            * User registration
            */
           AskFast.prototype.register = function (data)
@@ -230,8 +222,8 @@ define(
 
             AskFast.registerVerify(
               {
-                code:     data.verification.code,
-                id:       localStorage.getItem('data.verification.id')
+                code: data.verification.code,
+                id:   localStorage.getItem('data.verification.id') // TODO: Make Store
               },
               function (result)
               {
@@ -256,7 +248,7 @@ define(
 
             AskFast.resendVerify(
               {
-                code:         localStorage.getItem('data.verification.id'),
+                code:         localStorage.getItem('data.verification.id'), // TODO: Make Store
                 verification: 'SMS'
               },
               function (result)

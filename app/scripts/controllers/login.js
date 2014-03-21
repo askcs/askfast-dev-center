@@ -6,26 +6,35 @@ define(
 
     controllers.controller ('login',
       [
-        '$scope', '$rootScope', 'AskFast', 'Session', 'Storage', 'Store', 'Offline',
-        function ($scope, $rootScope, AskFast, Session, Storage, Store, Offline)
+        '$scope', '$rootScope', 'AskFast', 'Session', 'Store',
+        function ($scope, $rootScope, AskFast, Session, Store)
         {
           // console.log('Offline ->', Offline );
 
-          var Storer = Store('local');
 
-          Storer.save({
-            info: {
-              name: 'Cengiz Ulusoy',
-              tel: '0620143143',
-              email: 'culusoy@ask-cs.com'
-            }
-          });
+//          var Storer = Store('local');
+//
+//          Storer.save({
+//            info: {
+//              name: 'Cengiz Ulusoy',
+//              tel: '0620143143',
+//              email: 'culusoy@ask-cs.com'
+//            }
+//          });
+//
+//          console.log('==>', Storer.get('info'));
+//
+//          Storer.nuke();
 
-          console.log('==>', Storer.get('info'));
+
+
+          Store = Store('app');
+
+
 
           $scope.login = {
-            email: '',
-            password: '',
+            email: 'cengiz@ask-cs.com',
+            password: 'askask',
             validation: {
               email: false,
               password: false
@@ -39,12 +48,17 @@ define(
 
           var loginBtn = $('#login button[type=submit]');
 
-          if (!Storage.session.get('app'))
+
+
+          if (!sessionStorage.getItem('app'))
           {
-            Storage.session.add('app', '{}');
+            sessionStorage.setItem('app', '{}');
           }
 
-          var login = angular.fromJson(Storage.get('login'));
+
+
+          var login = Store.get('login');
+
 
           if (login && login.remember)
           {
@@ -57,13 +71,20 @@ define(
           {
             loginBtn.text('Login..').attr('disabled', 'disabled');
 
-            Storage.add('login', angular.toJson(
-              {
+
+
+
+
+            Store.save({
+              login: {
                 email:    $scope.login.email,
                 password: $scope.login.password,
                 remember: $scope.login.remember
               }
-            ));
+            });
+
+
+
 
             AskFast.login($scope.login)
               .then(function (result)
@@ -92,7 +113,6 @@ define(
 
               });
           };
-
 
         }
       ]

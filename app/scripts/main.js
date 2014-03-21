@@ -14,7 +14,7 @@ require.config (
       'angular-route':    '../vendors/angular-route/angular-route.min',
       //signet:   '../vendors/signet/signet.min',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
-      dom: '../vendors/lawnchair/src/adapters/dom',
+      dom: '../vendors/lawnchair/src/adapters/dom'
       //,
       //'indexed-db': '../vendors/lawnchair/src/adapters/indexed-db'
     },
@@ -44,23 +44,29 @@ require (
     'routes',
     'run',
     'modals/askfast',
-    'controllers/home',
-    'controllers/register',
-    'controllers/login',
-    'controllers/logout',
+
     'directives/appVersion',
     'filters/interpolate',
+
     //'filters/all',
-    'services/version',
+
+    // 'services/version',
+
     'services/session',
     'services/md5',
-    'services/storage',
+    // 'services/storage',
 
     'services/store',
 
     'services/offline',
 
-    'services/strings',
+    // 'services/strings',
+
+    'controllers/home',
+    'controllers/register',
+    'controllers/login',
+    'controllers/logout',
+
     'bootstrap',
     //'signet',
 
