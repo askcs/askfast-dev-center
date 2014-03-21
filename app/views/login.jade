@@ -9,7 +9,8 @@ section#login
             h3.text-pink Login
             p Please login to continue.
           .panel-body
-            form(role='form')
+            form(role='form',
+            ng-submit='auth()')
               .form-group
                 label Email Adress
                 input.form-control(type='text',
@@ -28,7 +29,8 @@ section#login
                   ng-model='login.remember')
                   | Remember me
           .panel-footer.text-right
-            button.btn.btn-primary(ng-click='auth()') Login
+            button.btn.btn-primary(type='submit',
+            ng-click='auth()') Login
             p.text-right(ng-show="login.error.state")
               small.text-danger(ng-show='login.error.code == 400') Wrong username or password!
               small.text-danger(ng-show='login.error.code == 403') Wrong username or password!

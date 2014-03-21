@@ -9,32 +9,11 @@ define(
         '$scope', '$rootScope', 'AskFast', 'Session', 'Store',
         function ($scope, $rootScope, AskFast, Session, Store)
         {
-          // console.log('Offline ->', Offline );
-
-
-//          var Storer = Store('local');
-//
-//          Storer.save({
-//            info: {
-//              name: 'Cengiz Ulusoy',
-//              tel: '0620143143',
-//              email: 'culusoy@ask-cs.com'
-//            }
-//          });
-//
-//          console.log('==>', Storer.get('info'));
-//
-//          Storer.nuke();
-
-
-
           Store = Store('app');
 
-
-
           $scope.login = {
-            email: 'cengiz@ask-cs.com',
-            password: 'askask',
+            email: '',
+            password: '',
             validation: {
               email: false,
               password: false
@@ -46,19 +25,9 @@ define(
             state: false
           };
 
-          var loginBtn = $('#login button[type=submit]');
-
-
-
-          if (!sessionStorage.getItem('app'))
-          {
-            sessionStorage.setItem('app', '{}');
-          }
-
-
+          var loginBtn = angular.element('#login button[type=submit]');
 
           var login = Store.get('login');
-
 
           if (login && login.remember)
           {
@@ -69,11 +38,8 @@ define(
 
           $scope.auth = function ()
           {
-            loginBtn.text('Login..').attr('disabled', 'disabled');
-
-
-
-
+            loginBtn.text('Login..')
+                    .attr('disabled', 'disabled');
 
             Store.save({
               login: {
@@ -82,9 +48,6 @@ define(
                 remember: $scope.login.remember
               }
             });
-
-
-
 
             AskFast.login($scope.login)
               .then(function (result)
@@ -96,7 +59,8 @@ define(
                     code:   result.status
                   };
 
-                  loginBtn.text('Login').removeAttr('disabled');
+                  loginBtn.text('Login')
+                          .removeAttr('disabled');
                 }
 
                 if (result.hasOwnProperty('X-SESSION_ID'))

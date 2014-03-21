@@ -6,8 +6,8 @@ define(
 
     app.config(
       [
-        '$routeProvider',
-        function ($routeProvider)
+        '$routeProvider', '$httpProvider',
+        function ($routeProvider, $httpProvider)
         {
           $routeProvider
             .when('/home',
@@ -34,6 +34,8 @@ define(
             .otherwise({
               redirectTo: '/home'
             });
+
+          $httpProvider.interceptors.push('Interceptor');
         }
       ]
     );
