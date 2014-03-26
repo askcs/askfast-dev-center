@@ -49,7 +49,7 @@ define(
               }
             });
 
-            AskFast.caller('login_',
+            AskFast.caller('login',
               {
                 username: $scope.login.email,
                 password: MD5($scope.login.password)
