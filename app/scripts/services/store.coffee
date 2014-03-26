@@ -5,6 +5,7 @@ define ['services/services'], (services) ->
   # TODOS
   # 1. Return callbacks in CRUD actions
   # 2. Extend it with local searching capabilitites
+  # 3. Implement Log module for errors
 
   services.factory 'Store', [
     '$window'
@@ -115,7 +116,6 @@ define ['services/services'], (services) ->
         collection = {}
         array = []
         isArray = config and config.isArray
-        # TODO: Investigate on other config stuff
         idGetter = $parse((if (config and config.entryKey) then config.entryKey else 'id'))
         transformSave = (if (config and config.transformSave) then config.transformSave else angular.identity)
         transformLoad = (if (config and config.transformLoad) then config.transformLoad else angular.identity)

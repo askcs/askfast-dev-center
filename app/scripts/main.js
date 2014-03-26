@@ -12,19 +12,23 @@ require.config (
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
+      'angular-cookies':    '../vendors/angular-cookies/angular-cookies.min',
       signet:   '../vendors/signet/signet.min',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
-      dom: '../vendors/lawnchair/src/adapters/dom',
-      'indexed-db': '../vendors/lawnchair/src/adapters/indexed-db'
+      dom: '../vendors/lawnchair/src/adapters/dom'
+//      ,
+//      'indexed-db': '../vendors/lawnchair/src/adapters/indexed-db'
     },
     shim: {
       angular:            { deps: ['jquery'], exports:  'angular' },
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
+      'angular-cookies':  { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
       lawnchair:          { exports: 'lawnchair' },
-      dom:                { deps: ['lawnchair'], exports: 'dom' },
-      'indexed-db':       { deps: ['lawnchair'], exports: 'indexed-db' }
+      dom:                { deps: ['lawnchair'], exports: 'dom' }
+//      ,
+//      'indexed-db':       { deps: ['lawnchair'], exports: 'indexed-db' }
     }
   }
 );
@@ -36,6 +40,7 @@ require (
     'jquery',
     'angular-resource',
     'angular-route',
+    'angular-cookies',
     'localization',
     'config',
     'app',
@@ -49,6 +54,7 @@ require (
     'services/store',
     'services/offline',
     'services/interceptor',
+    'services/logger',
     'controllers/home',
     'controllers/register',
     'controllers/login',
@@ -56,8 +62,9 @@ require (
     'bootstrap',
     'signet',
     'lawnchair',
-    'dom',
-    'indexed-db'
+    'dom'
+//    ,
+//    'indexed-db'
   ],
   function (angular, domReady)
   {

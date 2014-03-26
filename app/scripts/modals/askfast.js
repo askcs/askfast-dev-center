@@ -6,8 +6,8 @@ define(
 
     modals.factory('AskFast',
       [
-        '$resource', '$q', '$location', '$rootScope', 'Store', 'Session', 'MD5',
-        function ($resource, $q, $location, $rootScope, Store, Session, MD5)
+        '$resource', '$q', '$location', '$rootScope', 'Log',
+        function ($resource, $q, $location, $rootScope, Log)
         {
           var AskFast = $resource(
             $rootScope.config.host + '/:action/:level',
@@ -116,47 +116,55 @@ define(
                   action: 'keyserver',
                   level: 'token'
                 }
-              }
-            }
-          );
-
-
-          var Contact = $resource(
-            'http://char-a-lot.appspot.com/rpc',
-            {},
-            {
-              request: {
-                method: 'POST',
-                params: {}
+              },
+              logs: {
+                method: 'GET',
+                params: {
+                  action: 'log'
+                }
               }
             }
           );
 
 
           /**
-           * User login
+           * REST Call engine
            */
-          AskFast.prototype.login = function (data)
+          AskFast.prototype.caller = function (proxy, params, data, success, error)
           {
             var deferred = $q.defer();
 
-            AskFast.login(
-              {
-                username: data.email,
-                password: MD5(data.password)
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
+            params = params || {};
+
+            try
+            {
+              AskFast[proxy](
+                params,
+                data,
+                function (result)
+                {
+                  if (success) success.call();
+
+                  deferred.resolve(result);
+                },
+                function (err)
+                {
+                  if (error) error.call(err);
+
+                  deferred.resolve({error: err});
+                }
+              );
+            }
+            catch (err)
+            {
+              Log.error(err);
+            }
 
             return deferred.promise;
           };
+
+
+
 
 
           /**
@@ -288,37 +296,35 @@ define(
 
 
           /**
-           * Contact form
+           * Get user information
            */
-          AskFast.prototype.contact = function (contact)
+          AskFast.prototype.info = function ()
           {
             var deferred = $q.defer();
 
-            var data = {
-              message: contact.message,
-              sender: contact.name + ' ' +
-                      contact.surname + ' <' +
-                      contact.email + '>',
-              subject: 'New message from AskFast, related to: ' + contact.subject
-            };
-
-            Contact.request(
-              {},
+            AskFast.info(null,
+              function (result)
               {
-                "method": "outboundCallWithMap",
-                "params": {
-                  "adapterID": "2dbe5b60-154a-11e3-b728-00007f000001",
-                  "addressMap": {
-                    "abektes@ask-cs.com": "Contact Inquiry"
-                  },
-                  "url": "http://askfastmarket1.appspot.com/resource/question/comment?message=" +
-                    encodeURIComponent(data.message),
-                  "publicKey": 	"",
-                  "privateKey": 	"",
-                  "senderName": data.sender,
-                  "subject": 	data.subject
-                }
+                deferred.resolve(result);
               },
+              function (error)
+              {
+                deferred.resolve({error: error});
+              }
+            );
+
+            return deferred.promise;
+          };
+
+
+          /**
+           * Get user logs
+           */
+          AskFast.prototype.logs = function ()
+          {
+            var deferred = $q.defer();
+
+            AskFast.logs(null,
               function (result)
               {
                 deferred.resolve(result);

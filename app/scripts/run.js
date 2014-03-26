@@ -6,8 +6,8 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', 'Offline',
-        function($rootScope, $location, Offline)
+        '$rootScope', '$location', 'Offline', 'Session',
+        function($rootScope, $location, Offline, Session)
         {
           new Offline();
 
@@ -34,6 +34,8 @@ define(
           $rootScope.setLanguage(config.app.defaults.language);
 
           $rootScope.config = config.app;
+
+          // if (Session.get()) $location.path('/home');
 
           // TODO: Take it to a directive
           $rootScope.$on('$routeChangeStart', function () {});

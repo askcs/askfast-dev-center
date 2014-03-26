@@ -6,8 +6,8 @@ define(
 
     controllers.controller ('login',
       [
-        '$scope', '$rootScope', 'AskFast', 'Session', 'Store',
-        function ($scope, $rootScope, AskFast, Session, Store)
+        '$scope', '$rootScope', 'AskFast', 'Session', 'Store', '$location', 'MD5',
+        function ($scope, $rootScope, AskFast, Session, Store, $location, MD5)
         {
           Store = Store('app');
 
@@ -49,7 +49,11 @@ define(
               }
             });
 
-            AskFast.login($scope.login)
+            AskFast.caller('login_',
+              {
+                username: $scope.login.email,
+                password: MD5($scope.login.password)
+              })
               .then(function (result)
               {
                 if ([400, 403, 404, 500].indexOf(result.status) < 0)
@@ -70,14 +74,24 @@ define(
                     code:   null
                   };
 
-                  Session.set(result['X-SESSION_ID']);
+                  Session.set(result['X-SESSION_ID'], true);
 
                   $scope.login.state = true;
+
+                  AskFast.caller('info')
+                    .then(function (info)
+                    {
+                      Store.save({
+                        user: info
+                      });
+
+                      $location.path('/home');
+                    });
+
                 }
 
               });
           };
-
         }
       ]
     );

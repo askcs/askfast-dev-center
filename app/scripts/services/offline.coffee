@@ -20,11 +20,11 @@ define ['services/services'], (services) ->
           @addEvent window, event, @[event]
 
         # Are we online?
-        online: () =>
+        online: () ->
           $rootScope.$broadcast 'connection', false
 
         # Or offline?
-        offline: =>
+        offline: ->
           $rootScope.$broadcast 'connection', true
   ]
   return

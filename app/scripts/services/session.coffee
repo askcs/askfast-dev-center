@@ -3,43 +3,54 @@ define ['services/services'], (services) ->
   'use strict'
 
   services.factory 'Session', [
-    '$rootScope'
     '$http'
+    '$cookieStore'
     'Store'
-    ($rootScope, $http, Store) ->
+    ($http, $cookieStore, Store) ->
 
       Store = Store('session')
 
       return (
 
         # Check the session
-        check: ->
-          session = angular.fromJson(Storage.cookie.get('session'))
+        get: ->
+          session = @cookies.get()
           if session
             @set session.id
-            true
+            return session
           else
             false
 
-        # Get the current session if exists
-        get: (session) ->
-          @check session
-          @set session.id
-          session.id
+        # Cookies
+        cookies:
+
+          # Set cookie
+          set: (session) ->
+            days = 14
+            date = new Date()
+            date.setTime date.getTime() + (days * 24 * 60 * 60 * 1000)
+            expires = "; expires=" + date.toGMTString()
+            value = session + expires + "; path=/"
+            $cookieStore.put 'X-SESSION_ID', value
+            # document.cookie = 'X-SESSION_ID=' + session
+            return
+
+          # Get cookie
+          get: () ->
+            cookie = $cookieStore.get 'X-SESSION_ID'
+            cookie.split(';')[0]
 
         # Set the session
-        set: (id) ->
-          session = session:
-            id: id
-
-          Store.save session
-          $rootScope.session = session
+        set: (id, log) ->
+          session = { id: id }
+          session.inited = new Date().getTime() if log
+          Store.save info: session
+          @cookies.set session.id
           $http.defaults.headers.common['X-SESSION_ID'] = session.id
           session
 
         # Clear the session
         clear: ->
-          $rootScope.session = null
           $http.defaults.headers.common['X-SESSION_ID'] = null
           return
       )
