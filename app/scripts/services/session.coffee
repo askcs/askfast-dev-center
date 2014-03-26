@@ -24,14 +24,17 @@ define ['services/services'], (services) ->
         # Cookies
         cookies:
 
+          # Cookie age in days
+          age: 14
+
           # Set cookie
           set: (session) ->
-            days = 14
             date = new Date()
-            date.setTime date.getTime() + (days * 24 * 60 * 60 * 1000)
+            date.setTime date.getTime() + (@age * 24 * 60 * 60 * 1000)
             expires = "; expires=" + date.toGMTString()
             value = session + expires + "; path=/"
             $cookieStore.put 'X-SESSION_ID', value
+            # For the case where backend has trouble parsin it
             # document.cookie = 'X-SESSION_ID=' + session
             return
 
