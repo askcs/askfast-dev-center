@@ -80,9 +80,9 @@ define(
                       $scope.data.validation.last ||
                       $scope.data.validation.email ||
                       $scope.data.validation.userExists ||
-                      $scope.data.validation.passwords)
+                      $scope.data.validation.passwords ||
+                      !$scope.data.agreed)
                   {
-
                     result = false;
                   }
                   break;
