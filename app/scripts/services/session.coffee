@@ -34,7 +34,7 @@ define ['services/services'], (services) ->
             expires = "; expires=" + date.toGMTString()
             value = session + expires + "; path=/"
             $cookieStore.put 'X-SESSION_ID', value
-            # For the case where backend has trouble parsin it
+            # For the case where backend has trouble parsing it
             # document.cookie = 'X-SESSION_ID=' + session
             return
 

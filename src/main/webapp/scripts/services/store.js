@@ -1,1 +1,211 @@
-define(["services/services"],function(e){e.factory("Store",["$window","$log","$parse",function(e,t,n){return function(r,i){function c(e){try{return a(e)}catch(t){return null}}function h(e){return new Lawnchair({name:r},e)}function p(n,r){r=r.toString(),angular.isObject(n)&&n!==s[r]?(s[r]=s[r]||{},angular.extend(s[r],n)):s[r]=n;var i={key:r,value:f(s[r])};try{h(function(){this.save(i)})}catch(o){(o.name==="QUOTA_EXCEEDED_ERR"||o.name==="NS_ERROR_DOM_QUOTA_REACHED")&&e.localStorage.clear(),t.info("LocalStorage Exception ==> "+o.message)}}function d(e){return o.length=0,_.each(e,function(e){o.push(e)}),o}function v(e,t){e&&angular.isObject(e)&&s[t]&&s[t]!==e?angular.extend(s[t],e):s[t]=e}function m(e,t){return t&&(angular.isObject(t.value)&&angular.isObject(e)?angular.extend(e,l(t.value)):e=l(t.value),v(e,t.key)),e}function g(e){return h(function(){this.all(function(t){angular.forEach(t,function(e){v(e.value,e.key)}),e&&e(s)})}),s}function y(e){return d(g(function(t){d(t),e&&e(o)}))}function b(e){delete s[e],h(function(){this.remove(e)})}function w(e){if(s[e])return s[e];var t={};return a.assign(t,e),t}var s={},o=[],u=i&&i.isArray,a=n(i&&i.entryKey?i.entryKey:"id"),f=i&&i.transformSave?i.transformSave:angular.identity,l=i&&i.transformLoad?i.transformLoad:angular.identity,E={collection:s,save:function(e,t,n){e||(e=s,t=null),angular.isArray(e)?angular.forEach(e,function(e,t){p(e,c(e)||t)}):t||e&&c(e)?p(e,t||c(e)):angular.forEach(e,p);if(n){var r=angular.isArray(e)?_.chain(e).map(c).map(String).value():_.keys(e);_.chain(s).keys().difference(r).each(b),_.chain(s).filter(function(e){return!c(e)}).keys().each(b)}u&&d(s)},batch:function(e,t,n){var r=_.chain(e).map(function(e){return w(e)}).value();return t&&angular.isArray(t)?(t.length=0,_.each(r,function(e){t.push(e)})):t=r,h(function(){this.get(e,function(e){if(e)for(var r=e.length-1;r>=0;r--)t[r]=m(t[r],e[r]);n&&n(t)})}),t},get:function(e,t){var n=w(e);return h(function(){this.get(e,function(e){e&&(n=m(n,e)),t&&t(n)})}),n},all:u?y:g,remove:b,nuke:function(){h(function(){this.nuke()})},destroy:function(){for(var e in s)delete s[e];h(function(){this.nuke()})}};return E}}])});
+(function() {
+  define(['services/services'], function(services) {
+    'use strict';
+    services.factory('Store', [
+      '$window', '$log', '$parse', function($window, $log, $parse) {
+        return function(name, config) {
+          var LawnChair, Store, allAsArray, allAsCollection, array, collection, getDefault, getEntryId, idGetter, isArray, removeEntry, saveEntry, transformLoad, transformSave, updateArray, updateCache, updateCacheFromStorage;
+          getEntryId = function(entry) {
+            var e;
+            try {
+              return idGetter(entry);
+            } catch (_error) {
+              e = _error;
+              return null;
+            }
+          };
+          LawnChair = function(callback) {
+            return new Lawnchair({
+              name: name
+            }, callback);
+          };
+          saveEntry = function(data, key) {
+            var e, update;
+            key = key.toString();
+            if (angular.isObject(data) && data !== collection[key]) {
+              collection[key] = collection[key] || {};
+              angular.extend(collection[key], data);
+            } else {
+              collection[key] = data;
+            }
+            update = {
+              key: key,
+              value: transformSave(collection[key])
+            };
+            try {
+              LawnChair(function() {
+                this.save(update);
+              });
+            } catch (_error) {
+              e = _error;
+              if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                $window.localStorage.clear();
+              }
+              $log.info('LocalStorage Exception ==> ' + e.message);
+            }
+          };
+          updateArray = function(data) {
+            array.length = 0;
+            _.each(data, function(o) {
+              array.push(o);
+            });
+            return array;
+          };
+          updateCache = function(obj, key) {
+            if (obj && angular.isObject(obj) && collection[key] && collection[key] !== obj) {
+              angular.extend(collection[key], obj);
+            } else {
+              collection[key] = obj;
+            }
+          };
+          updateCacheFromStorage = function(cache, storage) {
+            if (storage) {
+              if (angular.isObject(storage.value) && angular.isObject(cache)) {
+                angular.extend(cache, transformLoad(storage.value));
+              } else {
+                cache = transformLoad(storage.value);
+              }
+              updateCache(cache, storage.key);
+            }
+            return cache;
+          };
+          allAsCollection = function(callback) {
+            LawnChair(function() {
+              this.all(function(result) {
+                angular.forEach(result, function(o) {
+                  updateCache(o.value, o.key);
+                });
+                if (callback) {
+                  callback(collection);
+                }
+              });
+            });
+            return collection;
+          };
+          allAsArray = function(callback) {
+            return updateArray(allAsCollection(function(data) {
+              updateArray(data);
+              if (callback) {
+                callback(array);
+              }
+            }));
+          };
+          removeEntry = function(key) {
+            delete collection[key];
+            LawnChair(function() {
+              this.remove(key);
+            });
+          };
+          getDefault = function(key) {
+            var d;
+            if (collection[key]) {
+              return collection[key];
+            } else {
+              d = {};
+              idGetter.assign(d, key);
+              return d;
+            }
+          };
+          collection = {};
+          array = [];
+          isArray = config && config.isArray;
+          idGetter = $parse((config && config.entryKey ? config.entryKey : 'id'));
+          transformSave = (config && config.transformSave ? config.transformSave : angular.identity);
+          transformLoad = (config && config.transformLoad ? config.transformLoad : angular.identity);
+          Store = {
+            collection: collection,
+            save: function(data, key, clear) {
+              var newIds;
+              if (!data) {
+                data = collection;
+                key = null;
+              }
+              if (angular.isArray(data)) {
+                angular.forEach(data, function(e, index) {
+                  saveEntry(e, getEntryId(e) || index);
+                });
+              } else if (key || (data && getEntryId(data))) {
+                saveEntry(data, key || getEntryId(data));
+              } else {
+                angular.forEach(data, saveEntry);
+              }
+              if (clear) {
+                newIds = (angular.isArray(data) ? _.chain(data).map(getEntryId).map(String).value() : _.keys(data));
+                _.chain(collection).keys().difference(newIds).each(removeEntry);
+                _.chain(collection).filter(function(entry) {
+                  return !getEntryId(entry);
+                }).keys().each(removeEntry);
+              }
+              if (isArray) {
+                updateArray(collection);
+              }
+            },
+            batch: function(keys, target, callback) {
+              var cache;
+              cache = _.chain(keys).map(function(k) {
+                return getDefault(k);
+              }).value();
+              if (target && angular.isArray(target)) {
+                target.length = 0;
+                _.each(cache, function(o) {
+                  target.push(o);
+                });
+              } else {
+                target = cache;
+              }
+              LawnChair(function() {
+                this.get(keys, function(result) {
+                  var i;
+                  if (result) {
+                    i = result.length - 1;
+                    while (i >= 0) {
+                      target[i] = updateCacheFromStorage(target[i], result[i]);
+                      i--;
+                    }
+                  }
+                  if (callback) {
+                    callback(target);
+                  }
+                });
+              });
+              return target;
+            },
+            get: function(key, callback) {
+              var value;
+              value = getDefault(key);
+              LawnChair(function() {
+                this.get(key, function(result) {
+                  if (result) {
+                    value = updateCacheFromStorage(value, result);
+                  }
+                  if (callback) {
+                    callback(value);
+                  }
+                });
+              });
+              return value;
+            },
+            all: (isArray ? allAsArray : allAsCollection),
+            remove: removeEntry,
+            nuke: function() {
+              LawnChair(function() {
+                this.nuke();
+              });
+            },
+            destroy: function() {
+              var key;
+              for (key in collection) {
+                delete collection[key];
+              }
+              LawnChair(function() {
+                this.nuke();
+              });
+            }
+          };
+          return Store;
+        };
+      }
+    ]);
+  });
+
+}).call(this);

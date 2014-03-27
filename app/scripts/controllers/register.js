@@ -49,7 +49,6 @@ define(
             }
           };
 
-
           $scope.step = {
             value: null,
 
@@ -140,7 +139,13 @@ define(
 
           $scope.register = function ()
           {
-            AskFast.register($scope.data)
+            AskFast.caller('register', {
+              name:         $scope.data.user.name.full(),
+              username:     $scope.data.user.email,
+              password:     $scope.data.passwords.first,
+              phone:        $scope.data.user.phone,
+              verification: 'SMS'
+            })
               .then(function (result)
               {
                 if (!result.hasOwnProperty('error'))
@@ -173,7 +178,7 @@ define(
 
               if ($scope.registrationForm1.email.$valid)
               {
-                AskFast.userExists($scope.data.user.email)
+                AskFast.caller('userExists', { username: $scope.data.user.email })
                   .then(function (result)
                   {
                     $scope.data.validation.userExists = ((result.hasOwnProperty('error')));
@@ -187,7 +192,10 @@ define(
 
           $scope.verify = function ()
           {
-            AskFast.verify($scope.data)
+            AskFast.caller('registerVerify', {
+              code: $scope.data.verification.code,
+              id:   localStorage.getItem('data.verification.id') // TODO: Make Store
+            })
               .then(function (result)
               {
                 if (!result.hasOwnProperty('error'))
@@ -209,7 +217,10 @@ define(
 
           $scope.resend = function ()
           {
-            AskFast.resend()
+            AskFast.caller('resendVerify', {
+              code:         localStorage.getItem('data.verification.id'), // TODO: Make Store
+              verification: 'SMS'
+            })
               .then(function (result)
               {
                 if (!result.hasOwnProperty('error'))

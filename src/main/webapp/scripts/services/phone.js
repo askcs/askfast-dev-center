@@ -1,1 +1,0 @@
-define(["services/services"],function(e){e.factory("Phone",[function(){function e(e,t,n){var r=phoneNumberParser(e,t,n);return r.parsed=angular.fromJson(r.parsed),r}return{parse:e}}])});
