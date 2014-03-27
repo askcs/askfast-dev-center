@@ -53,44 +53,54 @@ define(
               {
                 username: $scope.login.email,
                 password: MD5($scope.login.password)
-              })
-              .then(function (result)
+              },
+              null,
               {
-                if ([400, 403, 404, 500].indexOf(result.status) < 0)
+                success: function (result)
                 {
-                  $scope.login.error = {
-                    state:  true,
-                    code:   result.status
-                  };
+                  if (result.hasOwnProperty('X-SESSION_ID'))
+                  {
+                    $scope.login.error = {
+                      state:  false,
+                      code:   null
+                    };
 
-                  loginBtn.text('Login')
-                          .removeAttr('disabled');
-                }
+                    Session.set(result['X-SESSION_ID'], true);
 
-                if (result.hasOwnProperty('X-SESSION_ID'))
-                {
-                  $scope.login.error = {
-                    state:  false,
-                    code:   null
-                  };
+                    $scope.login.state = true;
 
-                  Session.set(result['X-SESSION_ID'], true);
+                    AskFast.caller('info')
+                      .then(function (info)
+                      {
+                        Store.save({
+                          user: info
+                        });
 
-                  $scope.login.state = true;
+                        $rootScope.user = info;
 
-                  AskFast.caller('info')
-                    .then(function (info)
-                    {
-                      Store.save({
-                        user: info
+                        $location.path('/home');
                       });
+                  }
+                },
+                error: function (result)
+                {
+                  if ([400, 403, 404, 500].indexOf(result.status) >= 0)
+                  {
+                    console.log('falling in');
 
-                      $location.path('/home');
-                    });
+                    $scope.login.error = {
+                      state:  true,
+                      code:   result.status
+                    };
 
+                    console.warn('login error ->', $scope.login.error);
+
+                    loginBtn.text('Login')
+                      .removeAttr('disabled');
+                  }
                 }
-
-              });
+              }
+            );
           };
         }
       ]

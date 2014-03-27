@@ -52,6 +52,7 @@ require (
     'services/interceptor',
     'services/logger',
     'controllers/home',
+    'controllers/user',
     'controllers/register',
     'controllers/login',
     'controllers/logout',

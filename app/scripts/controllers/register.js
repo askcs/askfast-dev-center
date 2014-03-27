@@ -6,10 +6,12 @@ define(
 
     controllers.controller ('register',
       [
-        '$scope', '$rootScope', '$location', 'AskFast',
-        function ($scope, $rootScope, $location, AskFast)
+        '$scope', '$rootScope', '$location', 'AskFast', 'Session', 'Store',
+        function ($scope, $rootScope, $location, AskFast, Session, Store)
         {
-          $('body').addClass('register-0');
+          Store = Store('app');
+
+          angular.element('body').addClass('register-0');
 
           $scope.data = {
             user: {
@@ -99,7 +101,18 @@ define(
 
             forward: function ()
             {
-              var current = this.value;
+              var current = this.value,
+                  body    = angular.element('body');
+
+              body.removeClass();
+
+              switch (current)
+              {
+                case 1: body.addClass('register-0'); break;
+                case 2: body.addClass('register-1'); break;
+                case 3: body.addClass('register-2'); break;
+                case 4: body.addClass('register-3'); break;
+              }
 
               if (this.validate(current))
               {
@@ -122,19 +135,6 @@ define(
             $location.hash('step-3');
           }
 
-          $scope.$watch('$location', function ()
-          {
-            $('body').removeClass();
-
-            switch ($scope.step.resolve)
-            {
-              case 1: $('body').addClass('register-0'); break;
-              case 2: $('body').addClass('register-1'); break;
-              case 3: $('body').addClass('register-1'); break;
-              case 4: $('body').addClass('register-3'); break;
-            }
-          });
-
           $scope.step.value = $scope.step.resolve;
 
           $scope.register = function ()
@@ -152,6 +152,7 @@ define(
                 {
                   $scope.data.verification.id = result.verificationCode;
 
+                  // TODO: Replace with Store
                   localStorage.setItem('data.verification.id', result.verificationCode);
                 }
                 else
@@ -194,7 +195,7 @@ define(
           {
             AskFast.caller('registerVerify', {
               code: $scope.data.verification.code,
-              id:   localStorage.getItem('data.verification.id') // TODO: Make Store
+              id:   localStorage.getItem('data.verification.id') // TODO: Replace with Store
             })
               .then(function (result)
               {
@@ -204,7 +205,7 @@ define(
 
                   $scope.step.forward();
 
-                  $rootScope.session = result['X-SESSION_ID'];
+                  $scope.sessionId = result['X-SESSION_ID'];
                 }
                 else
                 {
@@ -235,6 +236,28 @@ define(
                 }
               });
           };
+
+          $scope.bootstrap = function ()
+          {
+            // $rootScope.session = result['X-SESSION_ID'];
+
+            Session.set($scope.sessionId, true);
+
+            // $scope.login.state = true;
+
+            AskFast.caller('info')
+              .then(function (info)
+              {
+                Store.save({
+                  user: info
+                });
+
+                $rootScope.user = info;
+
+                $location.path('/home');
+              });
+          }
+
 
         }
       ]

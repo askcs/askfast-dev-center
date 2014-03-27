@@ -40,8 +40,7 @@ define ['services/services'], (services) ->
 
           # Get cookie
           get: () ->
-            cookie = $cookieStore.get 'X-SESSION_ID'
-            cookie.split(';')[0]
+            cookie.split(';')[0] if cookie = $cookieStore.get 'X-SESSION_ID'
 
         # Set the session
         set: (id, log) ->
@@ -54,6 +53,7 @@ define ['services/services'], (services) ->
 
         # Clear the session
         clear: ->
+          $cookieStore.remove 'X-SESSION_ID'
           $http.defaults.headers.common['X-SESSION_ID'] = null
           return
       )

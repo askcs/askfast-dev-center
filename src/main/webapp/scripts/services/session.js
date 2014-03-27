@@ -27,8 +27,9 @@
             },
             get: function() {
               var cookie;
-              cookie = $cookieStore.get('X-SESSION_ID');
-              return cookie.split(';')[0];
+              if (cookie = $cookieStore.get('X-SESSION_ID')) {
+                return cookie.split(';')[0];
+              }
             }
           },
           set: function(id, log) {
@@ -47,6 +48,7 @@
             return session;
           },
           clear: function() {
+            $cookieStore.remove('X-SESSION_ID');
             $http.defaults.headers.common['X-SESSION_ID'] = null;
           }
         };

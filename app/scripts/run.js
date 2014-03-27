@@ -6,8 +6,8 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', 'Offline', 'Session',
-        function($rootScope, $location, Offline, Session)
+        '$rootScope', '$location', 'Offline', 'Session', 'Store',
+        function($rootScope, $location, Offline, Session, Store)
         {
           new Offline();
 
@@ -25,6 +25,8 @@ define(
 
           $rootScope.app = $rootScope.app || {};
 
+          $rootScope.user = $rootScope.user || Store('app').get('user');
+
           $rootScope.setLanguage = function (language)
           {
             $rootScope.app.language = language;
@@ -35,9 +37,11 @@ define(
 
           $rootScope.config = config.app;
 
-          // if (Session.get()) $location.path('/home');
+          if (Session.get()) $location.path('/home');
 
-          // TODO: Take it to a directive
+          /**
+           * TODO: Take it to a directive
+           */
           $rootScope.$on('$routeChangeStart', function () {});
 
           $rootScope.$on('$routeChangeSuccess', function () {});

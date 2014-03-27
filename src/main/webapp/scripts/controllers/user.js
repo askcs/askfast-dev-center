@@ -1,0 +1,1 @@
+define(["controllers/controllers","modals/askfast"],function(e,t){e.controller("user",["$scope","$rootScope","AskFast","Session","Store","$location",function(e,t,n,r,i,s){e.logout=function(){r.clear(),n.caller("logout").then(function(){s.path("/login")})}}])});

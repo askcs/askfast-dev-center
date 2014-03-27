@@ -24,24 +24,10 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icons/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="/favicon.png">
-    <link rel="stylesheet" href="styles/46b24de3.main.css">
+    <link rel="stylesheet" href="styles/832c12d7.main.css">
   </head>
   <body>
-    <div role="navigation" ng-hide="isInternPage()" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li ng-repeat="item in config.app.nav.user" ng-class="(location.path == item) &amp;&amp; 'active'"><a ng-href="{{'#' + item + (item == 'register' &amp;&amp; '#step-1' || '')}}">{{ui.globals.nav.user[item]}}</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div id="wrap" class="ng-cloak">
-      <div ng-view="" class="container-fluid"></div>
-    </div>
-    <script data-main="scripts/21d68fc0.main" src="vendors/requirejs/require.js"></script>
+    <article ng-view="" class="ng-cloak"></article>
+    <script data-main="scripts/6f715bf0.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

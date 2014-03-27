@@ -126,7 +126,7 @@ define(
             }
           );
 
-          AskFast.prototype.caller = function (proxy, params, data, success, error)
+          AskFast.prototype.caller = function (proxy, params, data, callback)
           {
             var deferred = $q.defer();
 
@@ -139,15 +139,15 @@ define(
                 data,
                 function (result)
                 {
-                  if (success) success.call();
+                  if (callback && callback.success) callback.success.call(this, result);
 
                   deferred.resolve(result);
                 },
-                function (err)
+                function (result)
                 {
-                  if (error) error.call(err);
+                  if (callback && callback.error) callback.error.call(this, result);
 
-                  deferred.resolve({error: err});
+                  deferred.resolve({error: result});
                 }
               );
             }
