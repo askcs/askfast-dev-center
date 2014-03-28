@@ -1,0 +1,1 @@
+define(["directives/directives"],function(e){e.directive("navbar",["$rootScope","$location",function(e,t){return{restrict:"E",rep1ace:!0,templateUrl:"views/navbar.html",link:function(n,r,i){n.user=e.user,n.current=t.path()},scope:{}}}])});

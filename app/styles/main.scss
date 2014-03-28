@@ -118,6 +118,12 @@ body {
           cursor: pointer;
         }
       }
+
+      .active {
+        color: $pink;
+        text-decoration: none;
+        background-color: none;
+      }
     }
   }
 

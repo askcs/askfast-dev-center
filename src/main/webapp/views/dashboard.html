@@ -1,24 +1,7 @@
-<div role="navigation" ng-controller="user" class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="navbar-brand">ASK Developer Center</a>
-    </div>
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li><a href="#">DASHBOARD</a></li>
-        <li><a href="#">DEVELOPER TOOLS</a></li>
-        <li><a href="#">HELP</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">{{ user.name }}</a></li>
-        <li><a ng-click="logout()">LOGOUT</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
+<navbar></navbar>
 <div id="wrap">
   <div class="container-fluid">
-    <section id="home">
+    <section id="dashboard">
       <div class="container-fluid">
         <div id="sub-header" class="row">
           <div class="col-md-12 text-center">
@@ -68,6 +51,7 @@
                 <header>
                   <h2>Debugger</h2>
                 </header>
+                <section></section>
               </div>
             </div>
           </div>

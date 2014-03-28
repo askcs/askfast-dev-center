@@ -4,12 +4,11 @@ define(
   {
     'use strict';
 
-    controllers.controller ('home',
+    controllers.controller ('help',
       [
         '$rootScope', '$scope',
         function ($rootScope, $scope)
         {
-          $('body').removeClass();
         }
       ]
     );

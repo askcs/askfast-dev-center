@@ -10,11 +10,6 @@ define(
         function ($routeProvider, $httpProvider)
         {
           $routeProvider
-            .when('/home',
-            {
-              templateUrl:    'views/home.html',
-              controller:     'home'
-            })
             .when('/register',
             {
               templateUrl:    'views/register.html',
@@ -31,8 +26,28 @@ define(
               templateUrl:    'views/logout.html',
               controller:     'logout'
             })
+            .when('/dashboard',
+            {
+              templateUrl:    'views/dashboard.html',
+              controller:     'dashboard'
+            })
+            .when('/developer',
+            {
+              templateUrl:    'views/developer.html',
+              controller:     'developer'
+            })
+            .when('/help',
+            {
+              templateUrl:    'views/help.html',
+              controller:     'help'
+            })
+            .when('/profile',
+            {
+              templateUrl:    'views/profile.html',
+              controller:     'profile'
+            })
             .otherwise({
-              redirectTo: '/home'
+              redirectTo: '/dashboard'
             });
 
           $httpProvider.interceptors.push('Interceptor');
