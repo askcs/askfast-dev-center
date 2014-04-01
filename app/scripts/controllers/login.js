@@ -80,6 +80,13 @@ define(
 
                         $location.path('/home');
                       });
+
+
+                    AskFast.caller('logs')
+                      .then(function (logs)
+                      {
+                        console.log('logs ->', logs);
+                      });
                   }
                 },
                 error: function (result)

@@ -316,6 +316,7 @@ body {
 #widgets {
 
   .widget {
+
     .inner {
       background-color: white;
       margin: 1em !important;
@@ -323,6 +324,12 @@ body {
       header {
         h2 {
           padding: .5em;
+          padding-bottom: 0 !important;
+        }
+
+        span {
+          padding: .5em;
+          margin-left: .5em !important;
         }
       }
 

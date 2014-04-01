@@ -22,22 +22,103 @@ navbar
             .widget.widget-left
               .inner
                 header
-                  h2 Debugger
+                  h2 API Keys
+                  span For creating a dialog, you will need public private keys.
                 section
-                  p Some section information.
+                  form(role='form')
+                    .form-group
+                      label(for='publicKey') Public Key
+                      input#publicKey.form-control(type='text',
+                      placeholder='Enter your private key')
+                    .form-group
+                      label(for='privateKey') Private Key
+                      input#privateKey.form-control(type='text',
+                      placeholder='Enter your private key')
+                      .help-block Please do not share your private key with other people.
+                    button.btn.btn-default(type='button') Dialog Manager
+
 
             .widget.widget-left
               .inner
                 header
                   h2 Debugger
+                section
+                  p Some section information.
 
           .col-md-6
             .widget.widget-right
               .inner
                 header
-                  h2 Debugger
+                  h2 Document Center
+                  span Documents
+                section
+                  ul
+                    li: a(href='') Introduction to SMS sending
+                    li: a(href='') Testing credentials
+                    li: a(href='') Request types
+                  button.btn.btn-default(type='button') More Documents
+
             .widget.widget-right
               .inner
                 header
-                  h2 Debugger
+                  h2 Tutorials
+                  span You may want to start with starting tutorials.
                 section
+                  ul
+                    li: a(href='') Sending and receiving SMS Messages
+                    li: a(href='') How to handle incoming calls
+                    li: a(href='') Making an Outbound call
+                  button.btn.btn-default(type='button') More Tutorials
+
+            .widget.widget-right
+              .inner
+                header
+                  h2 Fast Developer Support
+                  span You may want to start with starting tutorials.
+                section
+                  p Your current plan provides you e-mail support.
+                  button.btn.btn-default(type='button') Change Support Plan
+                  br
+                  br
+                  p
+                    | Did you find a bug?
+                    a(href='') Create a ticket
+
+        #widgets.row
+          .col-md-12
+            .widget
+              .inner
+                header
+                  h2 Analysis
+                  span For creating a dialog, you will need public, private keys.
+                section
+                  p A diagram.
+
+        #widgets.row
+          .col-md-12
+            .widget
+              .inner
+                header
+                  h2 Fast Developers
+                  span For creating a dialog, you will need public, private keys.
+                section
+                  .row
+                    .col-md-6
+                      h4 Ranking communications
+                      p.
+                        Ask-Fast gives you a lot of opportunities and also communication channels. In
+                        some scenarios, you may want to rank them for reducing dialog cost. I will
+                        show you how you can
+                      a(href='') read more
+                    .col-md-6
+                      h4 TTS for your written communication
+                      p.
+                        Ask-Fast gives you a lot of opportunities and also communication channels. In
+                        some scenarios, you may want to rank them for reducing dialog cost. I will
+                        show you how you can
+                      a(href='') read more
+                  .row
+                    .col-md-12
+                      p
+                        | Do you want to become a verified developer?
+                        button.btn.btn-default(type='button') Yes, I want
