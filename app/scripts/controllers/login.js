@@ -65,7 +65,7 @@ define(
                       code:   null
                     };
 
-                    Session.set(result['X-SESSION_ID'], true);
+                    Session.set(result['X-SESSION_ID']);
 
                     $scope.login.state = true;
 
@@ -79,13 +79,6 @@ define(
                         $rootScope.user = info;
 
                         $location.path('/home');
-                      });
-
-
-                    AskFast.caller('logs')
-                      .then(function (logs)
-                      {
-                        console.log('logs ->', logs);
                       });
                   }
                 },

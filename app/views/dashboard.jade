@@ -17,8 +17,28 @@ navbar
               | life.
             button.btn.btn-primary(href='#') Upgrade
 
-        #widgets.row
+    #widgets.row
           .col-md-6
+
+            div.panel.panel-default(ng-show='false')
+              div.panel-heading
+                h3.panel-title API Keys
+                span For creating a dialog, you will need public private keys.
+              div.panel-body
+                form(role='form')
+                  .form-group
+                    label(for='publicKey') Public Key
+                    input#publicKey.form-control(type='text',
+                    placeholder='Enter your private key')
+                  .form-group
+                    .input-group
+                      input#privateKey.form-control(type='password',
+                      placeholder='Enter your private key')
+                      span.input-group-btn
+                        button.btn.btn-default(type='button') Reveal
+                    .help-block Please do not share your private key with other people.
+                  button.btn.btn-default(type='button') Dialog Manager
+
             .widget.widget-left
               .inner
                 header
@@ -31,9 +51,11 @@ navbar
                       input#publicKey.form-control(type='text',
                       placeholder='Enter your private key')
                     .form-group
-                      label(for='privateKey') Private Key
-                      input#privateKey.form-control(type='text',
-                      placeholder='Enter your private key')
+                      .input-group
+                        input#privateKey.form-control(type='password',
+                        placeholder='Enter your private key')
+                        span.input-group-btn
+                          button.btn.btn-default(type='button') Reveal
                       .help-block Please do not share your private key with other people.
                     button.btn.btn-default(type='button') Dialog Manager
 

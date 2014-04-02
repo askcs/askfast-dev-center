@@ -9,8 +9,7 @@ define(
     'filters/filters',
     'directives/directives',
     'angular-resource',
-    'angular-route',
-    'angular-cookies'
+    'angular-route'
   ],
   function (angular)
   {
@@ -22,8 +21,7 @@ define(
         'filters',
         'directives',
         'ngResource',
-        'ngRoute',
-        'ngCookies'
+        'ngRoute'
       ]);
   }
 );

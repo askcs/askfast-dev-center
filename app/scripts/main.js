@@ -12,7 +12,6 @@ require.config (
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-      'angular-cookies':    '../vendors/angular-cookies/angular-cookies.min',
       signet:   '../vendors/signet/signet.min',
       lawnchair: '../vendors/lawnchair/src/Lawnchair',
       dom: '../vendors/lawnchair/src/adapters/dom'
@@ -21,7 +20,6 @@ require.config (
       angular:            { deps: ['jquery'], exports:  'angular' },
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
-      'angular-cookies':  { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
       lawnchair:          { exports: 'lawnchair' },
       dom:                { deps: ['lawnchair'], exports: 'dom' }
@@ -36,7 +34,6 @@ require (
     'jquery',
     'angular-resource',
     'angular-route',
-    'angular-cookies',
     'localization',
     'config',
     'app',

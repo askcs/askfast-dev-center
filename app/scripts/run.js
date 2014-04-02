@@ -6,8 +6,8 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', 'Offline', 'Session', 'Store',
-        function($rootScope, $location, Offline, Session, Store)
+        '$rootScope', '$location', 'Offline', 'Session', 'Store', '$http',
+        function($rootScope, $location, Offline, Session, Store, $http)
         {
           new Offline();
 
@@ -37,7 +37,10 @@ define(
 
           $rootScope.config = config.app;
 
-          if (Session.get()) $location.path('/home');
+          // if (Session.get()) $location.path('/developer');
+
+          if (!$http.defaults.headers.common['X-SESSION_ID'])
+            $http.defaults.headers.common['X-SESSION_ID'] = Session.get();
 
           /**
            * TODO: Take it to a directive

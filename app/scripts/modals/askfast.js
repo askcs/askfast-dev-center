@@ -89,7 +89,8 @@ define(
                 method: 'GET',
                 params: {
                   action: 'adapter'
-                }
+                },
+                isArray: true
               },
               createAdapter: {
                 method: 'POST',

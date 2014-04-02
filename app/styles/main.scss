@@ -303,6 +303,20 @@ body {
   p {
     margin-top: 1.3em;
   }
+
+  ul {
+    margin: 15px 0 0 15px;
+
+    li {
+      a {
+        color: $white;
+      }
+    }
+  }
+}
+
+#toolbar {
+  padding: 1em;
 }
 
 #info-box {
