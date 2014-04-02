@@ -41,7 +41,6 @@ define(
 
           $scope.channelTypeSelected = function ()
           {
-            // console.log('channel type has been changed!');
             var candidates = [];
 
             angular.forEach($scope.extensions, function (extension)
@@ -56,12 +55,70 @@ define(
             $scope.candidates = candidates;
           };
 
+
+
           AskFast.caller('getAdapters')
             .then(function (adapters)
             {
               console.log('free adapters ->', adapters);
             });
 
+
+
+          $scope.Dialog = {
+
+            list: function (callback)
+            {
+              AskFast.caller('getDialog')
+                .then(function (dialogs)
+                {
+                  $scope.dialogs = dialogs;
+
+                  if (callback) callback.call();
+                });
+            },
+
+            add: function (dialog)
+            {
+              AskFast.caller('createDialog', null, {
+                name: dialog.form.name,
+                url: dialog.form.url
+              })
+                .then((function ()
+                {
+                  $scope.addingDialog = false;
+
+                  this.list(function ()
+                  {
+                    $scope.setSection('dialogs');
+                  });
+                }).bind(this));
+            },
+
+            remove: function (dialog)
+            {
+              AskFast.caller('deleteDialog', {
+                node: dialog.id
+              })
+                .then((function ()
+                {
+                  $scope.addingDialog = false;
+
+                  this.list(function ()
+                  {
+                    $scope.setSection('dialogs');
+                  });
+                }).bind(this));
+            },
+
+            open: function (dialog)
+            {
+              $scope.dialog = dialog;
+            }
+
+          };
+
+          $scope.Dialog.list();
 
         }
       ]

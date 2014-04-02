@@ -24,6 +24,7 @@ navbar
                     button.btn.btn-default(type='button') Search
           .col-md-9.text-right
             button.btn.btn-default(type='button',
+            ng-click='setSection("addDialog")',
             ng-show='(current=="dialogs")') Add a dialog
 
         section(ng-switch='', on='current')
@@ -50,30 +51,44 @@ navbar
                           th -
                           th: a(href='') Remove
 
-          #widgets.row(ng-switch-when='dialogs')
+          #widgets.row(ng-switch-when='addDialog')
+            .col-md-12
+              .widget
+                .inner
+                  header
+                    h2 Add a new dialog
+                  section
+                    form(role='form',
+                    ng-submit='Dialog.add(dialog)')
+                      .form-group
+                        .input-group
+                          input.form-control(type='text',
+                          ng-model='dialog.form.name',
+                          placeholder='Dialog name')
+                      .form-group
+                        .input-group
+                          input.form-control(type='text',
+                          ng-model='dialog.form.url',
+                          placeholder='URL for dialog')
+                      button.btn.btn-default(type='submit') Add a dialog
+                      a(ng-click='setSection("dialogs")', href='') &nbsp; or go back to the list.
 
+          #widgets.row(ng-switch-when='dialogs')
             .col-md-3
               .widget.widget-left
                 .inner
                   header
-                    h2 External Dialogs
-                    span You have 1 online, 2 offline dialogs
+                    h2 Dialogs
+                    // span You have 1 online, 2 offline dialogs
                   section
-                    ul
-                      li
-                        a(href='') Cow Registration Dialog
+                    p(ng-show='dialogs.length < 1')
+                      | There are no dialogs yet. Please add one.
+                    ul(ng-hide='dialogs.length < 1')
+                      li(ng-repeat='dialog in dialogs')
+                        a(ng-click='Dialog.open(dialog)', href='') {{dialog.name}}
                         | &nbsp;(online)&nbsp;
-                        a(href='') settings
-                      li
-                        a(href='') Sheep Registration Dialog
-                        | &nbsp;(offline)&nbsp;
-                        a(href='') settings
-                      li
-                        a(href='') Chicken Registration Dialog
-                        | &nbsp;(offline)&nbsp;
-                        a(href='') settings
-
-              .widget.widget-left
+                        a(ng-click='Dialog.remove(dialog)', href='') remove
+              .widget.widget-left(ng-show='false')
                 .inner
                   header
                     h2 Dialogs in Market
@@ -88,15 +103,14 @@ navbar
                         a(href='') Oneline
                         | &nbsp;(online)&nbsp;
                         a(href='') settings
-
-            .col-md-9
+            .col-md-9(ng-show='dialog')
               .widget.widget-right
                 .inner
                   header
-                    h2 Cow Registration Dialog
-                    span Cow registration flow for Netherlands government.
+                    h2 {{dialog.name}}
+                    span {{dialog.url}}
                   section
-                    h4 Dialog state
+                    h5 State
                     ul.list-inline
                       li
                         input#onState(name='state',
@@ -107,8 +121,6 @@ navbar
                         type='radio')
                         label(for='offState') &nbsp;Off
                     form.form-inline(role='form')
-                      p candidates -> {{channel}}
-
                       .form-group
                         h5 Type
                         select.form-control(ng-model='channel.type',
@@ -116,20 +128,16 @@ navbar
                           option(ng-repeat='type in types',
                           value='{{$index}}') {{type}}
                         span.help-block Please select a type first
-
                       .form-group(style='margin-left: 15px', ng-hide='(channel.type == null)')
                         h5 Extension
                         select.form-control(ng-model='channel.extension')
                           option(ng-repeat='candidate in candidates',
                           value='{{candidate.id}}') {{candidate.value}}
                         span.help-block Select the extension
-
                       .form-group(style='margin-left: 15px')
                         button.btn.btn-default(type='submit',
                         style='margin-top: 3px') Add a new channel
-
-                    hr
-                    h4 Channels
+                    h5 Channels
                     p You have no channels configured for this dialog yet.
 
           #widgets.row(ng-switch-when='debugger')

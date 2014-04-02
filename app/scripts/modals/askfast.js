@@ -10,7 +10,7 @@ define(
         function ($resource, $q, $location, $rootScope, Log)
         {
           var AskFast = $resource(
-            $rootScope.config.host + '/:action/:level',
+            $rootScope.config.host + '/:action/:level/:node',
             {},
             {
               register: {
@@ -47,6 +47,7 @@ define(
                   verification: ''
                 }
               },
+
               login: {
                 method: 'GET',
                 params: {
@@ -61,23 +62,27 @@ define(
                   action: 'logout'
                 }
               },
+
               authorizedApp: {
                 method: 'GET',
                 params: {
                   action: 'authorized_app'
                 }
               },
+
               info: {
                 method: 'GET',
                 params: {
                   action: 'info'
                 }
               },
+
               getDialog: {
                 method: 'GET',
                 params: {
                   action: 'dialog'
-                }
+                },
+                isArray: true
               },
               createDialog: {
                 method: 'POST',
@@ -85,6 +90,13 @@ define(
                   action: 'dialog'
                 }
               },
+              deleteDialog: {
+                method: 'DELETE',
+                params: {
+                  action: 'dialog'
+                }
+              },
+
               getAdapters: {
                 method: 'GET',
                 params: {
@@ -103,8 +115,10 @@ define(
                 method: 'GET',
                 params: {
                   action: 'free_adapters'
-                }
+                },
+                isArray: true
               },
+
               key: {
                 method: 'GET',
                 params: {
@@ -122,7 +136,8 @@ define(
                 method: 'GET',
                 params: {
                   action: 'log'
-                }
+                },
+                isArray: true
               }
             }
           );
