@@ -108,14 +108,21 @@ define(
                 method: 'POST',
                 params: {
                   action: 'adapter',
-                  id: ''
+                  level: ''
                 }
               },
               updateAdapter: {
                 method: 'PUT',
                 params: {
                   action: 'adapter',
-                  id: ''
+                  level: ''
+                }
+              },
+              removeAdapter: {
+                method: 'DELETE',
+                params: {
+                  action: 'adapter',
+                  level: ''
                 }
               },
               freeAdapters: {

@@ -22,22 +22,59 @@ navbar
                   placeholder='Search')
                   span.input-group-btn
                     button.btn.btn-default(type='button') Search
-          .col-md-9.text-right
+          .col-md-7
+          .col-md-2.text-right
             button.btn.btn-default(type='button',
             ng-click='setSection("addDialog")',
             ng-show='(current=="dialogs")') Add a dialog
+            select.form-control(ng-model='adapterType',
+            ng-change='Adapter.query(adapterType)')
+              option(value='', selected) Add a new adapter
+              option(value='email') Email
+              option(value='broadsoft') Phone
+              option(value='sms') SMS
+              option(value='xmpp') Gtalk
+              option(value='twitter') Twitter
 
         section(ng-switch='', on='current')
 
           #widgets.row(ng-switch-when='extensions')
+
+            .col-md-12(ng-show='adapterType')
+              .widget
+                .inner
+                  header
+                    h2 Available extensions
+                    span Extensions that you can hook with your account
+                  section
+                    p(ng-hide='freeAdapters.length > 0')
+                      | There are not any available extension for this type.
+                    table.table.table-bordered.table-hover(style='background-color: white',
+                    ng-show='freeAdapters.length > 0')
+                      thead
+                        tr
+                          th Extensions
+                          th Type
+                          th Usage
+                          th Actions
+                      tbody
+                        tr(ng-repeat='extension in freeAdapters')
+                          th {{extension | translateAdapterAddress}}
+                          th {{extension | translateAdapterType}}
+                          th -
+                          th: a(ng-click='Adapter.add(extension)', href='') Add to your account
+
             .col-md-12
               .widget
                 .inner
                   header
-                    h2 Extensions
+                    h2 Your extensions
                     span Extensions management
                   section
-                    table.table.table-bordered.table-hover(style='background-color: white')
+                    p(ng-hide='extensions.length > 0')
+                      | There are not any extensions for your account.
+                    table.table.table-bordered.table-hover(style='background-color: white',
+                    ng-show='extensions.length > 0')
                       thead
                         tr
                           th Extensions
@@ -49,7 +86,7 @@ navbar
                           th {{extension | translateAdapterAddress}}
                           th {{extension | translateAdapterType}}
                           th -
-                          th: a(href='') Remove
+                          th: a(ng-click='Adapter.remove(extension)', href='') Remove
 
           #widgets.row(ng-switch-when='addDialog')
             .col-md-12

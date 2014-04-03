@@ -60,20 +60,51 @@ define(
             
             list: function (callback)
             {
+              $scope.adapterType = '';
+
               AskFast.caller('getAdapters')
                 .then(function (adapters)
                 {
                   $scope.extensions = adapters;
 
-
-
                   if (callback) callback.call();
                 });
+            },
+
+            add: function (adapter)
+            {
+              AskFast.caller('createAdapter', {
+                level: adapter.configId
+              }).then((function ()
+              {
+                this.list();
+              }).bind(this));
+            },
+
+            query: function (type)
+            {
+              AskFast.caller('freeAdapters', {
+                adapterType: type
+              })
+                .then(function (result)
+                {
+                  $scope.freeAdapters = result;
+                }
+              );
+            },
+
+            remove: function (adapter)
+            {
+              AskFast.caller('removeAdapter', {
+                level: adapter.configId
+              }).then((function ()
+              {
+                this.list();
+              }).bind(this));
             }
           };
 
           $scope.Adapter.list();
-
 
           $scope.Dialog = {
 
