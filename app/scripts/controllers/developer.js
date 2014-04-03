@@ -9,7 +9,7 @@ define(
         '$rootScope', '$scope', 'AskFast',
         function ($rootScope, $scope, AskFast)
         {
-          $scope.current = 'dialogs';
+          $scope.current = 'extensions';
 
           $scope.setSection = function (selection)
           {
@@ -24,13 +24,13 @@ define(
             'Twitter'
           ];
 
-          $scope.extensions = [
-            { id: 0, type: 0, value: '+31 10 123456789' },
-            { id: 1, type: 3, value: 'culusoy@ask-cs.com' },
-            { id: 2, type: 4, value: '@ask-fast' },
-            { id: 3, type: 0, value: '+31 85 2225456' },
-            { id: 4, type: 3, value: 'info@ask-fast.com' }
-          ];
+//          $scope.extensions = [
+//            { id: 0, type: 0, value: '+31 10 123456789' },
+//            { id: 1, type: 3, value: 'culusoy@ask-cs.com' },
+//            { id: 2, type: 4, value: '@ask-fast' },
+//            { id: 3, type: 0, value: '+31 85 2225456' },
+//            { id: 4, type: 3, value: 'info@ask-fast.com' }
+//          ];
 
           $scope.channel = {
             type: null,
@@ -56,13 +56,23 @@ define(
           };
 
 
-
-          AskFast.caller('getAdapters')
-            .then(function (adapters)
+          $scope.Adapter = {
+            
+            list: function (callback)
             {
-              console.log('free adapters ->', adapters);
-            });
+              AskFast.caller('getAdapters')
+                .then(function (adapters)
+                {
+                  $scope.extensions = adapters;
 
+
+
+                  if (callback) callback.call();
+                });
+            }
+          };
+
+          $scope.Adapter.list();
 
 
           $scope.Dialog = {

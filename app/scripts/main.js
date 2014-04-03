@@ -41,7 +41,7 @@ require (
     'run',
     'modals/askfast',
     'directives/navbar',
-    'filters/interpolate',
+    'filters/all',
     'services/session',
     'services/md5',
     'services/store',

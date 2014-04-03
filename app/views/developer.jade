@@ -46,8 +46,8 @@ navbar
                           th Actions
                       tbody
                         tr(ng-repeat='extension in extensions')
-                          th {{extension.value}}
-                          th {{types[extension.type]}}
+                          th {{extension | translateAdapterAddress}}
+                          th {{extension | translateAdapterType}}
                           th -
                           th: a(href='') Remove
 

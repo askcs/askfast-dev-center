@@ -111,6 +111,13 @@ define(
                   id: ''
                 }
               },
+              updateAdapter: {
+                method: 'PUT',
+                params: {
+                  action: 'adapter',
+                  id: ''
+                }
+              },
               freeAdapters: {
                 method: 'GET',
                 params: {
