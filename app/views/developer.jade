@@ -221,17 +221,18 @@ navbar
                       .form-group
                         label Adapter type:
                         select.form-control(ng-model='query.type',
-                        ng-change='Log.query.type()')
-                          option(value='all') All
-                          option(value='xmpp') XMPP
-                          option(value='call') Call
-                          option(value='mail') Mail
-                          option(value='sms') SMS
+                        ng-change='Log.type()')
+                          option(value='ALL') All
+                          option(value='GTALK') Gtalk
+                          option(value='TWITTER') Twitter
+                          option(value='PHONE') Phone
+                          option(value='EMAIL') Email
+                          option(value='SMS') SMS
 
                       .form-group(style='margin-left: 15px;')
                         label Severity level:
                         select.form-control(ng-model='query.severity',
-                        ng-change='Log.filter()')
+                        ng-change='Log.severity()')
                           option(value='ALL') All
                           option(value='DEBUG') Debug
                           option(value='INFO') Info
@@ -264,15 +265,15 @@ navbar
                         tr
                           th Time
                           th Level
-                          th Adapter Id
-                          th Adapter Type
+                          th Adapter
+                          th Type
                           th Message
                       tbody
                         tr(ng-repeat='log in logs | orderBy: "timestamp" : true')
                           td {{log.timestamp | parseTimeStamp}}
                           td {{log.level}}
-                          td {{log.adapterAddress}}
-                          td {{log.adapterType}}
+                          td {{log | translateAdapterAddress}}
+                          td {{log | translateAdapterType}}
                           td {{log.message}}
 
 

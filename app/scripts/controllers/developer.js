@@ -54,11 +54,6 @@ define(
             }
           };
 
-//          if (!$scope.adapterTypes.written && Store.get('adapterTypes'))
-//          {
-//            $scope.adapterTypes = Store.get('adapterTypes');
-//          }
-
           $scope.channel = {
             type: null,
             extension: null
@@ -83,11 +78,39 @@ define(
           };
 
           $scope.query = {
+            type: 'ALL',
             severity: 'ALL',
             ddr: false,
             limit: 100
           };
 
+//          function parseMessage (msg)
+//          {
+//            if (msg[0] == '{' && msg[msg.length-1] == '}')
+//            {
+//              return angular.fromJson(msg);
+//            }
+//            else if (/{/.test(msg) && /}/.test(msg))
+//            {
+//              var msgs = msg.split('{');
+//
+//              for (var i = 0; i < msgs.length; i++)
+//              {
+//                if (msgs[i][msg[i].length - 1] == '}')
+//                {
+//                  msgs[i] += '{';
+//                }
+//              }
+//
+//              return msgs;
+//            }
+//            else
+//            {
+//              return msg;
+//            }
+//          }
+
+          // For more logs 0854881008
           $scope.Log = {
             data: null,
 
@@ -98,32 +121,6 @@ define(
               })
                 .then((function (result)
                 {
-                  function parseMessage (msg)
-                  {
-                    if (msg[0] == '{' && msg[msg.length-1] == '}')
-                    {
-                      return angular.fromJson(msg);
-                    }
-//                    else if (/{/.test(msg) && /}/.test(msg))
-//                    {
-//                      var msgs = msg.split('{');
-//
-//                      for (var i = 0; i < msgs.length; i++)
-//                      {
-//                        if (msgs[i][msg[i].length - 1] == '}')
-//                        {
-//                          msgs[i] += '{';
-//                        }
-//                      }
-//
-//                      return msgs;
-//                    }
-                    else
-                    {
-                      return msg;
-                    }
-                  }
-
                   var logs = {
                     DDR:    [],
                     INFO:   [],
@@ -132,26 +129,56 @@ define(
 
                   angular.forEach(result, function (log)
                   {
-                    // console.log('given adapter id ->', log.adapterID);
-
-                    if ($scope.adapterTypes.broadsoft.ids.indexOf(log.adapterID) >= 0)
+                    angular.forEach($scope.extensions, function (extension)
                     {
-                      // console.log('adapter id ->', log.adapterID);
-                    }
+                      if (extension.configId == log.adapterID)
+                      {
+                        log.myAddress   = extension.myAddress;
+                        log.adapterType = extension.adapterType;
+                      }
+                    });
 
                     logs[log.level].push(log);
                   });
 
-                  // console.log('logs =>', logs);
-
                   this.data = logs;
 
-                  this.filter();
+                  this.type();
+                  this.severity();
 
                 }).bind(this));
             },
 
-            filter : function ()
+            type: function ()
+            {
+              var type;
+
+              switch ($scope.query.type)
+              {
+                case 'GTALK':   type = 'xmpp';      break;
+                case 'TWITTER': type = 'twitter';   break;
+                case 'PHONE':   type = 'broadsoft'; break;
+                case 'SMS':     type = 'sms';       break;
+                case 'EMAIL':   type = 'email';     break;
+              }
+
+              var logs = [];
+
+              angular.forEach(this.data, function (segment)
+              {
+                angular.forEach(segment, function (log)
+                {
+                  if (log.adapterType == type)
+                  {
+                    logs.push(log);
+                  }
+                })
+              });
+
+              $scope.logs = logs;
+            },
+
+            severity : function ()
             {
               switch ($scope.query.severity)
               {
@@ -178,10 +205,7 @@ define(
             }
           };
 
-          $scope.$watch('query.ddr', function ()
-          {
-            $scope.Log.list();
-          });
+          $scope.$watch('query.ddr', function () { $scope.Log.list(); });
 
           $scope.Log.list();
 
@@ -198,8 +222,6 @@ define(
                   {
                     $scope.adapterTypes[adapter.adapterType].ids.push(adapter.configId);
                   });
-
-//                  $scope.adapterTypes.written = true;
 
                   Store.save($scope.adapterTypes, 'adapterTypes');
 

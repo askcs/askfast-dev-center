@@ -211,17 +211,18 @@
                     <form role="form" class="form-inline">
                       <div class="form-group">
                         <label>Adapter type:</label>
-                        <select ng-model="query.type" ng-change="Log.query.type()" class="form-control">
-                          <option value="all">All</option>
-                          <option value="xmpp">XMPP</option>
-                          <option value="call">Call</option>
-                          <option value="mail">Mail</option>
-                          <option value="sms">SMS</option>
+                        <select ng-model="query.type" ng-change="Log.type()" class="form-control">
+                          <option value="ALL">All</option>
+                          <option value="GTALK">Gtalk</option>
+                          <option value="TWITTER">Twitter</option>
+                          <option value="PHONE">Phone</option>
+                          <option value="EMAIL">Email</option>
+                          <option value="SMS">SMS</option>
                         </select>
                       </div>
                       <div style="margin-left: 15px" class="form-group">
                         <label>Severity level:</label>
-                        <select ng-model="query.severity" ng-change="Log.filter()" class="form-control">
+                        <select ng-model="query.severity" ng-change="Log.severity()" class="form-control">
                           <option value="ALL">All</option>
                           <option value="DEBUG">Debug</option>
                           <option value="INFO">Info</option>
@@ -253,8 +254,8 @@
                         <tr>
                           <th>Time</th>
                           <th>Level</th>
-                          <th>Adapter Id</th>
-                          <th>Adapter Type</th>
+                          <th>Adapter</th>
+                          <th>Type</th>
                           <th>Message</th>
                         </tr>
                       </thead>
@@ -262,8 +263,8 @@
                         <tr ng-repeat="log in logs | orderBy: &quot;timestamp&quot; : true">
                           <td>{{log.timestamp | parseTimeStamp}}</td>
                           <td>{{log.level}}</td>
-                          <td>{{log.adapterAddress}}</td>
-                          <td>{{log.adapterType}}</td>
+                          <td>{{log | translateAdapterAddress}}</td>
+                          <td>{{log | translateAdapterType}}</td>
                           <td>{{log.message}}</td>
                         </tr>
                       </tbody>

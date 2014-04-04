@@ -53,39 +53,39 @@ define(
     );
 
 
-    filters.filter('getAdapterAddress',
-      ['Store',
-        function (Store)
-        {
-          return function (log)
-          {
-            Store = Store('data');
+//    filters.filter('getAdapterAddress',
+//      ['Store',
+//        function (Store)
+//        {
+//          return function (log)
+//          {
+//            Store = Store('data');
+//
+//            var adapterTypes = Store.get('adapterTypes');
+//
+//            return log;
+//          }
+//        }
+//      ]
+//    );
 
-            var adapterTypes = Store.get('adapterTypes');
-
-            return log;
-          }
-        }
-      ]
-    );
 
 
-
-    filters.filter('getAdapterAddress',
-      ['Store',
-        function (Store)
-        {
-          return function (log)
-          {
-            Store = Store('data');
-
-            var adapterTypes = Store.get('adapterTypes');
-
-            return log;
-          }
-        }
-      ]
-    );
+//    filters.filter('getAdapterAddress',
+//      ['Store',
+//        function (Store)
+//        {
+//          return function (log)
+//          {
+//            Store = Store('data');
+//
+//            var adapterTypes = Store.get('adapterTypes');
+//
+//            return log;
+//          }
+//        }
+//      ]
+//    );
 
 
     filters.filter('parseTimeStamp',
