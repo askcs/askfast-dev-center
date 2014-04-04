@@ -239,10 +239,20 @@ navbar
                           option(value='SEVERE') Severe
 
                       .form-group(style='margin-left: 15px;')
+                        label Limit:
+                        select.form-control(ng-model='query.limit',
+                        ng-change='Log.list()')
+                          option(value='100') 100
+                          option(value='250') 250
+                          option(value='500') 500
+                          option(value='1000') 1000
+
+                      .form-group(style='margin-left: 15px;')
                         label Show DDR:
                         .input-group
                           input.checkbox(type='checkbox',
                           ng-model='query.ddr')
+
                     hr
 
                     p(ng-hide='logs.length > 0 || (query.severity != "ALL")')

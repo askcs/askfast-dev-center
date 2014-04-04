@@ -84,7 +84,8 @@ define(
 
           $scope.query = {
             severity: 'ALL',
-            ddr: false
+            ddr: false,
+            limit: 100
           };
 
           $scope.Log = {
@@ -93,7 +94,7 @@ define(
             list: function ()
             {
               AskFast.caller('log', {
-                limit: 500
+                limit: $scope.query.limit
               })
                 .then((function (result)
                 {
@@ -152,8 +153,6 @@ define(
 
             filter : function ()
             {
-              console.log('filter asked for ->', $scope.query.severity);
-
               switch ($scope.query.severity)
               {
                 case 'ALL':
@@ -183,11 +182,6 @@ define(
           {
             $scope.Log.list();
           });
-
-//          $scope.toggleDDR = function ()
-//          {
-//            console.log('working?', $scope.query.ddr);
-//          };
 
           $scope.Log.list();
 
