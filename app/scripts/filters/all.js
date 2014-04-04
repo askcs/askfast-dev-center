@@ -51,5 +51,43 @@ define(
         }
       ]
     );
+
+
+    filters.filter('getAdapterAddress',
+      ['Store',
+        function (Store)
+        {
+          return function (log)
+          {
+            Store = Store('data');
+
+            var adapterTypes = Store.get('adapterTypes');
+
+            return log;
+          }
+        }
+      ]
+    );
+
+
+
+    filters.filter('getAdapterAddress',
+      ['Store',
+        function (Store)
+        {
+          return function (log)
+          {
+            Store = Store('data');
+
+            var adapterTypes = Store.get('adapterTypes');
+
+            return log;
+          }
+        }
+      ]
+    );
+
+
+
   }
 );

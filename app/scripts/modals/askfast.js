@@ -146,7 +146,7 @@ define(
                   level: 'token'
                 }
               },
-              logs: {
+              log: {
                 method: 'GET',
                 params: {
                   action: 'log'

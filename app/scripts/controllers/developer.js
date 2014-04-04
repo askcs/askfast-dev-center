@@ -6,17 +6,19 @@ define(
 
     controllers.controller ('developer',
       [
-        '$rootScope', '$scope', 'AskFast',
-        function ($rootScope, $scope, AskFast)
+        '$rootScope', '$scope', 'AskFast', 'Store',
+        function ($rootScope, $scope, AskFast, Store)
         {
-          $scope.current = 'extensions';
+          Store = Store('data');
+
+          $scope.current = 'debugger';
 
           $scope.setSection = function (selection)
           {
             $scope.current = selection;
           };
 
-          $scope.types = [
+          $scope._types = [
             'Phone',
             'SMS',
             'Gtalk',
@@ -24,13 +26,38 @@ define(
             'Twitter'
           ];
 
-//          $scope.extensions = [
-//            { id: 0, type: 0, value: '+31 10 123456789' },
-//            { id: 1, type: 3, value: 'culusoy@ask-cs.com' },
-//            { id: 2, type: 4, value: '@ask-fast' },
-//            { id: 3, type: 0, value: '+31 85 2225456' },
-//            { id: 4, type: 3, value: 'info@ask-fast.com' }
-//          ];
+          $scope.adapterTypes = {
+//            written: false,
+            broadsoft: {
+              label: 'Phone',
+              ids: []
+            },
+            xmpp: {
+              label: 'Gtalk',
+              ids: []
+            },
+            email: {
+              label: 'Email',
+              ids: []
+            },
+            twitter: {
+              label: 'Twitter',
+              ids: []
+            },
+            sms: {
+              label: 'SMS',
+              ids: []
+            },
+            other: {
+              label: 'Others',
+              ids: []
+            }
+          };
+
+//          if (!$scope.adapterTypes.written && Store.get('adapterTypes'))
+//          {
+//            $scope.adapterTypes = Store.get('adapterTypes');
+//          }
 
           $scope.channel = {
             type: null,
@@ -55,6 +82,62 @@ define(
             $scope.candidates = candidates;
           };
 
+          $scope.Log = {
+            list: function ()
+            {
+              AskFast.caller('log', {
+                limit: 100
+              })
+                .then(function (result)
+                {
+                  function parseMessage (msg)
+                  {
+                    if (msg[0] == '{' && msg[msg.length-1] == '}')
+                    {
+                      return angular.fromJson(msg);
+                    }
+//                    else if (/{/.test(msg) && /}/.test(msg))
+//                    {
+//                      var msgs = msg.split('{');
+//
+//                      for (var i = 0; i < msgs.length; i++)
+//                      {
+//                        if (msgs[i][msg[i].length - 1] == '}')
+//                        {
+//                          msgs[i] += '{';
+//                        }
+//                      }
+//
+//                      return msgs;
+//                    }
+                    else
+                    {
+                      return msg;
+                    }
+                  }
+
+                  var logs = {
+                    DDR:    [],
+                    INFO:   [],
+                    SEVERE: []
+                  };
+
+                  angular.forEach(result, function (log)
+                  {
+                    if ($scope.adapterTypes.broadsoft.ids.indexOf(log.adapterID) >= 0)
+                    {
+                      console.log('adapter id ->', log.adapterID);
+                    }
+
+                    logs[log.level].push(log);
+                  });
+
+                  $scope.logs = result;
+                });
+            }
+          };
+
+          $scope.Log.list();
 
           $scope.Adapter = {
             
@@ -65,6 +148,15 @@ define(
               AskFast.caller('getAdapters')
                 .then(function (adapters)
                 {
+                  angular.forEach(adapters, function (adapter)
+                  {
+                    $scope.adapterTypes[adapter.adapterType].ids.push(adapter.configId);
+                  });
+
+//                  $scope.adapterTypes.written = true;
+
+                  Store.save($scope.adapterTypes, 'adapterTypes');
+
                   $scope.extensions = adapters;
 
                   if (callback) callback.call();

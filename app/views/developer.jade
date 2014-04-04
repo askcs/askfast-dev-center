@@ -37,8 +37,7 @@ navbar
               option(value='xmpp') Gtalk
               option(value='twitter') Twitter
 
-        section(ng-switch='',
-        on='current')
+        section(ng-switch='', on='current')
 
           #widgets.row(ng-switch-when='extensions')
 
@@ -73,6 +72,8 @@ navbar
                     h2 Your extensions
                     span Extensions management
                   section
+                    p adapterTypes -> {{adapterTypes}}
+
                     p(ng-hide='extensions.length > 0')
                       | There are not any extensions for your account.
                     table.table.table-bordered.table-hover(style='background-color: white',
@@ -113,7 +114,9 @@ navbar
                       a(ng-click='setSection("dialogs")', href='') &nbsp; or go back to the list.
 
           #widgets.row(ng-switch-when='dialogs')
+
             .col-md-3
+
               .widget.widget-left
                 .inner
                   header
@@ -127,6 +130,7 @@ navbar
                         a(ng-click='Dialog.open(dialog)', href='') {{dialog.name}}
                         | &nbsp;(online)&nbsp;
                         a(ng-click='Dialog.remove(dialog)', href='') remove
+
               .widget.widget-left(ng-show='false')
                 .inner
                   header
@@ -142,7 +146,9 @@ navbar
                         a(href='') Oneline
                         | &nbsp;(online)&nbsp;
                         a(href='') settings
+
             .col-md-9(ng-show='dialog')
+
               .widget.widget-right
                 .inner
                   header
@@ -167,7 +173,8 @@ navbar
                           option(ng-repeat='type in types',
                           value='{{$index}}') {{type}}
                         span.help-block Please select a type first
-                      .form-group(style='margin-left: 15px', ng-hide='(channel.type == null)')
+                      .form-group(style='margin-left: 15px',
+                      ng-hide='(channel.type == null)')
                         h5 Extension
                         select.form-control(ng-model='channel.extension')
                           option(ng-repeat='candidate in candidates',
@@ -180,6 +187,7 @@ navbar
                     p You have no channels configured for this dialog yet.
 
           #widgets.row(ng-switch-when='debugger')
+
             .col-md-12
               .widget
                 .inner
@@ -187,9 +195,25 @@ navbar
                     h2 Debugger
                     span Debugger management
                   section
-                    p Debugger console
+                    table.table.table-bordered.table-striped
+                      thead
+                        tr
+                          th Time
+                          th Level
+                          th Adapter Id
+                          th Adapter Type
+                          th Message
+                          th Timestamp
+                      tbody
+                        tr(ng-repeat='log in logs')
+                          td {{log.timestamp}}
+                          td {{log.level}}
+                          td {{log.adapterAddress}}
+                          td {{log.adapterType}}
+                          td {{log.message}}
 
           #widgets.row(ng-switch-when='analysis')
+
             .col-md-12
               .widget
                 .inner
