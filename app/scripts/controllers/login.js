@@ -78,7 +78,7 @@ define(
 
                         $rootScope.user = info;
 
-                        $location.path('/home');
+                        $location.path('/dashboard');
                       });
                   }
                 },
