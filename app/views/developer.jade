@@ -28,7 +28,8 @@ navbar
             ng-click='setSection("addDialog")',
             ng-show='(current=="dialogs")') Add a dialog
             select.form-control(ng-model='adapterType',
-            ng-change='Adapter.query(adapterType)')
+            ng-change='Adapter.query(adapterType)',
+            ng-show='(current=="extensions")')
               option(value='', selected) Add a new adapter
               option(value='email') Email
               option(value='broadsoft') Phone
@@ -36,7 +37,8 @@ navbar
               option(value='xmpp') Gtalk
               option(value='twitter') Twitter
 
-        section(ng-switch='', on='current')
+        section(ng-switch='',
+        on='current')
 
           #widgets.row(ng-switch-when='extensions')
 
