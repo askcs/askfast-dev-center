@@ -83,7 +83,8 @@ define(
           };
 
           $scope.query = {
-            severity: 'ALL'
+            severity: 'ALL',
+            ddr: false
           };
 
           $scope.Log = {
@@ -156,9 +157,12 @@ define(
               switch ($scope.query.severity)
               {
                 case 'ALL':
-                  var logs = [];
+                  var logs = [],
+                      data = this.data;
 
-                  angular.forEach(this.data, function (segment)
+                  if (!$scope.query.ddr) delete data['DDR'];
+
+                  angular.forEach(data, function (segment)
                   {
                     angular.forEach(segment, function (log)
                     {
@@ -174,6 +178,16 @@ define(
               }
             }
           };
+
+          $scope.$watch('query.ddr', function ()
+          {
+            $scope.Log.list();
+          });
+
+//          $scope.toggleDDR = function ()
+//          {
+//            console.log('working?', $scope.query.ddr);
+//          };
 
           $scope.Log.list();
 

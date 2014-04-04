@@ -237,6 +237,12 @@ navbar
                           option(value='INFO') Info
                           option(value='WARNING') Warning
                           option(value='SEVERE') Severe
+
+                      .form-group(style='margin-left: 15px;')
+                        label Show DDR:
+                        .input-group
+                          input.checkbox(type='checkbox',
+                          ng-model='query.ddr')
                     hr
 
                     p(ng-hide='logs.length > 0 || (query.severity != "ALL")')
