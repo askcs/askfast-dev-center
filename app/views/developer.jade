@@ -24,9 +24,11 @@ navbar
                     button.btn.btn-default(type='button') Search
           .col-md-7
           .col-md-2.text-right
+
             button.btn.btn-default(type='button',
             ng-click='setSection("addDialog")',
             ng-show='(current=="dialogs")') Add a dialog
+
             select.form-control(ng-model='adapterType',
             ng-change='Adapter.query(adapterType)',
             ng-show='(current=="extensions")')
@@ -37,7 +39,13 @@ navbar
               option(value='xmpp') Gtalk
               option(value='twitter') Twitter
 
+
+
+
         section(ng-switch='', on='current')
+
+
+
 
           #widgets.row(ng-switch-when='extensions')
 
@@ -72,24 +80,27 @@ navbar
                     h2 Your extensions
                     span Extensions management
                   section
-                    p adapterTypes -> {{adapterTypes}}
-
                     p(ng-hide='extensions.length > 0')
                       | There are not any extensions for your account.
                     table.table.table-bordered.table-hover(style='background-color: white',
                     ng-show='extensions.length > 0')
                       thead
                         tr
-                          th Extensions
+                          th ID
+                          th Extension
                           th Type
                           th Usage
                           th Actions
                       tbody
                         tr(ng-repeat='extension in extensions')
+                          th {{extension.configId}}
                           th {{extension | translateAdapterAddress}}
                           th {{extension | translateAdapterType}}
                           th -
                           th: a(ng-click='Adapter.remove(extension)', href='') Remove
+
+
+
 
           #widgets.row(ng-switch-when='addDialog')
             .col-md-12
@@ -112,6 +123,9 @@ navbar
                           placeholder='URL for dialog')
                       button.btn.btn-default(type='submit') Add a dialog
                       a(ng-click='setSection("dialogs")', href='') &nbsp; or go back to the list.
+
+
+
 
           #widgets.row(ng-switch-when='dialogs')
 
@@ -146,6 +160,9 @@ navbar
                         a(href='') Oneline
                         | &nbsp;(online)&nbsp;
                         a(href='') settings
+
+
+
 
             .col-md-9(ng-show='dialog')
 
@@ -186,6 +203,9 @@ navbar
                     h5 Channels
                     p You have no channels configured for this dialog yet.
 
+
+
+
           #widgets.row(ng-switch-when='debugger')
 
             .col-md-12
@@ -195,7 +215,35 @@ navbar
                     h2 Debugger
                     span Debugger management
                   section
-                    table.table.table-bordered.table-striped
+
+                    form.form-inline(role='form')
+
+                      .form-group
+                        label Adapter type:
+                        select.form-control(ng-model='query.type',
+                        ng-change='Log.query.type()')
+                          option(value='all') All
+                          option(value='xmpp') XMPP
+                          option(value='call') Call
+                          option(value='mail') Mail
+                          option(value='sms') SMS
+
+                      .form-group(style='margin-left: 15px;')
+                        label Severity level:
+                        select.form-control(ng-model='query.severity',
+                        ng-change='Log.filter()')
+                          option(value='ALL') All
+                          option(value='DEBUG') Debug
+                          option(value='INFO') Info
+                          option(value='WARNING') Warning
+                          option(value='SEVERE') Severe
+                    hr
+
+                    p(ng-hide='logs.length > 0 || (query.severity != "ALL")')
+                      | Loading logs..
+                    p(ng-hide='logs.length > 0 || (query.severity == "ALL")')
+                      | Your query has no logs..
+                    table.table.table-bordered.table-striped(ng-show='logs.length > 0')
                       thead
                         tr
                           th Time
@@ -203,14 +251,15 @@ navbar
                           th Adapter Id
                           th Adapter Type
                           th Message
-                          th Timestamp
                       tbody
-                        tr(ng-repeat='log in logs')
-                          td {{log.timestamp}}
+                        tr(ng-repeat='log in logs | orderBy: "timestamp" : true')
+                          td {{log.timestamp | parseTimeStamp}}
                           td {{log.level}}
                           td {{log.adapterAddress}}
                           td {{log.adapterType}}
                           td {{log.message}}
+
+
 
           #widgets.row(ng-switch-when='analysis')
 

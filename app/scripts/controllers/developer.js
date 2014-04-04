@@ -6,8 +6,8 @@ define(
 
     controllers.controller ('developer',
       [
-        '$rootScope', '$scope', 'AskFast', 'Store',
-        function ($rootScope, $scope, AskFast, Store)
+        '$rootScope', '$scope', 'AskFast', 'Store', 'Moment',
+        function ($rootScope, $scope, AskFast, Store, Moment)
         {
           Store = Store('data');
 
@@ -82,13 +82,19 @@ define(
             $scope.candidates = candidates;
           };
 
+          $scope.query = {
+            severity: 'ALL'
+          };
+
           $scope.Log = {
+            data: null,
+
             list: function ()
             {
               AskFast.caller('log', {
-                limit: 100
+                limit: 500
               })
-                .then(function (result)
+                .then((function (result)
                 {
                   function parseMessage (msg)
                   {
@@ -124,16 +130,48 @@ define(
 
                   angular.forEach(result, function (log)
                   {
+                    // console.log('given adapter id ->', log.adapterID);
+
                     if ($scope.adapterTypes.broadsoft.ids.indexOf(log.adapterID) >= 0)
                     {
-                      console.log('adapter id ->', log.adapterID);
+                      // console.log('adapter id ->', log.adapterID);
                     }
 
                     logs[log.level].push(log);
                   });
 
-                  $scope.logs = result;
-                });
+                  // console.log('logs =>', logs);
+
+                  this.data = logs;
+
+                  this.filter();
+
+                }).bind(this));
+            },
+
+            filter : function ()
+            {
+              console.log('filter asked for ->', $scope.query.severity);
+
+              switch ($scope.query.severity)
+              {
+                case 'ALL':
+                  var logs = [];
+
+                  angular.forEach(this.data, function (segment)
+                  {
+                    angular.forEach(segment, function (log)
+                    {
+                      logs.push(log);
+                    });
+                  });
+
+                  $scope.logs = logs;
+                  break;
+
+                default:
+                  $scope.logs = this.data[$scope.query.severity];
+              }
             }
           };
 

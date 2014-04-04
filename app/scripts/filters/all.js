@@ -88,6 +88,19 @@ define(
     );
 
 
+    filters.filter('parseTimeStamp',
+      ['Moment',
+        function (Moment)
+        {
+          return function (stamp)
+          {
+            return Moment(stamp)._d;
+          }
+        }
+      ]
+    );
+
+
 
   }
 );

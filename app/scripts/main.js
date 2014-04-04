@@ -12,9 +12,10 @@ require.config (
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-      signet:   '../vendors/signet/signet.min',
-      lawnchair: '../vendors/lawnchair/src/Lawnchair',
-      dom: '../vendors/lawnchair/src/adapters/dom'
+      signet:     '../vendors/signet/signet.min',
+      lawnchair:  '../vendors/lawnchair/src/Lawnchair',
+      dom:        '../vendors/lawnchair/src/adapters/dom',
+      moment:     '../vendors/momentjs/min/moment.min'
     },
     shim: {
       angular:            { deps: ['jquery'], exports:  'angular' },
@@ -22,7 +23,8 @@ require.config (
       'angular-route':    { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
       lawnchair:          { exports: 'lawnchair' },
-      dom:                { deps: ['lawnchair'], exports: 'dom' }
+      dom:                { deps: ['lawnchair'], exports: 'dom' },
+      moment:             { exports: 'moment' }
     }
   }
 );
@@ -45,6 +47,7 @@ require (
     'services/session',
     'services/md5',
     'services/store',
+    'services/moment',
     'services/offline',
     'services/interceptor',
     'services/logger',
@@ -59,7 +62,8 @@ require (
     'bootstrap',
     'signet',
     'lawnchair',
-    'dom'
+    'dom',
+    'moment'
   ],
   function (angular, domReady)
   {
