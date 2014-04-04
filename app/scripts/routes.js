@@ -47,7 +47,7 @@ define(
               controller:     'profile'
             })
             .otherwise({
-              redirectTo: '/dashboard'
+              redirectTo: '/login'
             });
 
           $httpProvider.interceptors.push('Interceptor');
