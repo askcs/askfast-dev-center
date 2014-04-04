@@ -18,45 +18,161 @@
             <button href="#" class="btn btn-primary">Upgrade</button>
           </div>
         </div>
-        <div id="widgets" class="row">
-          <div class="col-md-6">
-            <div class="widget widget-left">
-              <div class="inner">
-                <header>
-                  <h2>Debugger</h2>
-                </header>
-                <section>
-                  <p>Some section information.</p>
-                </section>
-              </div>
-            </div>
-            <div class="widget widget-left">
-              <div class="inner">
-                <header>
-                  <h2>Debugger</h2>
-                </header>
-              </div>
-            </div>
+      </div>
+    </section>
+    <div id="widgets" class="row">
+      <div class="col-md-6">
+        <div ng-show="false" class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">API Keys</h3><span>For creating a dialog, you will need public private keys.</span>
           </div>
-          <div class="col-md-6">
-            <div class="widget widget-right">
-              <div class="inner">
-                <header>
-                  <h2>Debugger</h2>
-                </header>
+          <div class="panel-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="publicKey">Public Key</label>
+                <input id="publicKey" type="text" placeholder="Enter your private key" class="form-control">
               </div>
-            </div>
-            <div class="widget widget-right">
-              <div class="inner">
-                <header>
-                  <h2>Debugger</h2>
-                </header>
-                <section></section>
+              <div class="form-group">
+                <div class="input-group">
+                  <input id="privateKey" type="password" placeholder="Enter your private key" class="form-control"><span class="input-group-btn">
+                    <button type="button" class="btn btn-default">Reveal</button></span>
+                </div>
+                <div class="help-block">Please do not share your private key with other people.</div>
               </div>
-            </div>
+              <button type="button" class="btn btn-default">Dialog Manager</button>
+            </form>
+          </div>
+        </div>
+        <div class="widget widget-left">
+          <div class="inner">
+            <header>
+              <h2>API Keys</h2><span>For creating a dialog, you will need public private keys.</span>
+            </header>
+            <section>
+              <form role="form">
+                <div class="form-group">
+                  <label for="publicKey">Public Key</label>
+                  <input id="publicKey" type="text" placeholder="Enter your private key" class="form-control">
+                </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <input id="privateKey" type="password" placeholder="Enter your private key" class="form-control"><span class="input-group-btn">
+                      <button type="button" class="btn btn-default">Reveal</button></span>
+                  </div>
+                  <div class="help-block">Please do not share your private key with other people.</div>
+                </div>
+                <button type="button" class="btn btn-default">Dialog Manager</button>
+              </form>
+            </section>
+          </div>
+        </div>
+        <div class="widget widget-left">
+          <div class="inner">
+            <header>
+              <h2>Debugger</h2>
+            </header>
+            <section>
+              <p>Some section information.</p>
+            </section>
           </div>
         </div>
       </div>
-    </section>
+      <div class="col-md-6">
+        <div class="widget widget-right">
+          <div class="inner">
+            <header>
+              <h2>Document Center</h2><span>Documents</span>
+            </header>
+            <section>
+              <ul>
+                <li><a href="">Introduction to SMS sending</a></li>
+                <li><a href="">Testing credentials</a></li>
+                <li><a href="">Request types</a></li>
+              </ul>
+              <button type="button" class="btn btn-default">More Documents</button>
+            </section>
+          </div>
+        </div>
+        <div class="widget widget-right">
+          <div class="inner">
+            <header>
+              <h2>Tutorials</h2><span>You may want to start with starting tutorials.</span>
+            </header>
+            <section>
+              <ul>
+                <li><a href="">Sending and receiving SMS Messages</a></li>
+                <li><a href="">How to handle incoming calls</a></li>
+                <li><a href="">Making an Outbound call</a></li>
+              </ul>
+              <button type="button" class="btn btn-default">More Tutorials</button>
+            </section>
+          </div>
+        </div>
+        <div class="widget widget-right">
+          <div class="inner">
+            <header>
+              <h2>Fast Developer Support</h2><span>You may want to start with starting tutorials.</span>
+            </header>
+            <section>
+              <p>Your current plan provides you e-mail support.</p>
+              <button type="button" class="btn btn-default">Change Support Plan</button><br><br>
+              <p>Did you find a bug?<a href="">Create a ticket</a></p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="widgets" class="row">
+      <div class="col-md-12">
+        <div class="widget">
+          <div class="inner">
+            <header>
+              <h2>Analysis</h2><span>For creating a dialog, you will need public, private keys.</span>
+            </header>
+            <section>
+              <p>A diagram.</p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="widgets" class="row">
+      <div class="col-md-12">
+        <div class="widget">
+          <div class="inner">
+            <header>
+              <h2>Fast Developers</h2><span>For creating a dialog, you will need public, private keys.</span>
+            </header>
+            <section>
+              <div class="row">
+                <div class="col-md-6">
+                  <h4>Ranking communications</h4>
+                  <p>
+                    Ask-Fast gives you a lot of opportunities and also communication channels. In
+                    some scenarios, you may want to rank them for reducing dialog cost. I will
+                    show you how you can
+                  </p><a href="">read more</a>
+                </div>
+                <div class="col-md-6">
+                  <h4>TTS for your written communication</h4>
+                  <p>
+                    Ask-Fast gives you a lot of opportunities and also communication channels. In
+                    some scenarios, you may want to rank them for reducing dialog cost. I will
+                    show you how you can
+                  </p><a href="">read more</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <p>Do you want to become a verified developer?
+                    <button type="button" class="btn btn-default">Yes, I want</button>
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

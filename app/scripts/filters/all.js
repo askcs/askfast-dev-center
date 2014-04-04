@@ -94,7 +94,7 @@ define(
         {
           return function (stamp)
           {
-            return Moment(stamp)._d;
+            return Moment(stamp).format("dddd, MMMM Do YYYY, h:mm:ss a");
           }
         }
       ]

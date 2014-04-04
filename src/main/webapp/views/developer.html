@@ -4,17 +4,290 @@
     <section id="developer">
       <div class="container-fluid">
         <div id="sub-header" class="row">
-          <div class="col-md-12 text-center">
-            <ul>
-              <li></li>
+          <div class="col-md-12">
+            <ul class="list-inline">
+              <li><a ng-click="setSection(&quot;extensions&quot;)" href="">Extensions</a></li>
+              <li><a ng-click="setSection(&quot;dialogs&quot;)" href="">Dialogs</a></li>
+              <li><a ng-click="setSection(&quot;debugger&quot;)" href="">Debugger</a></li>
+              <li><a ng-click="setSection(&quot;analysis&quot;)" href="">Analysis</a></li>
             </ul>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <p>Developer</p>
+        <div id="toolbar" class="row">
+          <div class="col-md-3">
+            <form role="form">
+              <div class="form-group">
+                <div class="input-group">
+                  <input id="privateKey" type="text" placeholder="Search" class="form-control"><span class="input-group-btn">
+                    <button type="button" class="btn btn-default">Search</button></span>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-7"></div>
+          <div class="col-md-2 text-right">
+            <button type="button" ng-click="setSection(&quot;addDialog&quot;)" ng-show="(current==&quot;dialogs&quot;)" class="btn btn-default">Add a dialog</button>
+            <select ng-model="adapterType" ng-change="Adapter.query(adapterType)" ng-show="(current==&quot;extensions&quot;)" class="form-control">
+              <option value="" selected="selected">Add a new adapter</option>
+              <option value="email">Email</option>
+              <option value="broadsoft">Phone</option>
+              <option value="sms">SMS</option>
+              <option value="xmpp">Gtalk</option>
+              <option value="twitter">Twitter</option>
+            </select>
           </div>
         </div>
+        <section ng-switch="" on="current">
+          <div id="widgets" ng-switch-when="extensions" class="row">
+            <div ng-show="adapterType" class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Available extensions</h2><span>Extensions that you can hook with your account</span>
+                  </header>
+                  <section>
+                    <p ng-hide="freeAdapters.length &gt; 0">There are not any available extension for this type.</p>
+                    <table style="background-color: white" ng-show="freeAdapters.length &gt; 0" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Extensions</th>
+                          <th>Type</th>
+                          <th>Usage</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="extension in freeAdapters">
+                          <th>{{extension | translateAdapterAddress}}</th>
+                          <th>{{extension | translateAdapterType}}</th>
+                          <th>-</th>
+                          <th><a ng-click="Adapter.add(extension)" href="">Add to your account</a></th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Your extensions</h2><span>Extensions management</span>
+                  </header>
+                  <section>
+                    <p ng-hide="extensions.length &gt; 0">There are not any extensions for your account.</p>
+                    <table style="background-color: white" ng-show="extensions.length &gt; 0" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Extension</th>
+                          <th>Type</th>
+                          <th>Usage</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="extension in extensions">
+                          <th>{{extension.configId}}</th>
+                          <th>{{extension | translateAdapterAddress}}</th>
+                          <th>{{extension | translateAdapterType}}</th>
+                          <th>-</th>
+                          <th><a ng-click="Adapter.remove(extension)" href="">Remove</a></th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="addDialog" class="row">
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Add a new dialog</h2>
+                  </header>
+                  <section>
+                    <form role="form" ng-submit="Dialog.add(dialog)">
+                      <div class="form-group">
+                        <div class="input-group">
+                          <input type="text" ng-model="dialog.form.name" placeholder="Dialog name" class="form-control">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <input type="text" ng-model="dialog.form.url" placeholder="URL for dialog" class="form-control">
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-default">Add a dialog</button><a ng-click="setSection(&quot;dialogs&quot;)" href="">&nbsp; or go back to the list.</a>
+                    </form>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="dialogs" class="row">
+            <div class="col-md-3">
+              <div class="widget widget-left">
+                <div class="inner">
+                  <header>
+                    <h2>Dialogs</h2>
+                    <!-- span You have 1 online, 2 offline dialogs-->
+                  </header>
+                  <section>
+                    <p ng-show="dialogs.length &lt; 1">There are no dialogs yet. Please add one.</p>
+                    <ul ng-hide="dialogs.length &lt; 1">
+                      <li ng-repeat="dialog in dialogs"><a ng-click="Dialog.open(dialog)" href="">{{dialog.name}}</a>&nbsp;(online)&nbsp;<a ng-click="Dialog.remove(dialog)" href="">remove</a></li>
+                    </ul>
+                  </section>
+                </div>
+              </div>
+              <div ng-show="false" class="widget widget-left">
+                <div class="inner">
+                  <header>
+                    <h2>Dialogs in Market</h2><span>2 dialogs are online.</span>
+                  </header>
+                  <section>
+                    <ul>
+                      <li><a href="">Broadcast</a>&nbsp;(online)&nbsp;<a href="">settings</a></li>
+                      <li><a href="">Oneline</a>&nbsp;(online)&nbsp;<a href="">settings</a></li>
+                    </ul>
+                  </section>
+                </div>
+              </div>
+            </div>
+            <div ng-show="dialog" class="col-md-9">
+              <div class="widget widget-right">
+                <div class="inner">
+                  <header>
+                    <h2>{{dialog.name}}</h2><span>{{dialog.url}}</span>
+                  </header>
+                  <section>
+                    <h5>State</h5>
+                    <ul class="list-inline">
+                      <li>
+                        <input id="onState" name="state" type="radio">
+                        <label for="onState">&nbsp;On</label>
+                      </li>
+                      <li>
+                        <input id="offState" name="state" type="radio">
+                        <label for="offState">&nbsp;Off</label>
+                      </li>
+                    </ul>
+                    <form role="form" class="form-inline">
+                      <div class="form-group">
+                        <h5>Type</h5>
+                        <select ng-model="channel.type" ng-change="channelTypeSelected()" class="form-control">
+                          <option ng-repeat="type in types" value="{{$index}}">{{type}}</option>
+                        </select><span class="help-block">Please select a type first</span>
+                      </div>
+                      <div style="margin-left: 15px" ng-hide="(channel.type == null)" class="form-group">
+                        <h5>Extension</h5>
+                        <select ng-model="channel.extension" class="form-control">
+                          <option ng-repeat="candidate in candidates" value="{{candidate.id}}">{{candidate.value}}</option>
+                        </select><span class="help-block">Select the extension</span>
+                      </div>
+                      <div style="margin-left: 15px" class="form-group">
+                        <button type="submit" style="margin-top: 3px" class="btn btn-default">Add a new channel</button>
+                      </div>
+                    </form>
+                    <h5>Channels</h5>
+                    <p>You have no channels configured for this dialog yet.</p>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="debugger" class="row">
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Debugger</h2><span>Debugger management</span>
+                  </header>
+                  <section>
+                    <form role="form" class="form-inline">
+                      <div class="form-group">
+                        <label>Adapter type:</label>
+                        <select ng-model="query.type" ng-change="Log.query.type()" class="form-control">
+                          <option value="all">All</option>
+                          <option value="xmpp">XMPP</option>
+                          <option value="call">Call</option>
+                          <option value="mail">Mail</option>
+                          <option value="sms">SMS</option>
+                        </select>
+                      </div>
+                      <div style="margin-left: 15px" class="form-group">
+                        <label>Severity level:</label>
+                        <select ng-model="query.severity" ng-change="Log.filter()" class="form-control">
+                          <option value="ALL">All</option>
+                          <option value="DEBUG">Debug</option>
+                          <option value="INFO">Info</option>
+                          <option value="WARNING">Warning</option>
+                          <option value="SEVERE">Severe</option>
+                        </select>
+                      </div>
+                      <div style="margin-left: 15px" class="form-group">
+                        <label>Limit:</label>
+                        <select ng-model="query.limit" ng-change="Log.list()" class="form-control">
+                          <option value="100">100</option>
+                          <option value="250">250</option>
+                          <option value="500">500</option>
+                          <option value="1000">1000</option>
+                        </select>
+                      </div>
+                      <div style="margin-left: 15px" class="form-group">
+                        <label>Show DDR:</label>
+                        <div class="input-group">
+                          <input type="checkbox" ng-model="query.ddr" class="checkbox">
+                        </div>
+                      </div>
+                    </form>
+                    <hr>
+                    <p ng-hide="logs.length &gt; 0 || (query.severity != &quot;ALL&quot;)">Loading logs..</p>
+                    <p ng-hide="logs.length &gt; 0 || (query.severity == &quot;ALL&quot;)">Your query has no logs..</p>
+                    <table ng-show="logs.length &gt; 0" class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Time</th>
+                          <th>Level</th>
+                          <th>Adapter Id</th>
+                          <th>Adapter Type</th>
+                          <th>Message</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="log in logs | orderBy: &quot;timestamp&quot; : true">
+                          <td>{{log.timestamp | parseTimeStamp}}</td>
+                          <td>{{log.level}}</td>
+                          <td>{{log.adapterAddress}}</td>
+                          <td>{{log.adapterType}}</td>
+                          <td>{{log.message}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="analysis" class="row">
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Analysis</h2><span>Analysis</span>
+                  </header>
+                  <section>
+                    <p>Analysis console</p>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
   </div>
