@@ -10,16 +10,21 @@ define(
         {
           return function (adapter)
           {
-            var address = adapter.myAddress;
-
-            switch (adapter.adapterType)
+            if (adapter && adapter.adapterType)
             {
-              case 'broadsoft':
-                address = adapter.myAddress.split('@')[0];
-                break;
-            }
+              var address = adapter.myAddress;
 
-            return address;
+              switch (adapter.adapterType)
+              {
+                case 'broadsoft':
+                    address = (/@/.test(adapter.myAddress)) ?
+                      adapter.myAddress.split('@')[0] :
+                      adapter;
+                  break;
+              }
+
+              return address;
+            }
           }
         }
       ]
