@@ -6,24 +6,40 @@ define(
 
     filters.filter('translateAdapterAddress',
       [
-        function ()
+        'Store',
+        function (Store)
         {
+          Store = Store('data');
+
+          var adapters = Store.get('adapterTypes');
+
+          var adapterTypes = {};
+
+//          angular.forEach(adapters, function (adp)
+//          {
+//            if (adp.configId == adapter.adapterID)
+//            {
+//              _adapter = '==> ' + adp.myAddress;
+//            }
+//          });
+//
+//          console.log('adapters ->', adapters);
+
           return function (adapter)
           {
             if (adapter && adapter.adapterType)
             {
-              var address = adapter.myAddress;
-
               switch (adapter.adapterType)
               {
                 case 'broadsoft':
-                    address = (/@/.test(adapter.myAddress)) ?
-                      adapter.myAddress.split('@')[0] :
-                      adapter;
-                  break;
-              }
 
-              return address;
+                  if (/@/.test(adapter.myAddress))
+                    return adapter.myAddress.split('@')[0];
+
+                  break;
+                default:
+                  return adapter;
+              }
             }
           }
         }
@@ -57,42 +73,6 @@ define(
       ]
     );
 
-
-//    filters.filter('getAdapterAddress',
-//      ['Store',
-//        function (Store)
-//        {
-//          return function (log)
-//          {
-//            Store = Store('data');
-//
-//            var adapterTypes = Store.get('adapterTypes');
-//
-//            return log;
-//          }
-//        }
-//      ]
-//    );
-
-
-
-//    filters.filter('getAdapterAddress',
-//      ['Store',
-//        function (Store)
-//        {
-//          return function (log)
-//          {
-//            Store = Store('data');
-//
-//            var adapterTypes = Store.get('adapterTypes');
-//
-//            return log;
-//          }
-//        }
-//      ]
-//    );
-
-
     filters.filter('parseTimeStamp',
       ['Moment',
         function (Moment)
@@ -104,8 +84,6 @@ define(
         }
       ]
     );
-
-
 
   }
 );

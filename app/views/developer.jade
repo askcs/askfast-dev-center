@@ -182,24 +182,29 @@ navbar
                         input#offState(name='state',
                         type='radio')
                         label(for='offState') &nbsp;Off
+
                     form.form-inline(role='form')
+
                       .form-group
                         h5 Type
                         select.form-control(ng-model='channel.type',
                         ng-change='channelTypeSelected()')
-                          option(ng-repeat='type in types',
-                          value='{{$index}}') {{type}}
+                          option(ng-repeat='type in adapterTypes',
+                          value='{{type.label}}') {{type.label}}
                         span.help-block Please select a type first
+
                       .form-group(style='margin-left: 15px',
                       ng-hide='(channel.type == null)')
                         h5 Extension
                         select.form-control(ng-model='channel.extension')
                           option(ng-repeat='candidate in candidates',
-                          value='{{candidate.id}}') {{candidate.value}}
+                          value='{{candidate.id}}') {{candidate.myAddress}}
                         span.help-block Select the extension
+
                       .form-group(style='margin-left: 15px')
                         button.btn.btn-default(type='submit',
                         style='margin-top: 3px') Add a new channel
+
                     h5 Channels
                     p You have no channels configured for this dialog yet.
 

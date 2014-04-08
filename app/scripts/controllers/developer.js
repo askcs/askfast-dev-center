@@ -6,19 +6,19 @@ define(
 
     controllers.controller ('developer',
       [
-        '$rootScope', '$scope', 'AskFast', 'Store', 'Moment',
-        function ($rootScope, $scope, AskFast, Store, Moment)
+        '$rootScope', '$scope', 'AskFast', 'Store',
+        function ($rootScope, $scope, AskFast, Store)
         {
           Store = Store('data');
 
-          $scope.current = 'debugger';
+          $scope.current = 'dialogs';
 
           $scope.setSection = function (selection)
           {
             $scope.current = selection;
           };
 
-          $scope._types = [
+          $scope.types = [
             'Phone',
             'SMS',
             'Gtalk',
@@ -27,7 +27,6 @@ define(
           ];
 
           $scope.adapterTypes = {
-//            written: false,
             broadsoft: {
               label: 'Phone',
               ids: []
@@ -47,10 +46,6 @@ define(
             sms: {
               label: 'SMS',
               ids: []
-            },
-            other: {
-              label: 'Others',
-              ids: []
             }
           };
 
@@ -64,14 +59,20 @@ define(
           $scope.channelTypeSelected = function ()
           {
             var candidates = [];
-
-            angular.forEach($scope.extensions, function (extension)
+            
+            angular.forEach($scope.adapterTypes, function (type)
             {
-              if ($scope.channel.type == extension.type)
-                candidates.push({
-                  id:   extension.id,
-                  value:extension.value
-                });
+              if (type.label == $scope.channel.type)
+              {
+                angular.forEach(type.ids, function (id)
+                {
+                  angular.forEach($scope.extensions, function (extension)
+                  {
+                    if (extension.configId == id)
+                      candidates.push(extension);
+                  });
+                })
+              }
             });
 
             $scope.candidates = candidates;
@@ -84,33 +85,6 @@ define(
             limit: 100
           };
 
-//          function parseMessage (msg)
-//          {
-//            if (msg[0] == '{' && msg[msg.length-1] == '}')
-//            {
-//              return angular.fromJson(msg);
-//            }
-//            else if (/{/.test(msg) && /}/.test(msg))
-//            {
-//              var msgs = msg.split('{');
-//
-//              for (var i = 0; i < msgs.length; i++)
-//              {
-//                if (msgs[i][msg[i].length - 1] == '}')
-//                {
-//                  msgs[i] += '{';
-//                }
-//              }
-//
-//              return msgs;
-//            }
-//            else
-//            {
-//              return msg;
-//            }
-//          }
-
-          // For more logs 0854881008
           $scope.Log = {
             data: null,
 
@@ -218,6 +192,10 @@ define(
               AskFast.caller('getAdapters')
                 .then(function (adapters)
                 {
+                  // Store.save(adapters, 'adapters');
+
+                  // console.log('adapters ->', adapters);
+
                   angular.forEach(adapters, function (adapter)
                   {
                     $scope.adapterTypes[adapter.adapterType].ids.push(adapter.configId);
@@ -321,6 +299,13 @@ define(
 
           $scope.Dialog.list();
 
+          setTimeout(function ()
+          {
+            $scope.$apply(function ()
+            {
+              $scope.Dialog.open($scope.dialogs[0]);
+            });
+          }, 250);
         }
       ]
     );
