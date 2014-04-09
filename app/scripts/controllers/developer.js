@@ -184,7 +184,7 @@ define(
           $scope.Log.list();
 
           $scope.Adapter = {
-            
+
             list: function (callback)
             {
               $scope.adapterType = '';
@@ -194,7 +194,7 @@ define(
                 {
                   // Store.save(adapters, 'adapters');
 
-                  // console.log('adapters ->', adapters);
+                  // console.log('adapters from list ->', angular.toJson(adapters));
 
                   angular.forEach(adapters, function (adapter)
                   {
@@ -204,8 +204,10 @@ define(
                   Store.save($scope.adapterTypes, 'adapterTypes');
 
                   $scope.extensions = adapters;
+                  
+                  // console.log('$scope.extensions ->', $scope.extensions);
 
-                  if (callback) callback.call();
+                  if (callback) callback.call(null, adapters);
                 });
             },
 
@@ -218,6 +220,20 @@ define(
                 this.list();
               }).bind(this));
             },
+
+            // TODO: Add changing dialog info later on
+//            update: function (dialog)
+//            {
+//              AskFast.caller('updateAdapter', { level: $scope.channel.extension },
+//                {
+//                  dialogId: dialog.id
+//                }).then((function ()
+//              {
+//                this.list();
+//
+//                $scope.Adapter.adapters();
+//              }).bind(this));
+//            },
 
             query: function (type)
             {
@@ -290,21 +306,62 @@ define(
                 }).bind(this));
             },
 
+            adapters: {
+              list: function (dialogId, updated)
+              {
+                var adapters = [];
+
+                angular.forEach($scope.extensions, function (adapter)
+                {
+                  if (updated && updated.id == adapter.id) adapter = updated;
+
+                  if (adapter.dialogId == dialogId) adapters.push(adapter);
+                });
+
+                return adapters;
+              },
+
+              update: function (dialogId, adapterId)
+              {
+                AskFast.caller('updateAdapter', { level: adapterId },
+                  {
+                    dialogId: dialogId
+                  }).then((function (adapter)
+                  {
+                    this.list(dialogId, adapter);
+                  }).bind(this));
+              },
+
+              add: function (dialog)
+              {
+                this.update(dialog.id, $scope.channel.extension);
+              },
+
+              remove: function (extension)
+              {
+                this.update('', extension.configId);
+              }
+            },
+
             open: function (dialog)
             {
               $scope.dialog = dialog;
-            }
 
+              $scope.dialogAdapters = this.adapters.list(dialog.id);
+            }
           };
 
           $scope.Dialog.list();
 
           setTimeout(function ()
           {
-            $scope.$apply(function ()
+            if ($scope.dialogs)
             {
-              $scope.Dialog.open($scope.dialogs[0]);
-            });
+              $scope.$apply(function ()
+              {
+                $scope.Dialog.open($scope.dialogs[0]);
+              });
+            }
           }, 250);
         }
       ]

@@ -38,7 +38,7 @@ define(
 
                   break;
                 default:
-                  return adapter;
+                  return adapter.myAddress;
               }
             }
           }

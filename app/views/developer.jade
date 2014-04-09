@@ -198,15 +198,34 @@ navbar
                         h5 Extension
                         select.form-control(ng-model='channel.extension')
                           option(ng-repeat='candidate in candidates',
-                          value='{{candidate.id}}') {{candidate.myAddress}}
+                          value='{{candidate.configId}}') {{candidate.myAddress}}
                         span.help-block Select the extension
 
                       .form-group(style='margin-left: 15px')
-                        button.btn.btn-default(type='submit',
-                        style='margin-top: 3px') Add a new channel
+                        button.btn.btn-default(type='button',
+                        ng-click='Dialog.adapters.add(dialog)') Add a new channel
 
-                    h5 Channels
-                    p You have no channels configured for this dialog yet.
+                    hr
+
+                    h4 Channels
+
+                    p(ng-hide='dialogAdapters.length > 0')
+                      | There are no adapter added in this dialog yet.
+
+                    table.table.table-bordered.table-hover(style='background-color: white',
+                    ng-show='dialogAdapters.length > 0')
+                      thead
+                        tr
+                          th ID
+                          th Extension
+                          th Type
+                          th Actions
+                      tbody
+                        tr(ng-repeat='extension in dialogAdapters')
+                          th {{extension.configId}}
+                          th {{extension | translateAdapterAddress}}
+                          th {{extension | translateAdapterType}}
+                          th: a(ng-click='Dialog.adapters.remove(extension)', href='') Remove
 
 
 

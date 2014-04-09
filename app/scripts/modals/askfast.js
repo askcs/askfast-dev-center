@@ -90,6 +90,13 @@ define(
                   action: 'dialog'
                 }
               },
+              updateDialog: {
+                method: 'PUT',
+                params: {
+                  action: 'dialog',
+                  level: ''
+                }
+              },
               deleteDialog: {
                 method: 'DELETE',
                 params: {
