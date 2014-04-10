@@ -221,7 +221,7 @@ navbar
                           th Type
                           th Actions
                       tbody
-                        tr(ng-repeat='extension in dialogAdapters')
+                        tr(ng-repeat='extension in extensions | filterAdapters: dialog')
                           th {{extension.configId}}
                           th {{extension | translateAdapterAddress}}
                           th {{extension | translateAdapterType}}

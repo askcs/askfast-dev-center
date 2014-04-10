@@ -85,5 +85,27 @@ define(
       ]
     );
 
+    filters.filter('filterAdapters',
+      [
+        function ()
+        {
+          return function (adapters, dialog)
+          {
+            if (adapters && dialog)
+            {
+              var _adapters = [];
+
+              angular.forEach(adapters, function (adapter)
+              {
+                if (adapter.dialogId == dialog.id) _adapters.push(adapter);
+              });
+
+              return _adapters;
+            }
+          }
+        }
+      ]
+    );
+
   }
 );

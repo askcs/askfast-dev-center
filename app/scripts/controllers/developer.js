@@ -68,8 +68,7 @@ define(
                 {
                   angular.forEach($scope.extensions, function (extension)
                   {
-                    if (extension.configId == id)
-                      candidates.push(extension);
+                    if (extension.configId == id) candidates.push(extension);
                   });
                 })
               }
@@ -142,10 +141,7 @@ define(
               {
                 angular.forEach(segment, function (log)
                 {
-                  if (log.adapterType == type)
-                  {
-                    logs.push(log);
-                  }
+                  if (log.adapterType == type) logs.push(log);
                 })
               });
 
@@ -192,10 +188,6 @@ define(
               AskFast.caller('getAdapters')
                 .then(function (adapters)
                 {
-                  // Store.save(adapters, 'adapters');
-
-                  // console.log('adapters from list ->', angular.toJson(adapters));
-
                   angular.forEach(adapters, function (adapter)
                   {
                     $scope.adapterTypes[adapter.adapterType].ids.push(adapter.configId);
@@ -204,8 +196,6 @@ define(
                   Store.save($scope.adapterTypes, 'adapterTypes');
 
                   $scope.extensions = adapters;
-                  
-                  // console.log('$scope.extensions ->', $scope.extensions);
 
                   if (callback) callback.call(null, adapters);
                 });
@@ -313,9 +303,14 @@ define(
 
                 angular.forEach($scope.extensions, function (adapter)
                 {
-                  if (updated && updated.id == adapter.id) adapter = updated;
-
-                  if (adapter.dialogId == dialogId) adapters.push(adapter);
+                  if (updated && updated.id == adapter.id)
+                  {
+                    adapters.push(updated);
+                  }
+                  else
+                  {
+                    if (adapter.dialogId == dialogId) adapters.push(adapter);
+                  }
                 });
 
                 return adapters;
@@ -328,13 +323,17 @@ define(
                     dialogId: dialogId
                   }).then((function (adapter)
                   {
-                    this.list(dialogId, adapter);
+                    // $scope.dialogAdapters = this.list(dialogId, adapter);
+
+                    $scope.Adapter.list();
                   }).bind(this));
               },
 
               add: function (dialog)
               {
                 this.update(dialog.id, $scope.channel.extension);
+
+                // $scope.Dialog.open($scope.dialogs[0]);
               },
 
               remove: function (extension)
