@@ -11,7 +11,7 @@ define(
         {
           Store = Store('data');
 
-          $scope.current = 'dialogs';
+          $scope.current = 'extensions';
 
           $scope.setSection = function (selection)
           {
@@ -75,6 +75,10 @@ define(
             });
 
             $scope.candidates = candidates;
+          };
+
+          $scope.resetAdapterMenus = function ()
+          {
           };
 
           $scope.query = {

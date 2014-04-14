@@ -72,6 +72,7 @@ define(
                     AskFast.caller('info')
                       .then(function (info)
                       {
+                        //AskFast.caller()
                         Store.save({
                           user: info
                         });
