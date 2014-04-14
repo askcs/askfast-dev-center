@@ -11,18 +11,10 @@ navbar
               li: a(ng-click='setSection("extensions")', href='') Extensions
               li: a(ng-click='setSection("dialogs")', href='') Dialogs
               li: a(ng-click='setSection("debugger")', href='') Debugger
-              li: a(ng-click='setSection("analysis")', href='') Analysis
+              //li: a(ng-click='setSection("analysis")', href='') Analysis
 
         #toolbar.row
-          .col-md-3
-            form(role='form')
-              .form-group
-                .input-group
-                  input#privateKey.form-control(type='text',
-                  placeholder='Search')
-                  span.input-group-btn
-                    button.btn.btn-default(type='button') Search
-          .col-md-7
+          .col-md-10
           .col-md-2.text-right
 
             button.btn.btn-default(type='button',

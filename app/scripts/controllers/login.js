@@ -72,14 +72,23 @@ define(
                     AskFast.caller('info')
                       .then(function (info)
                       {
-                        //AskFast.caller()
-                        Store.save({
-                          user: info
-                        });
+                        AskFast.caller('key')
+                          .then(function(keys)
+                          {
+                            Store.save({
+                              keys: keys
+                            });
 
-                        $rootScope.user = info;
+                            $rootScope.keys = keys;
 
-                        $location.path('/dashboard');
+                            Store.save({
+                              user: info
+                            });
+
+                            $rootScope.user = info;
+
+                            $location.path('/dashboard');
+                          });
                       });
                   }
                 },

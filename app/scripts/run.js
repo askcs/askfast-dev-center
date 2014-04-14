@@ -42,6 +42,9 @@ define(
           if (!$http.defaults.headers.common['X-SESSION_ID'])
             $http.defaults.headers.common['X-SESSION_ID'] = Session.get();
 
+          if (!$rootScope.keys)
+            $rootScope.keys = Store('app').get('keys');
+
           /**
            * TODO: Take it to a directive
            */
