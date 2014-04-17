@@ -32,7 +32,10 @@ navbar
                 section
                   p(ng-hide='logs') Loading logs..
                   article(ng-show='logs')
-                    p There are {{(logs | dashboardLogs).length}} severe logs
+                    p
+                      | There are&nbsp;
+                      strong {{(logs | dashboardLogs).length}}
+                      |  SEVERE logs.
 
                     div#accordion.panel-group
                       div.panel.panel-default(ng-repeat='log in (logs | dashboardLogs)')

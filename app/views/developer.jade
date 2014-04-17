@@ -96,6 +96,9 @@ navbar
                           input.form-control(type='text',
                           ng-model='dialog.form.url',
                           placeholder='URL for dialog')
+                      .form-group
+                        button.btn.btn-default(type='button',
+                        ng-click='Dialog.add(dialog)') Save dialog
                       a(ng-click='setSection("dialogs")') &nbsp; or go back to the list.
 
 
