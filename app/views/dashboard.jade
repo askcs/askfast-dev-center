@@ -12,19 +12,17 @@ navbar
               .inner
                 header
                   h2 API Keys
-                  span For creating a dialog, you will need public private keys.
                 section
                   form(role='form')
                   .form-group
                     label(for='accountID') Account ID
                     input#publicKey.form-control(type='text',
-                    ng-model='keys.accountId')
+                    ng-model='user.id')
                   .form-group
                     label(for='userKey') Your key
                     input#userKey.form-control(type='text',
-                    ng-model='keys.refreshToken')
+                    ng-model='user.refreshToken')
                     .help-block Please do not share your private key with other people.
-                  button.btn.btn-default(type='button') Dialog Manager
 
 
             .widget.widget-left
@@ -39,7 +37,6 @@ navbar
               .inner
                 header
                   h2 Document Center
-                  span Documents
                 section
                   ul
                     li: a(href='') Introduction to SMS sending

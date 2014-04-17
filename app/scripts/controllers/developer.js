@@ -11,7 +11,7 @@ define(
         {
           Store = Store('data');
 
-          $scope.current = 'extensions';
+          $scope.current = 'adapters';
 
           $scope.setSection = function (selection)
           {
@@ -51,7 +51,7 @@ define(
 
           $scope.channel = {
             type: null,
-            extension: null
+            adapter: null
           };
 
           $scope.candidates = [];
@@ -66,9 +66,9 @@ define(
               {
                 angular.forEach(type.ids, function (id)
                 {
-                  angular.forEach($scope.extensions, function (extension)
+                  angular.forEach($scope.adapters, function (adapter)
                   {
-                    if (extension.configId == id) candidates.push(extension);
+                    if (adapter.configId == id) candidates.push(adapter);
                   });
                 })
               }
@@ -106,12 +106,12 @@ define(
 
                   angular.forEach(result, function (log)
                   {
-                    angular.forEach($scope.extensions, function (extension)
+                    angular.forEach($scope.adapters, function (adapter)
                     {
-                      if (extension.configId == log.adapterID)
+                      if (adapter.configId == log.adapterID)
                       {
-                        log.myAddress   = extension.myAddress;
-                        log.adapterType = extension.adapterType;
+                        log.myAddress   = adapter.myAddress;
+                        log.adapterType = adapter.adapterType;
                       }
                     });
 
@@ -199,7 +199,7 @@ define(
 
                   Store.save($scope.adapterTypes, 'adapterTypes');
 
-                  $scope.extensions = adapters;
+                  $scope.adapters = adapters;
 
                   if (callback) callback.call(null, adapters);
                 });
@@ -218,7 +218,7 @@ define(
             // TODO: Add changing dialog info later on
 //            update: function (dialog)
 //            {
-//              AskFast.caller('updateAdapter', { level: $scope.channel.extension },
+//              AskFast.caller('updateAdapter', { level: $scope.channel.adapter },
 //                {
 //                  dialogId: dialog.id
 //                }).then((function ()
@@ -305,7 +305,7 @@ define(
               {
                 var adapters = [];
 
-                angular.forEach($scope.extensions, function (adapter)
+                angular.forEach($scope.adapters, function (adapter)
                 {
                   if (updated && updated.id == adapter.id)
                   {
@@ -322,10 +322,8 @@ define(
 
               update: function (dialogId, adapterId)
               {
-                AskFast.caller('updateAdapter', { level: adapterId },
-                  {
-                    dialogId: dialogId
-                  }).then((function (adapter)
+                AskFast.caller('updateAdapter', { level: adapterId },{ dialogId: dialogId })
+                  .then((function (adapter)
                   {
                     // $scope.dialogAdapters = this.list(dialogId, adapter);
 
@@ -335,14 +333,14 @@ define(
 
               add: function (dialog)
               {
-                this.update(dialog.id, $scope.channel.extension);
+                this.update(dialog.id, $scope.channel.adapter);
 
                 // $scope.Dialog.open($scope.dialogs[0]);
               },
 
-              remove: function (extension)
+              remove: function (adapter)
               {
-                this.update('', extension.configId);
+                this.update('', adapter.configId);
               }
             },
 

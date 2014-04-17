@@ -9,8 +9,6 @@ define(
         '$scope', '$rootScope', 'AskFast', 'Session', 'Store', '$location', 'MD5',
         function ($scope, $rootScope, AskFast, Session, Store, $location, MD5)
         {
-          Store = Store('app');
-
           $scope.login = {
             email: '',
             password: '',
@@ -27,7 +25,7 @@ define(
 
           var loginBtn = angular.element('#login button[type=submit]');
 
-          var login = Store.get('login');
+          var login = Store('app').get('login');
 
           if (login && login.remember)
           {
@@ -41,7 +39,7 @@ define(
             loginBtn.text('Login..')
                     .attr('disabled', 'disabled');
 
-            Store.save({
+            Store('app').save({
               login: {
                 email:    $scope.login.email,
                 password: $scope.login.password,
@@ -69,19 +67,33 @@ define(
 
                     $scope.login.state = true;
 
+                    /**
+                     * Build core cache
+                     */
                     AskFast.caller('info')
                       .then(function (info)
                       {
+                        /**
+                         * creationTime: 1395145568131
+                         * email: null
+                         * id: "8b559620"
+                         * name: "Cengiz Ulusoy"
+                         * password: "eadeb7"
+                         * phoneNumber: "0629143142"
+                         * status: "ACTIVE"
+                         * userName: "cengiz@ask-cs.com"
+                         */
                         AskFast.caller('key')
                           .then(function(keys)
                           {
-                            Store.save({
-                              keys: keys
-                            });
+                            /**
+                             * accountId: "8b559620"
+                             * refreshToken: "d4637ec"
+                             */
+                            if (keys.accountId == info.id)
+                              info.refreshToken = keys.refreshToken;
 
-                            $rootScope.keys = keys;
-
-                            Store.save({
+                            Store('app').save({
                               user: info
                             });
 

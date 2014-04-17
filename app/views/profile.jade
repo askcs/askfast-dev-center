@@ -15,4 +15,17 @@ navbar
               .inner
                 header
                   h2 Profile information
-                  span Profile information
+                section
+                  dl
+                    dt Name
+                    dd {{user.name}}
+                    dt Status
+                    dd {{user.status}}
+                    dt User name
+                    dd {{user.userName}}
+                    dt Phone number
+                    dd {{user.phoneNumber}}
+                    dt Email
+                    dd {{user.email || 'no email is given'}}
+                    dt Account created
+                    dd {{user.creationTime | parseTimeStamp}}

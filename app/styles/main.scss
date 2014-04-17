@@ -62,6 +62,10 @@ body {
     }
   }
 
+  a[ng-click]:hover {
+    cursor: pointer;
+  }
+
   dl {
     font-size: 1.2em;
 
@@ -322,9 +326,6 @@ body {
 #info-box {
   background-color: #eeeeff;
   padding: 2em;
-
-  p {
-  }
 }
 
 #widgets {
@@ -336,7 +337,10 @@ body {
       margin: 1em !important;
 
       header {
+        overflow: hidden;
+
         h2 {
+          float: left;
           padding: .5em;
           padding-bottom: 0 !important;
         }
@@ -345,11 +349,30 @@ body {
           padding: .5em;
           margin-left: .5em !important;
         }
+
+        button, select {
+          float: right;
+          margin: 25px 10px 0 0;
+        }
+
+        select {
+          width: 200px;
+        }
       }
 
       section {
         padding: 1em;
         background-color: #eeeeff;
+      }
+
+      table {
+        background-color: white
+      }
+
+      .form-inline {
+        .form-group {
+          margin-right: 15px;
+        }
       }
     }
   }
@@ -364,6 +387,10 @@ body {
 }
 
 
+
+hr {
+  border-bottom: 1px solid $light-gray;
+}
 
 
 
