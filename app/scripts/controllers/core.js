@@ -4,13 +4,11 @@ define(
   {
     'use strict';
 
-    controllers.controller ('developer',
+    controllers.controller ('core',
       [
         '$rootScope', '$scope', 'AskFast', 'Store',
         function ($rootScope, $scope, AskFast, Store)
         {
-          angular.element('body').css({'backgroundColor': '#454545'});
-
           Store = Store('data');
 
           $scope.current = 'adapters';
@@ -61,7 +59,7 @@ define(
           $scope.channelTypeSelected = function ()
           {
             var candidates = [];
-            
+
             angular.forEach($scope.adapterTypes, function (type)
             {
               if (type.label == $scope.channel.type)
@@ -87,7 +85,7 @@ define(
             type: 'ALL',
             severity: 'ALL',
             ddr: false,
-            limit: 100
+            limit: 1000
           };
 
           $scope.Log = {
@@ -122,13 +120,13 @@ define(
 
                   this.data = logs;
 
-                  this.type();
+                  this.categorize();
                   this.severity();
 
                 }).bind(this));
             },
 
-            type: function ()
+            categorize: function ()
             {
               var type;
 
@@ -160,7 +158,7 @@ define(
               {
                 case 'ALL':
                   var logs = [],
-                      data = this.data;
+                    data = this.data;
 
                   if (!$scope.query.ddr) delete data['DDR'];
 

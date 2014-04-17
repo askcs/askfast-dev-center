@@ -13,38 +13,33 @@ define(
             .when('/register',
             {
               templateUrl:    'views/register.html',
-              controller:     'register',
+              controller:     'user',
               reloadOnSearch: false
             })
             .when('/login',
             {
               templateUrl:    'views/login.html',
-              controller:     'login'
+              controller:     'user'
             })
             .when('/logout',
             {
               templateUrl:    'views/logout.html',
-              controller:     'logout'
+              controller:     'user'
             })
             .when('/dashboard',
             {
               templateUrl:    'views/dashboard.html',
-              controller:     'dashboard'
+              controller:     'core'
             })
             .when('/developer',
             {
               templateUrl:    'views/developer.html',
-              controller:     'developer'
-            })
-            .when('/help',
-            {
-              templateUrl:    'views/help.html',
-              controller:     'help'
+              controller:     'core'
             })
             .when('/profile',
             {
               templateUrl:    'views/profile.html',
-              controller:     'profile'
+              controller:     'core'
             })
             .otherwise({
               redirectTo: '/login'

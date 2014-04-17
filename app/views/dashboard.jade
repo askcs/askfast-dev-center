@@ -5,7 +5,7 @@ navbar
     section#dashboard
       .container-fluid
 
-    #widgets.row
+        #widgets.row
           .col-md-6
 
             .widget.widget-left
@@ -30,7 +30,24 @@ navbar
                 header
                   h2 Debugger
                 section
-                  p Some section information.
+                  p(ng-hide='logs') Loading logs..
+                  article(ng-show='logs')
+                    p There are {{(logs | dashboardLogs).length}} severe logs
+
+                    div#accordion.panel-group
+                      div.panel.panel-default(ng-repeat='log in (logs | dashboardLogs)')
+                        div.panel-heading
+                          h4.panel-title
+                            a(data-toggle='collapse',
+                            data-parent='#accordion',
+                            href='#collapse-{{log.logId}}')
+                              | {{log.timestamp | parseTimeStamp}} - {{log | translateAdapterType}}
+                        div.panel-collapse.collapse(id='collapse-{{log.logId}}',
+                        class='{{($first) && "in"}}')
+                          div.panel-body
+                            | {{log.messagegit st}}
+
+
 
           .col-md-6
             .widget.widget-right
