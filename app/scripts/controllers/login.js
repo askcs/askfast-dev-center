@@ -9,6 +9,10 @@ define(
         '$scope', '$rootScope', 'AskFast', 'Session', 'Store', '$location', 'MD5',
         function ($scope, $rootScope, AskFast, Session, Store, $location, MD5)
         {
+          angular.element('body')
+            .removeClass()
+            .css({'backgroundColor': 'white'});
+
           $scope.login = {
             email: '',
             password: '',
@@ -73,23 +77,9 @@ define(
                     AskFast.caller('info')
                       .then(function (info)
                       {
-                        /**
-                         * creationTime: 1395145568131
-                         * email: null
-                         * id: "8b559620"
-                         * name: "Cengiz Ulusoy"
-                         * password: "eadeb7"
-                         * phoneNumber: "0629143142"
-                         * status: "ACTIVE"
-                         * userName: "cengiz@ask-cs.com"
-                         */
                         AskFast.caller('key')
                           .then(function(keys)
                           {
-                            /**
-                             * accountId: "8b559620"
-                             * refreshToken: "d4637ec"
-                             */
                             if (keys.accountId == info.id)
                               info.refreshToken = keys.refreshToken;
 

@@ -9,6 +9,8 @@ define(
         '$rootScope', '$scope', 'AskFast', 'Store',
         function ($rootScope, $scope, AskFast, Store)
         {
+          angular.element('body').css({'backgroundColor': '#454545'});
+
           Store = Store('data');
 
           $scope.current = 'adapters';

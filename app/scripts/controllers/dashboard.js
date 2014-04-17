@@ -9,7 +9,9 @@ define(
         '$rootScope', '$scope',
         function ($rootScope, $scope)
         {
-          angular.element('body').removeClass();
+          angular.element('body')
+            .removeClass()
+            .css({'backgroundColor': '#454545'});
         }
       ]
     );
