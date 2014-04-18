@@ -1,0 +1,31 @@
+navbar
+
+#wrap
+  .container-fluid
+    section#profile
+      .container-fluid
+
+        #sub-header.row
+          .col-md-12.text-center
+            //p Hurray! Here is your dashboard designed specially for you
+
+        #widgets.row
+          .col-md-12
+            .widget
+              .inner
+                header
+                  h2 Profile information
+                section
+                  dl
+                    dt Name
+                    dd {{user.name}}
+                    dt Status
+                    dd {{user.status}}
+                    dt User name
+                    dd {{user.userName}}
+                    dt Phone number
+                    dd {{user.phoneNumber}}
+                    dt Email
+                    dd {{user.email || 'no email is given'}}
+                    dt Account created
+                    dd {{user.creationTime | parseTimeStamp}}

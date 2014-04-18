@@ -6,10 +6,24 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location',
-        function($rootScope, $location)
+        '$rootScope', '$location', 'Offline', 'Session', 'Store', '$http',
+        function($rootScope, $location, Offline, Session, Store, $http)
         {
-          $rootScope.app = $rootScope.app || {};
+          new Offline();
+
+          $rootScope.$on('connection', function ()
+          {
+            console.log((!arguments[1]) ? 'connection restored' : 'connection lost :[');
+          });
+
+
+
+
+          $rootScope.app  = $rootScope.app  || {};
+          $rootScope.user = $rootScope.user || Store('app').get('user');
+
+
+
 
           $rootScope.setLanguage = function (language)
           {
@@ -19,100 +33,22 @@ define(
 
           $rootScope.setLanguage(config.app.defaults.language);
 
+
+
           $rootScope.config = config.app;
 
-          $rootScope.setMainView = function (view)
-          {
-            if ($rootScope.config.app.nav.subs[view])
-            {
-              $location.path(view).hash($rootScope.config.app.nav.subs[view][0]);
+          // if (Session.get()) $location.path('/developer');
 
-              $rootScope.setSubView($rootScope.config.app.nav.subs[view][0]);
-            }
-            else
-            {
-              $location.path(view);
-            }
+          if (!$http.defaults.headers.common['X-SESSION_ID'])
+            $http.defaults.headers.common['X-SESSION_ID'] = Session.get();
 
-            $rootScope.collapseMenu();
-          };
 
-          $rootScope.collapseMenu = function ()
-          {
-            if ($('.navbar .in').length > 0)
-            {
-              $('.navbar .navbar-collapse').removeClass('in').addClass('collapse');
-            }
-          };
 
-          var parts = [];
 
-          angular.forEach($rootScope.config.app.nav.subs, function (sub)
-          {
-            angular.forEach(sub, function (part)
-            {
-              parts.push(part);
-            });
-          });
-
-          $rootScope.subView = {};
-
-          $rootScope.setSubView = function (view)
-          {
-            angular.forEach(parts, function (part)
-            {
-              $rootScope.subView[part] = false;
-            });
-
-            $location.hash(view);
-
-            $rootScope.subView[view] = true;
-          };
-
-          $rootScope.redirectTo = function (main, sub)
-          {
-            $location.path(main).hash(sub);
-
-            $rootScope.setSubView(sub);
-
-            window.scrollTo(0, 0);
-
-            $rootScope.contact.subject.sales = true;
-          };
-
-          $location.hash() && $rootScope.setSubView($location.hash());
-
-          $rootScope.location = {};
-
-          $rootScope.home = {
-            reference: {}
-          };
-
-          var i     = 0,
-              total = $rootScope.ui.pages.home.references.length;
-
-          $rootScope.home.reference = $rootScope.ui.pages.home.references[i];
-
-          setInterval(function ()
-          {
-            i = (i === total - 1) ? 0 : i + 1;
-
-            $rootScope.home.reference = $rootScope.ui.pages.home.references[i];
-
-            $rootScope.$apply();
-          }, 10 * 1000);
-
-          $rootScope.isInternPage = function ()
-          {
-            var interns = ['/login', '/register'];
-
-            return (interns.indexOf($location.path()) >= 0);
-          };
-
-          $rootScope.$on('$routeChangeStart', function ()
-          {
-            $rootScope.location.path = $location.path().substring(1);
-          });
+          /**
+           * TODO: Take it to a directive
+           */
+          $rootScope.$on('$routeChangeStart', function () {});
 
           $rootScope.$on('$routeChangeSuccess', function () {});
 

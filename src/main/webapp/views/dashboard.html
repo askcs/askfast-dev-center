@@ -1,0 +1,72 @@
+<navbar></navbar>
+<div id="wrap">
+  <div class="container-fluid">
+    <section id="dashboard">
+      <div class="container-fluid">
+        <div id="widgets" class="row">
+          <div class="col-md-6">
+            <div class="widget widget-left">
+              <div class="inner">
+                <header>
+                  <h2>API Keys</h2>
+                </header>
+                <section>
+                  <form role="form"></form>
+                  <div class="form-group">
+                    <label for="accountID">Account ID</label>
+                    <input id="publicKey" type="text" ng-model="user.id" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="userKey">Your key</label>
+                    <input id="userKey" type="text" ng-model="user.refreshToken" class="form-control">
+                    <div class="help-block">Please do not share your private key with other people.</div>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <div class="widget widget-left">
+              <div class="inner">
+                <header>
+                  <h2>Debugger</h2>
+                </header>
+                <section>
+                  <p ng-hide="logs">Loading logs..</p>
+                  <article ng-show="logs">
+                    <p>There are&nbsp;<strong>{{(logs | dashboardLogs).length}}</strong> SEVERE logs.</p>
+                    <div id="accordion" class="panel-group">
+                      <div ng-repeat="log in (logs | dashboardLogs)" class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{log.logId}}">{{log.timestamp | parseTimeStamp}} - {{log | translateAdapterType}}</a></h4>
+                        </div>
+                        <div id="collapse-{{log.logId}}" class="panel-collapse collapse {{($first) &amp;&amp; &quot;in&quot;}}">
+                          <div class="panel-body">{{log.message}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="widget widget-right">
+              <div class="inner">
+                <header>
+                  <h2>Document Center</h2>
+                </header>
+                <section>
+                  <ul>
+                    <li><a href="">Introduction to SMS sending</a></li>
+                    <li><a href="">Testing credentials</a></li>
+                    <li><a href="">Request types</a></li>
+                  </ul>
+                  <button type="button" class="btn btn-default">More Documents</button>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

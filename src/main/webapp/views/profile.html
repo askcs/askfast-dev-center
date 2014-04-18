@@ -1,0 +1,41 @@
+<navbar></navbar>
+<div id="wrap">
+  <div class="container-fluid">
+    <section id="profile">
+      <div class="container-fluid">
+        <div id="sub-header" class="row">
+          <div class="col-md-12 text-center">
+            <!--p Hurray! Here is your dashboard designed specially for you-->
+          </div>
+        </div>
+        <div id="widgets" class="row">
+          <div class="col-md-12">
+            <div class="widget">
+              <div class="inner">
+                <header>
+                  <h2>Profile information</h2>
+                </header>
+                <section>
+                  <dl>
+                    <dt>Name</dt>
+                    <dd>{{user.name}}</dd>
+                    <dt>Status</dt>
+                    <dd>{{user.status}}</dd>
+                    <dt>User name</dt>
+                    <dd>{{user.userName}}</dd>
+                    <dt>Phone number</dt>
+                    <dd>{{user.phoneNumber}}</dd>
+                    <dt>Email</dt>
+                    <dd>{{user.email || 'no email is given'}}</dd>
+                    <dt>Account created</dt>
+                    <dd>{{user.creationTime | parseTimeStamp}}</dd>
+                  </dl>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,1 +1,34 @@
-define(["services/services"],function(e){e.factory("Session",["$rootScope","$http","Storage",function(e,t,n){return{check:function(){var e=angular.fromJson(n.cookie.get("session"));return e?(this.set(e.id),!0):!1},cookie:function(e){var t,n=document.cookie.split(";");for(var r=0;r<n.length;r++){t=n[r].split("=");if(t[0].trim()=="Oneline.session")return angular.fromJson(t[1])}},get:function(e){return this.check(e),this.set(e.id),e.id},set:function(r){var i={id:r,time:new Date};return n.cookie.add("session",angular.toJson(i)),e.session=i,t.defaults.headers.common["X-SESSION_ID"]=e.session.id,i},clear:function(){e.session=null,t.defaults.headers.common["X-SESSION_ID"]=null}}}])});
+(function() {
+  define(['services/services'], function(services) {
+    'use strict';
+    services.factory('Session', [
+      '$http', 'Store', function($http, Store) {
+        Store = Store('session');
+        return {
+          get: function() {
+            var session;
+            session = Store.get('info');
+            return session.id;
+          },
+          set: function(id) {
+            var session;
+            session = {
+              id: id
+            };
+            session.inited = new Date().getTime();
+            Store.save({
+              info: session
+            });
+            $http.defaults.headers.common['X-SESSION_ID'] = session.id;
+            return session;
+          },
+          clear: function() {
+            Store.remove('info');
+            $http.defaults.headers.common['X-SESSION_ID'] = null;
+          }
+        };
+      }
+    ]);
+  });
+
+}).call(this);

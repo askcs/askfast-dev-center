@@ -1,0 +1,262 @@
+<navbar></navbar>
+<div id="wrap">
+  <div class="container-fluid">
+    <section id="developer">
+      <div class="container-fluid">
+        <div id="sub-header" class="row">
+          <div class="col-md-12">
+            <ul class="list-inline">
+              <li><a ng-click="setSection(&quot;adapters&quot;)">Adapters</a></li>
+              <li><a ng-click="setSection(&quot;dialogs&quot;)">Dialogs</a></li>
+              <li><a ng-click="setSection(&quot;debugger&quot;)">Debugger</a></li>
+            </ul>
+          </div>
+        </div>
+        <div id="toolbar" class="row">
+          <div class="col-md-10"></div>
+          <div class="col-md-2 text-right"></div>
+        </div>
+        <section ng-switch="" on="current">
+          <div id="widgets" ng-switch-when="adapters" class="row">
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Adapters</h2>
+                    <select ng-model="adapterType" ng-change="Adapter.query(adapterType)" class="form-control">
+                      <option value="" selected="selected">Add a new adapter</option>
+                      <option value="email">Email</option>
+                      <option value="broadsoft">Phone</option>
+                      <option value="sms">SMS</option>
+                      <option value="xmpp">Gtalk</option>
+                      <option value="twitter">Twitter</option>
+                    </select>
+                  </header>
+                  <section>
+                    <article ng-show="adapterType">
+                      <h3>Available adapters</h3>
+                      <p ng-hide="freeAdapters.length &gt; 0">There are not any available adapter for this type.</p>
+                      <table ng-show="freeAdapters.length &gt; 0" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>Adapter</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="adapter in freeAdapters">
+                            <td>{{adapter | translateAdapterAddress}}</td>
+                            <td>{{adapter | translateAdapterType}}</td>
+                            <td>
+                              <button ng-click="Adapter.add(adapter)" class="btn btn-default btn-sm">Add to your account</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <hr>
+                    </article>
+                    <h3>Your adapters</h3>
+                    <p ng-hide="adapters.length &gt; 0">There are not any adapters for your account.</p>
+                    <table ng-show="adapters.length &gt; 0" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Adapter</th>
+                          <th>Type</th>
+                          <!--th Usage-->
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="adapter in adapters">
+                          <td>{{adapter.configId}}</td>
+                          <td>{{adapter | translateAdapterAddress}}</td>
+                          <td>{{adapter | translateAdapterType}}</td>
+                          <!--td --->
+                          <td>
+                            <button ng-click="Adapter.remove(adapter)" class="btn btn-default btn-sm">Remove</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="addDialog" class="row">
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Add a new dialog</h2>
+                  </header>
+                  <section>
+                    <form role="form" ng-submit="Dialog.add(dialog)">
+                      <div class="form-group">
+                        <div class="input-group">
+                          <input type="text" ng-model="dialog.form.name" placeholder="Dialog name" class="form-control">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <input type="text" ng-model="dialog.form.url" placeholder="URL for dialog" class="form-control">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <button type="button" ng-click="Dialog.add(dialog)" class="btn btn-default">Save dialog</button>
+                      </div><a ng-click="setSection(&quot;dialogs&quot;)">&nbsp; or go back to the list.</a>
+                    </form>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="dialogs" class="row">
+            <div class="col-md-12">
+              <div class="widget widget-right">
+                <div class="inner">
+                  <header>
+                    <h2>Dialogs</h2>
+                    <button type="button" ng-click="setSection(&quot;addDialog&quot;)" class="btn btn-default">Add a dialog</button>
+                  </header>
+                  <section>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <p ng-show="dialogs.length &lt; 1">There are no dialogs yet. Please add one.</p>
+                        <ul ng-hide="dialogs.length &lt; 1" class="nav nav-pills nav-stacked">
+                          <li ng-repeat="_dialog in dialogs" class="{{(_dialog.id == dialog.id) &amp;&amp; &quot;active&quot;}}"><a ng-click="Dialog.open(_dialog)">{{_dialog.name}}</a></li>
+                        </ul>
+                      </div>
+                      <div ng-show="dialogs.length &lt; 1" class="col-md-9"></div>
+                      <div ng-hide="dialogs.length &lt; 1" class="col-md-9">
+                        <button ng-click="Dialog.remove(dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
+                        <h5>URL</h5>
+                        <p>{{dialog.url}}</p>
+                        <form role="form" class="form-inline">
+                          <div class="form-group">
+                            <h5>Type</h5>
+                            <select ng-model="channel.type" ng-change="channelTypeSelected()" class="form-control">
+                              <option ng-repeat="type in adapterTypes" value="{{type.label}}">{{type.label}}</option>
+                            </select><span class="help-block">Please select a type first</span>
+                          </div>
+                          <div ng-hide="(channel.type == null)" class="form-group">
+                            <h5>adapter</h5><span ng-hide="candidates.length &gt; 0">There are sadly no adapters for this one.</span>
+                            <select ng-model="channel.adapter" ng-show="candidates.length &gt; 0" class="form-control">
+                              <option ng-repeat="candidate in candidates" value="{{candidate.configId}}">{{candidate.myAddress}}</option>
+                            </select><span class="help-block">Select the adapter</span>
+                          </div>
+                          <div class="form-group">
+                            <button type="button" ng-click="Dialog.adapters.add(dialog)" class="btn btn-default">Add a new channel</button>
+                          </div>
+                        </form>
+                        <hr>
+                        <h4>Channels</h4>
+                        <p ng-hide="(adapters | filterAdapters: dialog).length &gt; 0">There are no adapter added in this dialog yet.</p>
+                        <table ng-show="(adapters | filterAdapters: dialog).length &gt; 0" class="table table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th>Adapter</th>
+                              <th>Type</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="adapter in adapters | filterAdapters: dialog">
+                              <th>{{adapter | translateAdapterAddress}}</th>
+                              <th>{{adapter | translateAdapterType}}</th>
+                              <th><a ng-click="Dialog.adapters.remove(adapter)">Remove</a></th>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="debugger" class="row">
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Debugger</h2>
+                  </header>
+                  <section>
+                    <form role="form" class="form-inline">
+                      <div class="form-group">
+                        <label>Adapter type:</label>
+                        <select ng-model="query.type" ng-change="Log.type()" class="form-control">
+                          <option value="ALL">All</option>
+                          <option value="GTALK">Gtalk</option>
+                          <option value="TWITTER">Twitter</option>
+                          <option value="PHONE">Phone</option>
+                          <option value="EMAIL">Email</option>
+                          <option value="SMS">SMS</option>
+                        </select>
+                      </div>
+                      <div style="margin-left: 15px" class="form-group">
+                        <label>Severity level:</label>
+                        <select ng-model="query.severity" ng-change="Log.severity()" class="form-control">
+                          <option value="ALL">All</option>
+                          <option value="DEBUG">Debug</option>
+                          <option value="INFO">Info</option>
+                          <option value="WARNING">Warning</option>
+                          <option value="SEVERE">Severe</option>
+                        </select>
+                      </div>
+                      <div style="margin-left: 15px" class="form-group">
+                        <label>Limit:</label>
+                        <select ng-model="query.limit" ng-change="Log.list()" class="form-control">
+                          <option value="100">100</option>
+                          <option value="250">250</option>
+                          <option value="500">500</option>
+                          <option value="1000">1000</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label>Filter</label>
+                        <input type="text" ng-model="queryLogs" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label>Show DDR:</label>
+                        <div class="input-group">
+                          <input type="checkbox" ng-model="query.ddr" class="checkbox">
+                        </div>
+                      </div>
+                    </form>
+                    <hr>
+                    <p ng-hide="logs.length &gt; 0 || (query.severity != &quot;ALL&quot;)">Loading logs..</p>
+                    <p ng-hide="logs.length &gt; 0 || (query.severity == &quot;ALL&quot;)">Your query has no logs..</p>
+                    <table ng-show="logs.length &gt; 0" class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Time</th>
+                          <th>Level</th>
+                          <th>Adapter</th>
+                          <th>Type</th>
+                          <th>Message</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="log in logs | filter:queryLogs | orderBy: &quot;timestamp&quot; : true">
+                          <td>{{log.timestamp | parseTimeStamp}}</td>
+                          <td>{{log.level}}</td>
+                          <td>{{log | translateAdapterAddress}}</td>
+                          <td>{{log | translateAdapterType}}</td>
+                          <td>{{log.message}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+</div>

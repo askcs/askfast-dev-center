@@ -27,5 +27,3 @@
   });
 
 }).call(this);
-
-//# sourceMappingURL=../../.tmp/scripts/config.js.map

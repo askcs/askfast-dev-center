@@ -6,15 +6,16 @@ if (window.location.port == '8080')
 require.config (
   {
     paths: {
-      angular:  '../vendors/angular/angular',
       jquery:   '../vendors/jquery/jquery.min',
       domReady: '../vendors/requirejs-domready/domReady',
+      angular:  '../vendors/angular/angular',
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-      //signet:   '../vendors/signet/signet.min',
-      lawnchair: '../vendors/lawnchair/src/Lawnchair',
-      dom: '../vendors/lawnchair/src/adapters/dom'
+//      signet:     '../vendors/signet/signet.min',
+      lawnchair:  '../vendors/lawnchair/src/Lawnchair',
+      dom:        '../vendors/lawnchair/src/adapters/dom',
+      moment:     '../vendors/momentjs/min/moment.min'
     },
     shim: {
       angular:            { deps: ['jquery'], exports:  'angular' },
@@ -22,7 +23,8 @@ require.config (
       'angular-route':    { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
       lawnchair:          { exports: 'lawnchair' },
-      dom:                { deps: ['lawnchair'], exports: 'dom' }
+      dom:                { deps: ['lawnchair'], exports: 'dom' },
+      moment:             { exports: 'moment' }
     }
   }
 );
@@ -34,31 +36,35 @@ require (
     'jquery',
     'angular-resource',
     'angular-route',
+
     'localization',
     'config',
     'app',
     'routes',
     'run',
+
     'modals/askfast',
-    'controllers/home',
-    'controllers/register',
-    'controllers/login',
-    'controllers/logout',
-    'directives/appVersion',
-    'filters/interpolate',
-    //'filters/all',
-    'services/version',
+
+    'directives/navbar',
+
+    'filters/all',
+
     'services/session',
     'services/md5',
-    'services/storage',
-
     'services/store',
+    'services/moment',
+    'services/offline',
+    'services/interceptor',
+    'services/logger',
 
-    'services/strings',
+    'controllers/core',
+    'controllers/user',
+
     'bootstrap',
-    //'signet',
+//    'signet',
     'lawnchair',
-    'dom'
+    'dom',
+    'moment'
   ],
   function (angular, domReady)
   {

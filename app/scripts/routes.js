@@ -6,34 +6,46 @@ define(
 
     app.config(
       [
-        '$routeProvider',
-        function ($routeProvider)
+        '$routeProvider', '$httpProvider',
+        function ($routeProvider, $httpProvider)
         {
           $routeProvider
-            .when('/home',
-            {
-              templateUrl:    'views/home.html',
-              controller:     'home'
-            })
             .when('/register',
             {
               templateUrl:    'views/register.html',
-              controller:     'register',
+              controller:     'user',
               reloadOnSearch: false
             })
             .when('/login',
             {
               templateUrl:    'views/login.html',
-              controller:     'login'
+              controller:     'user'
             })
             .when('/logout',
             {
               templateUrl:    'views/logout.html',
-              controller:     'logout'
+              controller:     'user'
+            })
+            .when('/dashboard',
+            {
+              templateUrl:    'views/dashboard.html',
+              controller:     'core'
+            })
+            .when('/developer',
+            {
+              templateUrl:    'views/developer.html',
+              controller:     'core'
+            })
+            .when('/profile',
+            {
+              templateUrl:    'views/profile.html',
+              controller:     'core'
             })
             .otherwise({
-              redirectTo: '/home'
+              redirectTo: '/login'
             });
+
+          $httpProvider.interceptors.push('Interceptor');
         }
       ]
     );

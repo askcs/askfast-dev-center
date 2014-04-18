@@ -21,9 +21,5 @@ html.no-js(lang='en')
     link(rel='stylesheet', href='styles/main.css')
     // endbuild
   body
-    block iestuff
-    block navbar
-    #wrap.ng-cloak
-      .container-fluid(ng-view='')
-    block footer
+    article.ng-cloak(ng-view='')
     script(data-main='scripts/main', src='vendors/requirejs/require.js')

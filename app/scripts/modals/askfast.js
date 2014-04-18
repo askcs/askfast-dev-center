@@ -6,11 +6,11 @@ define(
 
     modals.factory('AskFast',
       [
-        '$resource', '$q', '$location', '$rootScope', 'Storage', 'Session', 'MD5',
-        function ($resource, $q, $location, $rootScope, Storage, Session, MD5)
+        '$resource', '$q', '$location', '$rootScope', 'Log',
+        function ($resource, $q, $location, $rootScope, Log)
         {
           var AskFast = $resource(
-            $rootScope.config.host + '/:action/:level',
+            $rootScope.config.host + '/:action/:level/:node',
             {},
             {
               register: {
@@ -47,6 +47,7 @@ define(
                   verification: ''
                 }
               },
+
               login: {
                 method: 'GET',
                 params: {
@@ -61,23 +62,27 @@ define(
                   action: 'logout'
                 }
               },
+
               authorizedApp: {
                 method: 'GET',
                 params: {
                   action: 'authorized_app'
                 }
               },
+
               info: {
                 method: 'GET',
                 params: {
                   action: 'info'
                 }
               },
+
               getDialog: {
                 method: 'GET',
                 params: {
                   action: 'dialog'
-                }
+                },
+                isArray: true
               },
               createDialog: {
                 method: 'POST',
@@ -85,25 +90,56 @@ define(
                   action: 'dialog'
                 }
               },
+              updateDialog: {
+                method: 'PUT',
+                params: {
+                  action: 'dialog',
+                  level: ''
+                }
+              },
+              deleteDialog: {
+                method: 'DELETE',
+                params: {
+                  action: 'dialog'
+                }
+              },
+
               getAdapters: {
                 method: 'GET',
                 params: {
                   action: 'adapter'
-                }
+                },
+                isArray: true
               },
               createAdapter: {
                 method: 'POST',
                 params: {
                   action: 'adapter',
-                  id: ''
+                  level: ''
+                }
+              },
+              updateAdapter: {
+                method: 'PUT',
+                params: {
+                  action: 'adapter',
+                  level: ''
+                }
+              },
+              removeAdapter: {
+                method: 'DELETE',
+                params: {
+                  action: 'adapter',
+                  level: ''
                 }
               },
               freeAdapters: {
                 method: 'GET',
                 params: {
                   action: 'free_adapters'
-                }
+                },
+                isArray: true
               },
+
               key: {
                 method: 'GET',
                 params: {
@@ -116,230 +152,49 @@ define(
                   action: 'keyserver',
                   level: 'token'
                 }
+              },
+              log: {
+                method: 'GET',
+                params: {
+                  action: 'log'
+                },
+                isArray: true
               }
             }
           );
 
+          AskFast.prototype.caller = function (proxy, params, data, callback)
+          {
+            var deferred = $q.defer();
 
-          var Contact = $resource(
-            'http://char-a-lot.appspot.com/rpc',
-            {},
+            params = params || {};
+
+            try
             {
-              request: {
-                method: 'POST',
-                params: {}
-              }
-            }
-          );
+              AskFast[proxy](
+                params,
+                data,
+                function (result)
+                {
+                  if (callback && callback.success) callback.success.call(this, result);
 
+                  deferred.resolve(result);
+                },
+                function (result)
+                {
+                  if (callback && callback.error) callback.error.call(this, result);
 
-          /**
-           * User login
-           */
-          AskFast.prototype.login = function (data)
-          {
-            var deferred = $q.defer();
-
-            AskFast.login(
-              {
-                username: data.email,
-                password: MD5(data.password)
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
-
-            return deferred.promise;
-          };
-
-
-          /**
-           * /user_exists?username={preferred_username}
-
-           returns a 200 if it doesn't exists and a 409 if it does.
-           * @type {*}
-           */
-
-
-          /**
-           * User registration
-           */
-          AskFast.prototype.register = function (data)
-          {
-            var deferred = $q.defer();
-
-            AskFast.register(
-              {
-                name:         data.user.name.full(),
-                username:     data.user.email,
-                password:     data.passwords.first,
-                phone:        data.user.phone,
-                verification: 'SMS'
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
-
-            return deferred.promise;
-          };
-
-
-          /**
-           * Check whet username already exists
-           */
-          AskFast.prototype.userExists = function (username)
-          {
-            var deferred = $q.defer();
-
-            AskFast.userExists(
-              {
-                username: username
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
-
-            return deferred.promise;
-          };
-
-
-          /**
-           * User registration verify
-           */
-          AskFast.prototype.verify = function (data)
-          {
-            var deferred = $q.defer();
-
-            AskFast.registerVerify(
-              {
-                code:     data.verification.code,
-                id:       localStorage.getItem('data.verification.id')
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
-
-            return deferred.promise;
-          };
-
-
-          /**
-           * User registration verify
-           */
-          AskFast.prototype.resend = function ()
-          {
-            var deferred = $q.defer();
-
-            AskFast.resendVerify(
-              {
-                code:         localStorage.getItem('data.verification.id'),
-                verification: 'SMS'
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
-
-            return deferred.promise;
-          };
-
-
-          /**
-           * User logout
-           */
-          AskFast.prototype.logout = function ()
-          {
-            var deferred = $q.defer();
-
-            AskFast.process(null,
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
-
-            return deferred.promise;
-          };
-
-
-          /**
-           * Contact form
-           */
-          AskFast.prototype.contact = function (contact)
-          {
-            var deferred = $q.defer();
-
-            var data = {
-              message: contact.message,
-              sender: contact.name + ' ' +
-                      contact.surname + ' <' +
-                      contact.email + '>',
-              subject: 'New message from AskFast, related to: ' + contact.subject
-            };
-
-            Contact.request(
-              {},
-              {
-                "method": "outboundCallWithMap",
-                "params": {
-                  "adapterID": "2dbe5b60-154a-11e3-b728-00007f000001",
-                  "addressMap": {
-                    "abektes@ask-cs.com": "Contact Inquiry"
-                  },
-                  "url": "http://askfastmarket1.appspot.com/resource/question/comment?message=" +
-                    encodeURIComponent(data.message),
-                  "publicKey": 	"",
-                  "privateKey": 	"",
-                  "senderName": data.sender,
-                  "subject": 	data.subject
+                  deferred.resolve({error: result});
                 }
-              },
-              function (result)
-              {
-                deferred.resolve(result);
-              },
-              function (error)
-              {
-                deferred.resolve({error: error});
-              }
-            );
+              );
+            }
+            catch (err)
+            {
+              Log.error(err);
+            }
 
             return deferred.promise;
           };
-
 
           return new AskFast();
         }
