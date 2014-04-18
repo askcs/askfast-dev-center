@@ -9,6 +9,14 @@ define(
         '$routeProvider', '$httpProvider',
         function ($routeProvider, $httpProvider)
         {
+          var redirect = [
+            '$location', 'Store',
+            function ($location, Store)
+            {
+              if (Store('session').get('info').id == 'info') $location.path('#/login');
+            }
+          ];
+
           $routeProvider
             .when('/register',
             {
@@ -29,17 +37,20 @@ define(
             .when('/dashboard',
             {
               templateUrl:    'views/dashboard.html',
-              controller:     'core'
+              controller:     'core',
+              resolve:        { redirect: redirect }
             })
             .when('/developer',
             {
               templateUrl:    'views/developer.html',
-              controller:     'core'
+              controller:     'core',
+              resolve:        { redirect: redirect }
             })
             .when('/profile',
             {
               templateUrl:    'views/profile.html',
-              controller:     'core'
+              controller:     'core',
+              resolve:        { redirect: redirect }
             })
             .otherwise({
               redirectTo: '/login'

@@ -37,7 +37,9 @@ define(
 
           $rootScope.config = config.app;
 
-          // if (Session.get()) $location.path('/developer');
+
+          // if (!Session.get()) $location.path('/login');
+
 
           if (!$http.defaults.headers.common['X-SESSION_ID'])
             $http.defaults.headers.common['X-SESSION_ID'] = Session.get();

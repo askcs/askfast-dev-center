@@ -104,7 +104,7 @@ define(
                     DDR:    [],
                     INFO:   [],
                     SEVERE: [],
-                    WARNING: []
+                    WARNING:[]
                   };
 
                   angular.forEach(result, function (log)
