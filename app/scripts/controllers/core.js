@@ -11,7 +11,7 @@ define(
         {
           Store = Store('data');
 
-          $scope.current = 'adapters';
+          $scope.current = 'dialogs';
 
           $scope.setSection = function (selection)
           {
@@ -77,8 +77,10 @@ define(
             $scope.candidates = candidates;
           };
 
-          $scope.resetAdapterMenus = function ()
+          $scope.resetAdapterMenu = function ()
           {
+            $scope.channel.type = null;
+            $scope.channel.adapter = null;
           };
 
           $scope.query = {
@@ -101,7 +103,8 @@ define(
                   var logs = {
                     DDR:    [],
                     INFO:   [],
-                    SEVERE: []
+                    SEVERE: [],
+                    WARNING: []
                   };
 
                   angular.forEach(result, function (log)
@@ -115,7 +118,8 @@ define(
                       }
                     });
 
-                    logs[log.level].push(log);
+                    if (logs[log.level])
+                      logs[log.level].push(log);
                   });
 
                   this.data = logs;
@@ -194,7 +198,10 @@ define(
                 {
                   angular.forEach(adapters, function (adapter)
                   {
-                    $scope.adapterTypes[adapter.adapterType].ids.push(adapter.configId);
+                    var ids = $scope.adapterTypes[adapter.adapterType].ids;
+
+                    if (ids.indexOf(adapter.configId) == -1)
+                      ids.push(adapter.configId);
                   });
 
                   Store.save($scope.adapterTypes, 'adapterTypes');
@@ -295,6 +302,9 @@ define(
 
                   this.list(function ()
                   {
+                    if ($scope.dialogs[0])
+                      $scope.dialog = $scope.dialogs[0];
+
                     $scope.setSection('dialogs');
                   });
                 }).bind(this));
@@ -334,6 +344,10 @@ define(
               add: function (dialog)
               {
                 this.update(dialog.id, $scope.channel.adapter);
+
+                $scope.resetAdapterMenu();
+
+                $scope.candidates = [];
 
                 // $scope.Dialog.open($scope.dialogs[0]);
               },

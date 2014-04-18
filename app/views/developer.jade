@@ -62,15 +62,17 @@ navbar
                     table.table.table-bordered.table-hover(ng-show='adapters.length > 0')
                       thead
                         tr
+                          th ID
                           th Adapter
                           th Type
-                          th Usage
+                          //th Usage
                           th Actions
                       tbody
                         tr(ng-repeat='adapter in adapters')
+                          td {{adapter.configId}}
                           td {{adapter | translateAdapterAddress}}
                           td {{adapter | translateAdapterType}}
-                          td -
+                          //td -
                           td
                             button.btn.btn-default.btn-sm(ng-click='Adapter.remove(adapter)')
                               | Remove
@@ -120,10 +122,10 @@ navbar
                         ul.nav.nav-pills.nav-stacked(ng-hide='dialogs.length < 1')
                           li(ng-repeat='_dialog in dialogs',
                           class='{{(_dialog.id == dialog.id) && "active"}}')
-                            a(ng-click='Dialog.open(dialog)') {{_dialog.name}}
-                        // a(ng-click='Dialog.remove(dialog)') remove
-
+                            a(ng-click='Dialog.open(_dialog)') {{_dialog.name}}
                       .col-md-9
+                        button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
+                          | Delete dialog
                         h5 URL
                         p {{dialog.url}}
                         form.form-inline(role='form')
@@ -145,12 +147,13 @@ navbar
                             ng-click='Dialog.adapters.add(dialog)') Add a new channel
                         hr
                         h4 Channels
-                        p(ng-hide='dialogAdapters.length > 0')
+                        p(ng-hide='(adapters | filterAdapters: dialog).length > 0')
                           | There are no adapter added in this dialog yet.
-                        table.table.table-bordered.table-hover
+                        table.table.table-bordered.table-hover(
+                        ng-show='(adapters | filterAdapters: dialog).length > 0')
                           thead
                             tr
-                              th adapter
+                              th Adapter
                               th Type
                               th Actions
                           tbody
@@ -197,6 +200,10 @@ navbar
                           option(value='500') 500
                           option(value='1000') 1000
                       .form-group
+                        label Filter
+                        input.form-control(type='text',
+                        ng-model='queryLogs')
+                      .form-group
                         label Show DDR:
                         .input-group
                           input.checkbox(type='checkbox',
@@ -215,7 +222,7 @@ navbar
                           th Type
                           th Message
                       tbody
-                        tr(ng-repeat='log in logs | orderBy: "timestamp" : true')
+                        tr(ng-repeat='log in logs | filter:queryLogs | orderBy: "timestamp" : true')
                           td {{log.timestamp | parseTimeStamp}}
                           td {{log.level}}
                           td {{log | translateAdapterAddress}}
