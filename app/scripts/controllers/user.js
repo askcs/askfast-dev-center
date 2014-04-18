@@ -86,7 +86,14 @@ define(
                               .removeClass()
                               .css({'backgroundColor': '#454545'});
 
-                            $location.path('/dashboard');
+                            if ($location.search().redirect_url)
+                            {
+                              window.location.href = $location.search().redirect_url;
+                            }
+                            else
+                            {
+                              $location.path('/dashboard');
+                            }
                           });
                       });
                   }
