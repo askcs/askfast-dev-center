@@ -302,6 +302,8 @@ define(
 
                   this.list(function ()
                   {
+                    $scope.dialog = null;
+
                     if ($scope.dialogs[0])
                       $scope.dialog = $scope.dialogs[0];
 
@@ -349,7 +351,7 @@ define(
 
                 $scope.candidates = [];
 
-                // $scope.Dialog.open($scope.dialogs[0]);
+                openDialog(dialog);
               },
 
               remove: function (adapter)
@@ -362,9 +364,15 @@ define(
             {
               $scope.dialog = dialog;
 
-              $scope.dialogAdapters = this.adapters.list(dialog.id);
+              if (this.adapters.list(dialog.id))
+                $scope.dialogAdapters = this.adapters.list(dialog.id);
             }
           };
+
+          function openDialog (dialog)
+          {
+            $scope.Dialog.open(dialog);
+          }
 
           $scope.Dialog.list();
 
@@ -374,7 +382,8 @@ define(
             {
               $scope.$apply(function ()
               {
-                $scope.Dialog.open($scope.dialogs[0]);
+                if ($scope.dialogs.length > 0)
+                  $scope.Dialog.open($scope.dialogs[0]);
               });
             }
           }, 250);

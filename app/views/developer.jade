@@ -123,7 +123,8 @@ navbar
                           li(ng-repeat='_dialog in dialogs',
                           class='{{(_dialog.id == dialog.id) && "active"}}')
                             a(ng-click='Dialog.open(_dialog)') {{_dialog.name}}
-                      .col-md-9
+                      .col-md-9(ng-show='dialogs.length < 1')
+                      .col-md-9(ng-hide='dialogs.length < 1')
                         button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
                           | Delete dialog
                         h5 URL
@@ -138,7 +139,10 @@ navbar
                             span.help-block Please select a type first
                           .form-group(ng-hide='(channel.type == null)')
                             h5 adapter
-                            select.form-control(ng-model='channel.adapter')
+                            span(ng-hide='candidates.length > 0')
+                              | There are sadly no adapters for this one.
+                            select.form-control(ng-model='channel.adapter',
+                            ng-show='candidates.length > 0')
                               option(ng-repeat='candidate in candidates',
                               value='{{candidate.configId}}') {{candidate.myAddress}}
                             span.help-block Select the adapter
