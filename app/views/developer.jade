@@ -179,7 +179,7 @@ navbar
                       .form-group
                         label Adapter type:
                         select.form-control(ng-model='query.type',
-                        ng-change='Log.type()')
+                        ng-change='Log.categorize()')
                           option(value='ALL') All
                           option(value='GTALK') Gtalk
                           option(value='TWITTER') Twitter
@@ -203,6 +203,11 @@ navbar
                           option(value='250') 250
                           option(value='500') 500
                           option(value='1000') 1000
+                      .form-group
+                        label Logs until
+                        input.form-control(type='date',
+                        ng-model='query.until',
+                        ng-change='Log.period(this)')
                       .form-group
                         label Filter
                         input.form-control(type='text',

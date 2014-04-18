@@ -188,7 +188,7 @@
                     <form role="form" class="form-inline">
                       <div class="form-group">
                         <label>Adapter type:</label>
-                        <select ng-model="query.type" ng-change="Log.type()" class="form-control">
+                        <select ng-model="query.type" ng-change="Log.categorize()" class="form-control">
                           <option value="ALL">All</option>
                           <option value="GTALK">Gtalk</option>
                           <option value="TWITTER">Twitter</option>
@@ -215,6 +215,10 @@
                           <option value="500">500</option>
                           <option value="1000">1000</option>
                         </select>
+                      </div>
+                      <div class="form-group">
+                        <label>Logs until</label>
+                        <input type="date" ng-model="query.until" ng-change="Log.period(this)" class="form-control">
                       </div>
                       <div class="form-group">
                         <label>Filter</label>

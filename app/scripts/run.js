@@ -16,14 +16,8 @@ define(
             console.log((!arguments[1]) ? 'connection restored' : 'connection lost :[');
           });
 
-
-
-
           $rootScope.app  = $rootScope.app  || {};
           $rootScope.user = $rootScope.user || Store('app').get('user');
-
-
-
 
           $rootScope.setLanguage = function (language)
           {
@@ -33,19 +27,10 @@ define(
 
           $rootScope.setLanguage(config.app.defaults.language);
 
-
-
           $rootScope.config = config.app;
-
-
-          // if (!Session.get()) $location.path('/login');
-
 
           if (!$http.defaults.headers.common['X-SESSION_ID'])
             $http.defaults.headers.common['X-SESSION_ID'] = Session.get();
-
-
-
 
           /**
            * TODO: Take it to a directive
