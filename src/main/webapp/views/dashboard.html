@@ -3,176 +3,70 @@
   <div class="container-fluid">
     <section id="dashboard">
       <div class="container-fluid">
-        <div id="sub-header" class="row">
-          <div class="col-md-12 text-center">
-            <p>Hurray! Here is your dashboard designed specially for you</p>
+        <div id="widgets" class="row">
+          <div class="col-md-6">
+            <div class="widget widget-left">
+              <div class="inner">
+                <header>
+                  <h2>API Keys</h2>
+                </header>
+                <section>
+                  <form role="form"></form>
+                  <div class="form-group">
+                    <label for="accountID">Account ID</label>
+                    <input id="publicKey" type="text" ng-model="user.id" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="userKey">Your key</label>
+                    <input id="userKey" type="text" ng-model="user.refreshToken" class="form-control">
+                    <div class="help-block">Please do not share your private key with other people.</div>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <div class="widget widget-left">
+              <div class="inner">
+                <header>
+                  <h2>Debugger</h2>
+                </header>
+                <section>
+                  <p ng-hide="logs">Loading logs..</p>
+                  <article ng-show="logs">
+                    <p>There are&nbsp;<strong>{{(logs | dashboardLogs).length}}</strong> SEVERE logs.</p>
+                    <div id="accordion" class="panel-group">
+                      <div ng-repeat="log in (logs | dashboardLogs)" class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{log.logId}}">{{log.timestamp | parseTimeStamp}} - {{log | translateAdapterType}}</a></h4>
+                        </div>
+                        <div id="collapse-{{log.logId}}" class="panel-collapse collapse {{($first) &amp;&amp; &quot;in&quot;}}">
+                          <div class="panel-body">{{log.message}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </section>
+              </div>
+            </div>
           </div>
-        </div>
-        <div id="info-box" class="row">
-          <div class="col-md-6 col-md-push-3 text-center">
-            <p>
-              Trial version is a sandbox that is designed for you to understand the capabilities
-              of our service. If you are convinced, Let us prepare your account to be used in real
-              life.
-            </p>
-            <button href="#" class="btn btn-primary">Upgrade</button>
+          <div class="col-md-6">
+            <div class="widget widget-right">
+              <div class="inner">
+                <header>
+                  <h2>Document Center</h2>
+                </header>
+                <section>
+                  <ul>
+                    <li><a href="">Introduction to SMS sending</a></li>
+                    <li><a href="">Testing credentials</a></li>
+                    <li><a href="">Request types</a></li>
+                  </ul>
+                  <button type="button" class="btn btn-default">More Documents</button>
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
-    <div id="widgets" class="row">
-      <div class="col-md-6">
-        <div ng-show="false" class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">API Keys</h3><span>For creating a dialog, you will need public private keys.</span>
-          </div>
-          <div class="panel-body">
-            <form role="form">
-              <div class="form-group">
-                <label for="publicKey">Public Key</label>
-                <input id="publicKey" type="text" placeholder="Enter your private key" class="form-control">
-              </div>
-              <div class="form-group">
-                <div class="input-group">
-                  <input id="privateKey" type="password" placeholder="Enter your private key" class="form-control"><span class="input-group-btn">
-                    <button type="button" class="btn btn-default">Reveal</button></span>
-                </div>
-                <div class="help-block">Please do not share your private key with other people.</div>
-              </div>
-              <button type="button" class="btn btn-default">Dialog Manager</button>
-            </form>
-          </div>
-        </div>
-        <div class="widget widget-left">
-          <div class="inner">
-            <header>
-              <h2>API Keys</h2><span>For creating a dialog, you will need public private keys.</span>
-            </header>
-            <section>
-              <form role="form">
-                <div class="form-group">
-                  <label for="publicKey">Public Key</label>
-                  <input id="publicKey" type="text" placeholder="Enter your private key" class="form-control">
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <input id="privateKey" type="password" placeholder="Enter your private key" class="form-control"><span class="input-group-btn">
-                      <button type="button" class="btn btn-default">Reveal</button></span>
-                  </div>
-                  <div class="help-block">Please do not share your private key with other people.</div>
-                </div>
-                <button type="button" class="btn btn-default">Dialog Manager</button>
-              </form>
-            </section>
-          </div>
-        </div>
-        <div class="widget widget-left">
-          <div class="inner">
-            <header>
-              <h2>Debugger</h2>
-            </header>
-            <section>
-              <p>Some section information.</p>
-            </section>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="widget widget-right">
-          <div class="inner">
-            <header>
-              <h2>Document Center</h2><span>Documents</span>
-            </header>
-            <section>
-              <ul>
-                <li><a href="">Introduction to SMS sending</a></li>
-                <li><a href="">Testing credentials</a></li>
-                <li><a href="">Request types</a></li>
-              </ul>
-              <button type="button" class="btn btn-default">More Documents</button>
-            </section>
-          </div>
-        </div>
-        <div class="widget widget-right">
-          <div class="inner">
-            <header>
-              <h2>Tutorials</h2><span>You may want to start with starting tutorials.</span>
-            </header>
-            <section>
-              <ul>
-                <li><a href="">Sending and receiving SMS Messages</a></li>
-                <li><a href="">How to handle incoming calls</a></li>
-                <li><a href="">Making an Outbound call</a></li>
-              </ul>
-              <button type="button" class="btn btn-default">More Tutorials</button>
-            </section>
-          </div>
-        </div>
-        <div class="widget widget-right">
-          <div class="inner">
-            <header>
-              <h2>Fast Developer Support</h2><span>You may want to start with starting tutorials.</span>
-            </header>
-            <section>
-              <p>Your current plan provides you e-mail support.</p>
-              <button type="button" class="btn btn-default">Change Support Plan</button><br><br>
-              <p>Did you find a bug?<a href="">Create a ticket</a></p>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="widgets" class="row">
-      <div class="col-md-12">
-        <div class="widget">
-          <div class="inner">
-            <header>
-              <h2>Analysis</h2><span>For creating a dialog, you will need public, private keys.</span>
-            </header>
-            <section>
-              <p>A diagram.</p>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="widgets" class="row">
-      <div class="col-md-12">
-        <div class="widget">
-          <div class="inner">
-            <header>
-              <h2>Fast Developers</h2><span>For creating a dialog, you will need public, private keys.</span>
-            </header>
-            <section>
-              <div class="row">
-                <div class="col-md-6">
-                  <h4>Ranking communications</h4>
-                  <p>
-                    Ask-Fast gives you a lot of opportunities and also communication channels. In
-                    some scenarios, you may want to rank them for reducing dialog cost. I will
-                    show you how you can
-                  </p><a href="">read more</a>
-                </div>
-                <div class="col-md-6">
-                  <h4>TTS for your written communication</h4>
-                  <p>
-                    Ask-Fast gives you a lot of opportunities and also communication channels. In
-                    some scenarios, you may want to rank them for reducing dialog cost. I will
-                    show you how you can
-                  </p><a href="">read more</a>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <p>Do you want to become a verified developer?
-                    <button type="button" class="btn btn-default">Yes, I want</button>
-                  </p>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>

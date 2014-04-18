@@ -4,40 +4,16 @@ navbar
   .container-fluid
     section#developer
       .container-fluid
-
         #sub-header.row
           .col-md-12
             ul.list-inline
-              li: a(ng-click='setSection("extensions")', href='') Extensions
-              li: a(ng-click='setSection("dialogs")', href='') Dialogs
-              li: a(ng-click='setSection("debugger")', href='') Debugger
-              li: a(ng-click='setSection("analysis")', href='') Analysis
-
+              li: a(ng-click='setSection("adapters")') Adapters
+              li: a(ng-click='setSection("dialogs")') Dialogs
+              li: a(ng-click='setSection("debugger")') Debugger
         #toolbar.row
-          .col-md-3
-            form(role='form')
-              .form-group
-                .input-group
-                  input#privateKey.form-control(type='text',
-                  placeholder='Search')
-                  span.input-group-btn
-                    button.btn.btn-default(type='button') Search
-          .col-md-7
+          .col-md-10
           .col-md-2.text-right
 
-            button.btn.btn-default(type='button',
-            ng-click='setSection("addDialog")',
-            ng-show='(current=="dialogs")') Add a dialog
-
-            select.form-control(ng-model='adapterType',
-            ng-change='Adapter.query(adapterType)',
-            ng-show='(current=="extensions")')
-              option(value='', selected) Add a new adapter
-              option(value='email') Email
-              option(value='broadsoft') Phone
-              option(value='sms') SMS
-              option(value='xmpp') Gtalk
-              option(value='twitter') Twitter
 
 
 
@@ -47,57 +23,59 @@ navbar
 
 
 
-          #widgets.row(ng-switch-when='extensions')
-
-            .col-md-12(ng-show='adapterType')
-              .widget
-                .inner
-                  header
-                    h2 Available extensions
-                    span Extensions that you can hook with your account
-                  section
-                    p(ng-hide='freeAdapters.length > 0')
-                      | There are not any available extension for this type.
-                    table.table.table-bordered.table-hover(style='background-color: white',
-                    ng-show='freeAdapters.length > 0')
-                      thead
-                        tr
-                          th Extensions
-                          th Type
-                          th Usage
-                          th Actions
-                      tbody
-                        tr(ng-repeat='extension in freeAdapters')
-                          th {{extension | translateAdapterAddress}}
-                          th {{extension | translateAdapterType}}
-                          th -
-                          th: a(ng-click='Adapter.add(extension)', href='') Add to your account
-
+          #widgets.row(ng-switch-when='adapters')
             .col-md-12
               .widget
                 .inner
                   header
-                    h2 Your extensions
-                    span Extensions management
+                    h2 Adapters
+                    select.form-control(ng-model='adapterType',
+                    ng-change='Adapter.query(adapterType)')
+                      option(value='', selected) Add a new adapter
+                      option(value='email') Email
+                      option(value='broadsoft') Phone
+                      option(value='sms') SMS
+                      option(value='xmpp') Gtalk
+                      option(value='twitter') Twitter
                   section
-                    p(ng-hide='extensions.length > 0')
-                      | There are not any extensions for your account.
-                    table.table.table-bordered.table-hover(style='background-color: white',
-                    ng-show='extensions.length > 0')
+                    article(ng-show='adapterType')
+                      h3 Available adapters
+                      p(ng-hide='freeAdapters.length > 0')
+                        | There are not any available adapter for this type.
+                      table.table.table-bordered.table-hover(ng-show='freeAdapters.length > 0')
+                        thead
+                          tr
+                            th Adapter
+                            th Type
+                            th Actions
+                        tbody
+                          tr(ng-repeat='adapter in freeAdapters')
+                            td {{adapter | translateAdapterAddress}}
+                            td {{adapter | translateAdapterType}}
+                            td
+                              button.btn.btn-default.btn-sm(ng-click='Adapter.add(adapter)')
+                                | Add to your account
+                      hr
+                    h3 Your adapters
+                    p(ng-hide='adapters.length > 0')
+                      | There are not any adapters for your account.
+                    table.table.table-bordered.table-hover(ng-show='adapters.length > 0')
                       thead
                         tr
                           th ID
-                          th Extension
+                          th Adapter
                           th Type
-                          th Usage
+                          //th Usage
                           th Actions
                       tbody
-                        tr(ng-repeat='extension in extensions')
-                          th {{extension.configId}}
-                          th {{extension | translateAdapterAddress}}
-                          th {{extension | translateAdapterType}}
-                          th -
-                          th: a(ng-click='Adapter.remove(extension)', href='') Remove
+                        tr(ng-repeat='adapter in adapters')
+                          td {{adapter.configId}}
+                          td {{adapter | translateAdapterAddress}}
+                          td {{adapter | translateAdapterType}}
+                          //td -
+                          td
+                            button.btn.btn-default.btn-sm(ng-click='Adapter.remove(adapter)')
+                              | Remove
 
 
 
@@ -106,8 +84,7 @@ navbar
             .col-md-12
               .widget
                 .inner
-                  header
-                    h2 Add a new dialog
+                  header: h2 Add a new dialog
                   section
                     form(role='form',
                     ng-submit='Dialog.add(dialog)')
@@ -121,126 +98,84 @@ navbar
                           input.form-control(type='text',
                           ng-model='dialog.form.url',
                           placeholder='URL for dialog')
-                      button.btn.btn-default(type='submit') Add a dialog
-                      a(ng-click='setSection("dialogs")', href='') &nbsp; or go back to the list.
+                      .form-group
+                        button.btn.btn-default(type='button',
+                        ng-click='Dialog.add(dialog)') Save dialog
+                      a(ng-click='setSection("dialogs")') &nbsp; or go back to the list.
 
 
 
 
           #widgets.row(ng-switch-when='dialogs')
-
-            .col-md-3
-
-              .widget.widget-left
-                .inner
-                  header
-                    h2 Dialogs
-                    // span You have 1 online, 2 offline dialogs
-                  section
-                    p(ng-show='dialogs.length < 1')
-                      | There are no dialogs yet. Please add one.
-                    ul(ng-hide='dialogs.length < 1')
-                      li(ng-repeat='dialog in dialogs')
-                        a(ng-click='Dialog.open(dialog)', href='') {{dialog.name}}
-                        | &nbsp;(online)&nbsp;
-                        a(ng-click='Dialog.remove(dialog)', href='') remove
-
-              .widget.widget-left(ng-show='false')
-                .inner
-                  header
-                    h2 Dialogs in Market
-                    span 2 dialogs are online.
-                  section
-                    ul
-                      li
-                        a(href='') Broadcast
-                        | &nbsp;(online)&nbsp;
-                        a(href='') settings
-                      li
-                        a(href='') Oneline
-                        | &nbsp;(online)&nbsp;
-                        a(href='') settings
-
-
-
-
-            .col-md-9(ng-show='dialog')
-
+            .col-md-12
               .widget.widget-right
                 .inner
                   header
-                    h2 {{dialog.name}}
-                    span {{dialog.url}}
+                    h2 Dialogs
+                    button.btn.btn-default(type='button',
+                    ng-click='setSection("addDialog")') Add a dialog
                   section
-                    h5 State
-                    ul.list-inline
-                      li
-                        input#onState(name='state',
-                        type='radio')
-                        label(for='onState') &nbsp;On
-                      li
-                        input#offState(name='state',
-                        type='radio')
-                        label(for='offState') &nbsp;Off
-
-                    form.form-inline(role='form')
-
-                      .form-group
-                        h5 Type
-                        select.form-control(ng-model='channel.type',
-                        ng-change='channelTypeSelected()')
-                          option(ng-repeat='type in adapterTypes',
-                          value='{{type.label}}') {{type.label}}
-                        span.help-block Please select a type first
-
-                      .form-group(style='margin-left: 15px',
-                      ng-hide='(channel.type == null)')
-                        h5 Extension
-                        select.form-control(ng-model='channel.extension')
-                          option(ng-repeat='candidate in candidates',
-                          value='{{candidate.configId}}') {{candidate.myAddress}}
-                        span.help-block Select the extension
-
-                      .form-group(style='margin-left: 15px')
-                        button.btn.btn-default(type='button',
-                        ng-click='Dialog.adapters.add(dialog)') Add a new channel
-
-                    hr
-
-                    h4 Channels
-
-                    p(ng-hide='dialogAdapters.length > 0')
-                      | There are no adapter added in this dialog yet.
-
-                    table.table.table-bordered.table-hover(style='background-color: white')
-                      thead
-                        tr
-                          th ID
-                          th Extension
-                          th Type
-                          th Actions
-                      tbody
-                        tr(ng-repeat='extension in extensions | filterAdapters: dialog')
-                          th {{extension.configId}}
-                          th {{extension | translateAdapterAddress}}
-                          th {{extension | translateAdapterType}}
-                          th: a(ng-click='Dialog.adapters.remove(extension)', href='') Remove
+                    .row
+                      .col-md-3
+                        p(ng-show='dialogs.length < 1')
+                          | There are no dialogs yet. Please add one.
+                        ul.nav.nav-pills.nav-stacked(ng-hide='dialogs.length < 1')
+                          li(ng-repeat='_dialog in dialogs',
+                          class='{{(_dialog.id == dialog.id) && "active"}}')
+                            a(ng-click='Dialog.open(_dialog)') {{_dialog.name}}
+                      .col-md-9(ng-show='dialogs.length < 1')
+                      .col-md-9(ng-hide='dialogs.length < 1')
+                        button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
+                          | Delete dialog
+                        h5 URL
+                        p {{dialog.url}}
+                        form.form-inline(role='form')
+                          .form-group
+                            h5 Type
+                            select.form-control(ng-model='channel.type',
+                            ng-change='channelTypeSelected()')
+                              option(ng-repeat='type in adapterTypes',
+                              value='{{type.label}}') {{type.label}}
+                            span.help-block Please select a type first
+                          .form-group(ng-hide='(channel.type == null)')
+                            h5 adapter
+                            span(ng-hide='candidates.length > 0')
+                              | There are sadly no adapters for this one.
+                            select.form-control(ng-model='channel.adapter',
+                            ng-show='candidates.length > 0')
+                              option(ng-repeat='candidate in candidates',
+                              value='{{candidate.configId}}') {{candidate.myAddress}}
+                            span.help-block Select the adapter
+                          .form-group
+                            button.btn.btn-default(type='button',
+                            ng-click='Dialog.adapters.add(dialog)') Add a new channel
+                        hr
+                        h4 Channels
+                        p(ng-hide='(adapters | filterAdapters: dialog).length > 0')
+                          | There are no adapter added in this dialog yet.
+                        table.table.table-bordered.table-hover(
+                        ng-show='(adapters | filterAdapters: dialog).length > 0')
+                          thead
+                            tr
+                              th Adapter
+                              th Type
+                              th Actions
+                          tbody
+                            tr(ng-repeat='adapter in adapters | filterAdapters: dialog')
+                              th {{adapter | translateAdapterAddress}}
+                              th {{adapter | translateAdapterType}}
+                              th: a(ng-click='Dialog.adapters.remove(adapter)') Remove
 
 
 
 
           #widgets.row(ng-switch-when='debugger')
-
             .col-md-12
               .widget
                 .inner
-                  header
-                    h2 Debugger
-                    span Debugger management
+                  header: h2 Debugger
                   section
-
                     form.form-inline(role='form')
-
                       .form-group
                         label Adapter type:
                         select.form-control(ng-model='query.type',
@@ -251,7 +186,6 @@ navbar
                           option(value='PHONE') Phone
                           option(value='EMAIL') Email
                           option(value='SMS') SMS
-
                       .form-group(style='margin-left: 15px;')
                         label Severity level:
                         select.form-control(ng-model='query.severity',
@@ -261,7 +195,6 @@ navbar
                           option(value='INFO') Info
                           option(value='WARNING') Warning
                           option(value='SEVERE') Severe
-
                       .form-group(style='margin-left: 15px;')
                         label Limit:
                         select.form-control(ng-model='query.limit',
@@ -270,15 +203,16 @@ navbar
                           option(value='250') 250
                           option(value='500') 500
                           option(value='1000') 1000
-
-                      .form-group(style='margin-left: 15px;')
+                      .form-group
+                        label Filter
+                        input.form-control(type='text',
+                        ng-model='queryLogs')
+                      .form-group
                         label Show DDR:
                         .input-group
                           input.checkbox(type='checkbox',
                           ng-model='query.ddr')
-
                     hr
-
                     p(ng-hide='logs.length > 0 || (query.severity != "ALL")')
                       | Loading logs..
                     p(ng-hide='logs.length > 0 || (query.severity == "ALL")')
@@ -292,22 +226,9 @@ navbar
                           th Type
                           th Message
                       tbody
-                        tr(ng-repeat='log in logs | orderBy: "timestamp" : true')
+                        tr(ng-repeat='log in logs | filter:queryLogs | orderBy: "timestamp" : true')
                           td {{log.timestamp | parseTimeStamp}}
                           td {{log.level}}
                           td {{log | translateAdapterAddress}}
                           td {{log | translateAdapterType}}
                           td {{log.message}}
-
-
-
-          #widgets.row(ng-switch-when='analysis')
-
-            .col-md-12
-              .widget
-                .inner
-                  header
-                    h2 Analysis
-                    span Analysis
-                  section
-                    p Analysis console

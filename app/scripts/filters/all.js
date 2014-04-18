@@ -107,5 +107,28 @@ define(
       ]
     );
 
+    filters.filter('dashboardLogs',
+      [
+        function ()
+        {
+          return function (logs)
+          {
+            if (logs)
+            {
+              var _logs = [];
+
+              angular.forEach(logs, function (log)
+              {
+                if (log.level == 'SEVERE')
+                  _logs.push(log);
+              });
+
+              return _logs;
+            }
+          }
+        }
+      ]
+    );
+
   }
 );

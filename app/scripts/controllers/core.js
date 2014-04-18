@@ -4,14 +4,14 @@ define(
   {
     'use strict';
 
-    controllers.controller ('developer',
+    controllers.controller ('core',
       [
         '$rootScope', '$scope', 'AskFast', 'Store',
         function ($rootScope, $scope, AskFast, Store)
         {
           Store = Store('data');
 
-          $scope.current = 'extensions';
+          $scope.current = 'dialogs';
 
           $scope.setSection = function (selection)
           {
@@ -51,7 +51,7 @@ define(
 
           $scope.channel = {
             type: null,
-            extension: null
+            adapter: null
           };
 
           $scope.candidates = [];
@@ -59,16 +59,16 @@ define(
           $scope.channelTypeSelected = function ()
           {
             var candidates = [];
-            
+
             angular.forEach($scope.adapterTypes, function (type)
             {
               if (type.label == $scope.channel.type)
               {
                 angular.forEach(type.ids, function (id)
                 {
-                  angular.forEach($scope.extensions, function (extension)
+                  angular.forEach($scope.adapters, function (adapter)
                   {
-                    if (extension.configId == id) candidates.push(extension);
+                    if (adapter.configId == id) candidates.push(adapter);
                   });
                 })
               }
@@ -77,15 +77,17 @@ define(
             $scope.candidates = candidates;
           };
 
-          $scope.resetAdapterMenus = function ()
+          $scope.resetAdapterMenu = function ()
           {
+            $scope.channel.type = null;
+            $scope.channel.adapter = null;
           };
 
           $scope.query = {
             type: 'ALL',
             severity: 'ALL',
             ddr: false,
-            limit: 100
+            limit: 1000
           };
 
           $scope.Log = {
@@ -101,32 +103,34 @@ define(
                   var logs = {
                     DDR:    [],
                     INFO:   [],
-                    SEVERE: []
+                    SEVERE: [],
+                    WARNING: []
                   };
 
                   angular.forEach(result, function (log)
                   {
-                    angular.forEach($scope.extensions, function (extension)
+                    angular.forEach($scope.adapters, function (adapter)
                     {
-                      if (extension.configId == log.adapterID)
+                      if (adapter.configId == log.adapterID)
                       {
-                        log.myAddress   = extension.myAddress;
-                        log.adapterType = extension.adapterType;
+                        log.myAddress   = adapter.myAddress;
+                        log.adapterType = adapter.adapterType;
                       }
                     });
 
-                    logs[log.level].push(log);
+                    if (logs[log.level])
+                      logs[log.level].push(log);
                   });
 
                   this.data = logs;
 
-                  this.type();
+                  this.categorize();
                   this.severity();
 
                 }).bind(this));
             },
 
-            type: function ()
+            categorize: function ()
             {
               var type;
 
@@ -158,7 +162,7 @@ define(
               {
                 case 'ALL':
                   var logs = [],
-                      data = this.data;
+                    data = this.data;
 
                   if (!$scope.query.ddr) delete data['DDR'];
 
@@ -194,12 +198,15 @@ define(
                 {
                   angular.forEach(adapters, function (adapter)
                   {
-                    $scope.adapterTypes[adapter.adapterType].ids.push(adapter.configId);
+                    var ids = $scope.adapterTypes[adapter.adapterType].ids;
+
+                    if (ids.indexOf(adapter.configId) == -1)
+                      ids.push(adapter.configId);
                   });
 
                   Store.save($scope.adapterTypes, 'adapterTypes');
 
-                  $scope.extensions = adapters;
+                  $scope.adapters = adapters;
 
                   if (callback) callback.call(null, adapters);
                 });
@@ -218,7 +225,7 @@ define(
             // TODO: Add changing dialog info later on
 //            update: function (dialog)
 //            {
-//              AskFast.caller('updateAdapter', { level: $scope.channel.extension },
+//              AskFast.caller('updateAdapter', { level: $scope.channel.adapter },
 //                {
 //                  dialogId: dialog.id
 //                }).then((function ()
@@ -295,6 +302,11 @@ define(
 
                   this.list(function ()
                   {
+                    $scope.dialog = null;
+
+                    if ($scope.dialogs[0])
+                      $scope.dialog = $scope.dialogs[0];
+
                     $scope.setSection('dialogs');
                   });
                 }).bind(this));
@@ -305,7 +317,7 @@ define(
               {
                 var adapters = [];
 
-                angular.forEach($scope.extensions, function (adapter)
+                angular.forEach($scope.adapters, function (adapter)
                 {
                   if (updated && updated.id == adapter.id)
                   {
@@ -322,10 +334,8 @@ define(
 
               update: function (dialogId, adapterId)
               {
-                AskFast.caller('updateAdapter', { level: adapterId },
-                  {
-                    dialogId: dialogId
-                  }).then((function (adapter)
+                AskFast.caller('updateAdapter', { level: adapterId },{ dialogId: dialogId })
+                  .then((function (adapter)
                   {
                     // $scope.dialogAdapters = this.list(dialogId, adapter);
 
@@ -335,14 +345,18 @@ define(
 
               add: function (dialog)
               {
-                this.update(dialog.id, $scope.channel.extension);
+                this.update(dialog.id, $scope.channel.adapter);
 
-                // $scope.Dialog.open($scope.dialogs[0]);
+                $scope.resetAdapterMenu();
+
+                $scope.candidates = [];
+
+                openDialog(dialog);
               },
 
-              remove: function (extension)
+              remove: function (adapter)
               {
-                this.update('', extension.configId);
+                this.update('', adapter.configId);
               }
             },
 
@@ -350,9 +364,15 @@ define(
             {
               $scope.dialog = dialog;
 
-              $scope.dialogAdapters = this.adapters.list(dialog.id);
+              if (this.adapters.list(dialog.id))
+                $scope.dialogAdapters = this.adapters.list(dialog.id);
             }
           };
+
+          function openDialog (dialog)
+          {
+            $scope.Dialog.open(dialog);
+          }
 
           $scope.Dialog.list();
 
@@ -362,7 +382,8 @@ define(
             {
               $scope.$apply(function ()
               {
-                $scope.Dialog.open($scope.dialogs[0]);
+                if ($scope.dialogs.length > 0)
+                  $scope.Dialog.open($scope.dialogs[0]);
               });
             }
           }, 250);
