@@ -261,6 +261,7 @@ define(
             AskFast.caller('register', {
               name:         $scope.data.user.name.full(),
               username:     $scope.data.user.email,
+              email:        $scope.data.user.email,
               password:     $scope.data.passwords.first,
               phone:        $scope.data.user.phone,
               verification: 'SMS'
