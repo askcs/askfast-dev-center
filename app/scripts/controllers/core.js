@@ -87,7 +87,7 @@ define(
             type: 'ALL',
             severity: 'ALL',
             ddr: false,
-            limit: 1000
+            limit: 100
           };
 
           $scope.Log = {
