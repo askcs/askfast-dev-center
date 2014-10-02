@@ -61,6 +61,7 @@ require (
     'controllers/user',
 	'controllers/profile',
 	'controllers/dashboard',
+	'controllers/credits',
 
     'bootstrap',
 //    'signet',

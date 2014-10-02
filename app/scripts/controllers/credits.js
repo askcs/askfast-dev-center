@@ -4,7 +4,7 @@ define(
   {
     'use strict';
 
-    controllers.controller ('dashboard',
+    controllers.controller ('credits',
       [
         '$scope', '$rootScope', 'AskFast', 'Session', 'Store',  
         function ($scope, $rootScope, AskFast, Session, Store )
@@ -12,17 +12,17 @@ define(
             AskFast.caller('info')
               .then(function (info)
 				{
-					AskFast.caller('key')
-						.then(function (keys)
-					{
-						info.refreshToken = keys.refreshToken;
-					});
+					console.log(info);
 					Store('app').save({
                         user: info
                     });
 				});
-			
-			
+			AskFast.caller('ddr')
+              .then(function (ddr)
+				{
+					console.log(ddr);
+					$scope.logs = ddr;
+				});
         }
       ]
     );

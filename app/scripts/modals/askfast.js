@@ -153,6 +153,15 @@ define(
                   level: 'token'
                 }
               },
+			  
+			   ddr: {
+                method: 'GET',
+                params: {
+                  action: 'ddr',
+				  'limit':100
+                },
+				isArray: true
+              },
               log: {
                 method: 'GET',
                 params: {

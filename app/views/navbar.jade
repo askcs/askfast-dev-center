@@ -19,7 +19,9 @@ ng-controller='user')
         //li(class='{{(current == "/help") && "active"}}')
         //  a(href='#/help') HELP
       ul.nav.navbar-nav.navbar-right
+        li(class='{{(current == "/credits") && "active"}}')
+          a(href='#/credits') CREDITS: &nbsp {{user.credits | currency:"&euro;"}} 
         li(class='{{(current == "/profile") && "active"}}')
-          a(href='#/profile') CREDITS: &nbsp {{user.credits | currency:"&euro;"}} &nbsp {{user.name}}
+          a(href='#/profile') {{user.name}}
         li
           a(ng-click='logout()') LOGOUT

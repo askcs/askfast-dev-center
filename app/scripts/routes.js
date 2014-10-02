@@ -52,6 +52,12 @@ define(
               controller:     'profile',
               resolve:        { redirect: redirect }
             })
+			.when('/credits',
+            {
+              templateUrl:    'views/credits.html',
+              controller:     'credits',
+              resolve:        { redirect: redirect }
+            })
             .otherwise({
               redirectTo: '/login'
             });
