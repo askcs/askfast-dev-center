@@ -19,6 +19,8 @@ navbar
                   dl
                     dt Name
                     dd {{user.name}}
+                    dt Credits
+                    dd {{user.credits | currency:"&euro;" }}
                     dt Status
                     dd {{user.status}}
                     dt User name
@@ -29,3 +31,4 @@ navbar
                     dd {{user.email || 'no email is given'}}
                     dt Account created
                     dd {{user.creationTime | parseTimeStamp}}
+                    

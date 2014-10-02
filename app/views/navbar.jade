@@ -20,6 +20,6 @@ ng-controller='user')
         //  a(href='#/help') HELP
       ul.nav.navbar-nav.navbar-right
         li(class='{{(current == "/profile") && "active"}}')
-          a(href='#/profile') {{user.name}}
+          a(href='#/profile') CREDITS: &nbsp {{user.credits | currency:"&euro;"}} &nbsp {{user.name}}
         li
           a(ng-click='logout()') LOGOUT

@@ -37,7 +37,7 @@ define(
             .when('/dashboard',
             {
               templateUrl:    'views/dashboard.html',
-              controller:     'core',
+              controller:     'dashboard',
               resolve:        { redirect: redirect }
             })
             .when('/developer',
@@ -49,7 +49,7 @@ define(
             .when('/profile',
             {
               templateUrl:    'views/profile.html',
-              controller:     'core',
+              controller:     'profile',
               resolve:        { redirect: redirect }
             })
             .otherwise({
