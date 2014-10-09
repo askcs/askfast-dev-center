@@ -204,14 +204,14 @@ define(
               AskFast.caller('getAdapters')
                 .then(function (adapters)
                 {
-                  angular.forEach(adapters, function (adapter)
-                  {
-                    var ids = $scope.adapterTypes[adapter.adapterType].ids;
-
-                    if (ids.indexOf(adapter.configId) == -1)
-                      ids.push(adapter.configId);
+                  angular.forEach(adapters, function (adapter) {
+                    if (adapter.adapterType in $scope.adapterTypes) {git add 
+                      var ids = $scope.adapterTypes[adapter.adapterType].ids;
+                      if (ids.indexOf(adapter.configId) == -1)
+                        ids.push(adapter.configId);
+                    }
                   });
-
+                  console.log($scope.adapterTypes);
                   Store.save($scope.adapterTypes, 'adapterTypes');
 
                   $scope.adapters = adapters;
