@@ -45,6 +45,13 @@ html, body {
   padding: 0;
   height: 100%;
 }
+tr:nth-child(even) {
+     background-color: #eeeeff;
+}
+ul{
+    list-style-type: none;
+    padding-left:0px;
+}
 
 body {
   font-family: 'Lato', sans-serif;

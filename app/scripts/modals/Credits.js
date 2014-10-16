@@ -3,7 +3,6 @@
 
 angular.module('WebPaige.Modals.Logs', ['ngResource'])
 
-
 /**
  * Groups modal
  */

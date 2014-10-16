@@ -70,6 +70,16 @@ define(
                     AskFast.caller('info')
                       .then(function (info)
                       {
+                      AskFast.caller('getAdapters')
+                        .then(function(adapters)
+                        {
+                            var adatperMap =  {};
+                            angular.forEach(adapters, function (adapter)
+                            {
+                                adatperMap[adapter.configId] =  adapter.adapterType;
+                            });
+                            Store('adatperMap').save(adatperMap);   
+                            
                         AskFast.caller('key')
                           .then(function(keys)
                           {
@@ -95,6 +105,7 @@ define(
                               $location.path('/dashboard');
                             }
                           });
+                         });
                       });
                   }
                 },

@@ -20,70 +20,42 @@ navbar
                     dt Credits
                     dd {{user.credits | currency:"&euro;" }}
                     dd If you would like to buy credits please send an email to sales@ask-fast.com
-                ul
-                    li(ng-repeat="log in logs")
-                        {{log.start}}
           .col-md-12
             .widget
               .inner
                 header
                   h2 Credits information
-                section
-                    div(ng-show='ng-show', logs.length='logs.length')
-                      | 0"
+                section(ng-hide="loading")
+                    div
                       table.table.table-striped
                         thead
                           tr
-                            th
-                              a(ng-click='orderBy(\'status\')') Status
-                              span(ng-show='(ordered==\'status\')')
-                                span(ng-hide='reversed') ▲
-                                span(ng-show='reversed') ▼
-                            th
-                              a(ng-click='orderBy(\'from\')') From
-                              span(ng-show='(ordered==\'from\')')
-                                span(ng-hide='reversed') ▲
-                                span(ng-show='reversed') ▼
-                            th
-                              a(ng-click='orderBy(\'to\')') To
-                              span(ng-show='(ordered==\'to\')')
-                                span(ng-hide='reversed') ▲
-                                span(ng-show='reversed') ▼
-                            th
-                              a(ng-click='orderBy(\'started.stamp\')') Time
-                              span(ng-show='(ordered==\'started.stamp\')')
-                                span(ng-hide='reversed') ▲
-                                span(ng-show='reversed') ▼
-                            th
-                              a(ng-click='orderBy(\'duration.stamp\')') Duration
-                              span(ng-show='(ordered==\'duration.stamp\')')
-                                span(ng-hide='reversed') ▲
-                                span(ng-show='reversed') ▼
+                            th Start
+                            th Medium
+                            th Cost
+                            th Duration
+                            th To
+                            th status
                         tbody
                           tr(ng-repeat='log in logs| filter: filtered | orderBy:ordered : reversed')
+                            td 
+                                | {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
                             td
-                              span.label.label-inverse.log-{{log.status}} {{log.status}}
-                              span(ng-show='ng-show', log.records.length='log.records.length')
-                                | 0"
-                                span(ng-repeat='record in log.records')
-                                  br
-                                  | ∟
-                                  span.label.label-inverse.log-{{record.status}} {{record.status}}
+                                | {{log.adapterName}}
                             td
-                              | {{log.start}}
-                              span(ng-show='ng-show', log.records.length='log.records.length')
-                                | 0" ng-repeat="record in log.records"
-                                br
-                                | {{record.from}}
+                                | {{log.totalCost}}
                             td
-                              | {{log.to}}
-                              span(ng-show='ng-show', log.records.length='log.records.length')
-                                | 0" ng-repeat="record in log.records"
-                                br
-                                | {{record.to}}
-                            td {{log.started.date}}
-                            td {{log.duration.presentation}}
-                            td {{log.start}}
-                    hr
+                                | {{log.duration}}
+                            td
+                                ul
+                                    li(ng-repeat="(key, val) in log.statusPerAddress")
+                                        | {{key}}
+                            td
+                                ul
+                                    li(ng-repeat="(key, val) in log.statusPerAddress")
+                                        | {{val}}
+                
+                section(ng-show="loading")
+                    p Hold on loading your records ...
                     
                      
