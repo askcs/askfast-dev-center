@@ -45,11 +45,11 @@ navbar
                             td
                                 | {{log.totalCost}}
                             td
-                                | {{log.duration}}
+                                | {{getDuration(log.duration)}}
                             td
                                 ul
                                     li(ng-repeat="(key, val) in log.statusPerAddress")
-                                        | {{key}}
+                                        | {{getPropperAdress(key)}}
                             td
                                 ul
                                     li(ng-repeat="(key, val) in log.statusPerAddress")

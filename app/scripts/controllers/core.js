@@ -212,7 +212,6 @@ define(
                         ids.push(adapter.configId);
                     }
                   });
-                  console.log($scope.adapterTypes);
                   Store.save($scope.adapterTypes, 'adapterTypes');
                   
                   $scope.adapters = adapters;

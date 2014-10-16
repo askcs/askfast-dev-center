@@ -13,8 +13,6 @@ define(
                         Store('app').save({
                             user: info
                         });
-
-
                     });
                 AskFast.caller('getAdapters')
                     .then(function(adapters) {
@@ -22,7 +20,6 @@ define(
                         angular.forEach(adapters, function(adapter) {
                             adatperMap[adapter.configId] = adapter.adapterType;
                         });
-                        console.log(adatperMap);
                         AskFast.caller('ddr')
                             .then(function(ddr) {
                                 angular.forEach(ddr, function(drrlog) {
@@ -32,9 +29,23 @@ define(
                                 $scope.loading = false;
                             });
                     });
-                $scope.getAdapter = function(string) {
-                    return $scope.result = '?';
+                $scope.getDuration = function(string) {
+                    if(string){
+                        return $scope.result =moment.utc(string).format("HH:mm:ss");
+                    }else{
+                        return $scope.result = '';
+                    }
                 }
+                $scope.getPropperAdress = function(string){
+                    if (string.indexOf('@ask-ask-voipit-nl') >= 0) {
+                        var num = string.replace('@ask-ask-voipit-nl','');
+                        num= num.slice(1);
+                        num = '+31'+num;
+                        return $scope.result = num;
+                    }else{
+                        return $scope.result = string;
+                    }
+                } 
 
             }
         ]);
