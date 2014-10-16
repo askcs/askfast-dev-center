@@ -26,6 +26,18 @@ navbar
                 header
                   h2 Credits information
                 section(ng-hide="loading")
+                    form.form-inline(role='form')
+                      .form-group
+                        label Adapter type:
+                        select.form-control(ng-model='filtered',
+                        ng-change='Log.categorize()')
+                          option(value='') All
+                          option(value='GTALK') Gtalk
+                          option(value='TWITTER') Twitter
+                          option(value='Broadsoft') Phone
+                          option(value='EMAIL') Email
+                          option(value='SMS') SMS
+                    br
                     div
                       table.table.table-striped
                         thead
