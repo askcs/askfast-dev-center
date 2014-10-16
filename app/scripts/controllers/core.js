@@ -204,38 +204,15 @@ define(
               AskFast.caller('getAdapters')
                 .then(function (adapters)
                 {
-<<<<<<< HEAD
-                    console.log(adapters);
-                  angular.forEach(adapters, function (adapter)
-                  {
-                    var ids = $scope.adapterTypes[adapter.adapterType].ids;
 
-                    if (ids.indexOf(adapter.configId) == -1)
-                      ids.push(adapter.configId);
-                  });
-                  
-                   //store adapter map
-                   var adatperMap =  {};
-                  angular.forEach(adapters, function (adapter)
-                  {
-                    adatperMap[adapter.configId] =  adapter.adapterType;
-                  });
-                  Store.save(adatperMap,'adatperMap'); 
-                  
-                  /*Store.get('adatperMap',function(result){
-                    console.log('result from core '+result)
-                  });*/
-
-=======
                   angular.forEach(adapters, function (adapter) {
-                    if (adapter.adapterType in $scope.adapterTypes) {git add 
+                    if (adapter.adapterType in $scope.adapterTypes) {
                       var ids = $scope.adapterTypes[adapter.adapterType].ids;
                       if (ids.indexOf(adapter.configId) == -1)
                         ids.push(adapter.configId);
                     }
                   });
                   console.log($scope.adapterTypes);
->>>>>>> 38cb0da56f08963972ecef12b13e3cf6b168c442
                   Store.save($scope.adapterTypes, 'adapterTypes');
                   
                   $scope.adapters = adapters;
