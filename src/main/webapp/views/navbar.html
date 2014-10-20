@@ -11,7 +11,8 @@
         <!--  a(href='#/help') HELP-->
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="{{(current == &quot;/profile&quot;) &amp;&amp; &quot;active&quot;}}"><a href="#/profile">CREDITS: &nbsp {{user.credits | currency:"&euro;"}} &nbsp {{user.name}}</a></li>
+        <li class="{{(current == &quot;/credits&quot;) &amp;&amp; &quot;active&quot;}}"><a href="#/credits">CREDITS: &nbsp {{user.credits | currency:"&euro;"}} </a></li>
+        <li class="{{(current == &quot;/profile&quot;) &amp;&amp; &quot;active&quot;}}"><a href="#/profile">{{user.name}}</a></li>
         <li><a ng-click="logout()">LOGOUT</a></li>
       </ul>
     </div>
