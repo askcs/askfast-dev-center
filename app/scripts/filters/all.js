@@ -57,14 +57,12 @@ define(
             switch (address)
             {
               case 'broadsoft':
+              case 'voxeo':
                 return 'Phone';
-                break;
               case 'xmpp':
                 return 'Gtalk';
-                break;
               case 'email':
                 return 'Email';
-                break;
               default:
                 return address;
             }
@@ -130,5 +128,25 @@ define(
       ]
     );
 
+    filters.filter('mediumToType',
+      [
+        function() {
+          return function(medium) {
+            switch (medium)
+            {
+              case 'broadsoft':
+              case 'voxeo':
+                return 'Phone';
+              case 'xmpp':
+                return 'Gtalk';
+              case 'email':
+                return 'Email';
+              default:
+                return medium;
+            }
+          }
+        }
+      ]
+    );
   }
 );

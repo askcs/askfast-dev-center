@@ -43,7 +43,7 @@ navbar
                         thead
                           tr
                             th Start
-                            th Medium
+                            th Type
                             th Cost
                             th Duration
                             th To
@@ -53,7 +53,7 @@ navbar
                             td 
                                 | {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
                             td
-                                | {{log.adapterName}}
+                                | {{log.adapterName | mediumToType }}
                             td
                                 | {{log.totalCost}}
                             td

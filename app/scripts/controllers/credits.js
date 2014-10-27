@@ -36,14 +36,14 @@ define(
                         return $scope.result = '';
                     }
                 }
-                $scope.getPropperAdress = function(string){
-                    if (string.indexOf('@ask-ask-voipit-nl') >= 0) {
-                        var num = string.replace('@ask-ask-voipit-nl','');
+                $scope.getPropperAdress = function(address){
+                    if (address.indexOf('@') >= 0) {
+                        var num = address.substring(0, address.indexOf('@'));
                         num= num.slice(1);
                         num = '+31'+num;
                         return $scope.result = num;
                     }else{
-                        return $scope.result = string;
+                        return $scope.result = address;
                     }
                 } 
 
