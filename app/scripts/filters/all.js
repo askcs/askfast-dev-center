@@ -141,6 +141,8 @@ define(
                 return 'Gtalk';
               case 'email':
                 return 'Email';
+              case 'email':
+                return 'SMS';
               default:
                 return medium;
             }
