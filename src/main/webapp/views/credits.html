@@ -50,7 +50,7 @@
                       <thead>
                         <tr>
                           <th>Start</th>
-                          <th>Medium</th>
+                          <th>Type</th>
                           <th>Cost</th>
                           <th>Duration</th>
                           <th>To</th>
@@ -63,7 +63,7 @@
                              
                             {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
                           </td>
-                          <td>{{log.adapterName}}</td>
+                          <td>{{log.adapterName | mediumToType }}</td>
                           <td>{{log.totalCost}}</td>
                           <td>{{getDuration(log.duration)}}</td>
                           <td>
