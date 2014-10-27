@@ -70,6 +70,16 @@ define(
                     AskFast.caller('info')
                       .then(function (info)
                       {
+                      AskFast.caller('getAdapters')
+                        .then(function(adapters)
+                        {
+                            var adatperMap =  {};
+                            angular.forEach(adapters, function (adapter)
+                            {
+                                adatperMap[adapter.configId] =  adapter.adapterType;
+                            });
+                            Store('adatperMap').save(adatperMap);   
+                            
                         AskFast.caller('key')
                           .then(function(keys)
                           {
@@ -86,8 +96,16 @@ define(
                               .removeClass()
                               .css({'backgroundColor': '#454545'});
 
-                            $location.path('/dashboard');
+                            if ($location.search().redirect_url)
+                            {
+                              window.location.href = $location.search().redirect_url;
+                            }
+                            else
+                            {
+                              $location.path('/dashboard');
+                            }
                           });
+                         });
                       });
                   }
                 },
@@ -254,6 +272,7 @@ define(
             AskFast.caller('register', {
               name:         $scope.data.user.name.full(),
               username:     $scope.data.user.email,
+              email:        $scope.data.user.email,
               password:     $scope.data.passwords.first,
               phone:        $scope.data.user.phone,
               verification: 'SMS'

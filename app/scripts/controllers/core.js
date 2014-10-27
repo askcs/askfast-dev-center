@@ -11,7 +11,7 @@ define(
         {
           Store = Store('data');
 
-          $scope.current = 'dialogs';
+          $scope.current = 'debugger';
 
           $scope.setSection = function (selection)
           {
@@ -93,10 +93,13 @@ define(
           $scope.Log = {
             data: null,
 
-            list: function ()
+            list: function (period)
             {
+              var _period = (period) ? period : Date.now();
+
               AskFast.caller('log', {
-                limit: $scope.query.limit
+                limit:  $scope.query.limit,
+                end:    parseInt(_period) + (1000 * 60 * 60 * 24)
               })
                 .then((function (result)
                 {
@@ -104,7 +107,7 @@ define(
                     DDR:    [],
                     INFO:   [],
                     SEVERE: [],
-                    WARNING: []
+                    WARNING:[]
                   };
 
                   angular.forEach(result, function (log)
@@ -180,6 +183,11 @@ define(
                 default:
                   $scope.logs = this.data[$scope.query.severity];
               }
+            },
+
+            period: function ()
+            {
+              this.list(Date.parse($scope.query.until));
             }
           };
 
@@ -196,16 +204,16 @@ define(
               AskFast.caller('getAdapters')
                 .then(function (adapters)
                 {
-                  angular.forEach(adapters, function (adapter)
-                  {
-                    var ids = $scope.adapterTypes[adapter.adapterType].ids;
 
-                    if (ids.indexOf(adapter.configId) == -1)
-                      ids.push(adapter.configId);
+                  angular.forEach(adapters, function (adapter) {
+                    if (adapter.adapterType in $scope.adapterTypes) {
+                      var ids = $scope.adapterTypes[adapter.adapterType].ids;
+                      if (ids.indexOf(adapter.configId) == -1)
+                        ids.push(adapter.configId);
+                    }
                   });
-
                   Store.save($scope.adapterTypes, 'adapterTypes');
-
+                  
                   $scope.adapters = adapters;
 
                   if (callback) callback.call(null, adapters);

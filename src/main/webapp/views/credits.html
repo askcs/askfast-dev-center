@@ -1,0 +1,94 @@
+<navbar></navbar>
+<div id="wrap">
+  <div class="container-fluid">
+    <section id="credits">
+      <div class="container-fluid">
+        <div id="sub-header" class="row">
+          <div class="col-md-12 text-center">
+            <!--p Hurray! Here is your dashboard designed specially for you-->
+          </div>
+        </div>
+        <div id="widgets" class="row">
+          <div class="col-md-12">
+            <div class="widget">
+              <div class="inner">
+                <header>
+                  <h2>Credits information</h2>
+                </header>
+                <section>
+                  <dl>
+                    <dt>Credits</dt>
+                    <dd>{{user.credits | currency:"&euro;" }}</dd>
+                    <dd>If you would like to buy credits please send an email to sales@ask-fast.com</dd>
+                  </dl>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="widget">
+              <div class="inner">
+                <header>
+                  <h2>Credits information</h2>
+                </header>
+                <section ng-hide="loading">
+                  <form role="form" class="form-inline">
+                    <div class="form-group">
+                      <label>Adapter type:</label>
+                      <select ng-model="filtered" ng-change="Log.categorize()" class="form-control">
+                        <option value="">All</option>
+                        <option value="GTALK">Gtalk</option>
+                        <option value="TWITTER">Twitter</option>
+                        <option value="Broadsoft">Phone</option>
+                        <option value="EMAIL">Email</option>
+                        <option value="SMS">SMS</option>
+                      </select>
+                    </div>
+                  </form><br>
+                  <div>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Start</th>
+                          <th>Type</th>
+                          <th>Cost</th>
+                          <th>Duration</th>
+                          <th>To</th>
+                          <th>status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="log in logs| filter: filtered | orderBy:ordered : reversed">
+                          <td>
+                             
+                            {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
+                          </td>
+                          <td>{{log.adapterName | mediumToType }}</td>
+                          <td>{{log.totalCost}}</td>
+                          <td>{{getDuration(log.duration)}}</td>
+                          <td>
+                            <ul>
+                              <li ng-repeat="(key, val) in log.statusPerAddress">{{getPropperAdress(key)}}</li>
+                            </ul>
+                          </td>
+                          <td>
+                            <ul>
+                              <li ng-repeat="(key, val) in log.statusPerAddress">{{val}}</li>
+                            </ul>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+                <section ng-show="loading">
+                  <p>Hold on loading your records ...</p>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

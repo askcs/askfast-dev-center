@@ -4,8 +4,9 @@ define ['services/services'], (services) ->
 
   services.factory 'Interceptor', [
     '$q'
+    '$location'
     'Log'
-    ($q, Log) ->
+    ($q, $location, Log) ->
 
       # Log request
       request: (config) ->
@@ -14,7 +15,7 @@ define ['services/services'], (services) ->
 
       # On request error
       requestError: (rejection) ->
-        # console.warn 'request error ->', rejection
+        console.warn 'request error ->', rejection
         $q.reject rejection
 
       # Log response
@@ -25,6 +26,7 @@ define ['services/services'], (services) ->
       # On response error
       responseError: (rejection) ->
         # console.warn 'response error ->', rejection
+        if rejection.status == 403 then $location.path('#/login')
         $q.reject rejection
   ]
 
