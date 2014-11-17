@@ -4,6 +4,6 @@ define(
   {
     'use strict';
 
-    return angular.module('controllers', []);
+    return angular.module('controllers', ['datatables']);
   }
 );

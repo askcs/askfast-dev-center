@@ -8,6 +8,7 @@ require.config (
     paths: {
       jquery:   '../vendors/jquery/jquery.min',
       domReady: '../vendors/requirejs-domready/domReady',
+      datatables: '../scripts/libs/datatables/1.10.4/media/js/jquery.dataTables',
       angular:  '../vendors/angular/angular',
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
@@ -15,16 +16,21 @@ require.config (
 //      signet:     '../vendors/signet/signet.min',
       lawnchair:  '../vendors/lawnchair/src/Lawnchair',
       dom:        '../vendors/lawnchair/src/adapters/dom',
-      moment:     '../vendors/momentjs/min/moment.min'
+      moment:     '../vendors/momentjs/min/moment.min',
+      'angular-datatables':'../vendors/angular-datatables/dist/angular-datatables',
+      'datatables.tools':'../scripts/libs/datatables/1.10.4/extensions/TableTools/js/dataTables.tableTools.min'
     },
     shim: {
-      angular:            { deps: ['jquery'], exports:  'angular' },
+      angular:            { deps: ['jquery','datatables'], exports:  'angular' },
+      datatables :        {deps:['jquery'],exports: 'jquery.datatables'},
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
       lawnchair:          { exports: 'lawnchair' },
       dom:                { deps: ['lawnchair'], exports: 'dom' },
-      moment:             { exports: 'moment' }
+      moment:             { exports: 'moment' },
+      'angular-datatables':{deps:['angular'],exports:'angular'},
+      'datatables.tools':{exports:'datatables.tools'}
     }
   }
 );
@@ -36,7 +42,10 @@ require (
     'jquery',
     'angular-resource',
     'angular-route',
-
+    'datatables',
+    'angular-datatables',
+    'datatables.tools',
+    
     'localization',
     'config',
     'app',
