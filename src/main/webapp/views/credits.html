@@ -32,24 +32,11 @@
                   <h2>Credits information</h2>
                 </header>
                 <section ng-hide="loading">
-                  <form role="form" class="form-inline">
-                    <div class="form-group">
-                      <label>Adapter type:</label>
-                      <select ng-model="filtered" ng-change="Log.categorize()" class="form-control">
-                        <option value="">All</option>
-                        <option value="GTALK">Gtalk</option>
-                        <option value="TWITTER">Twitter</option>
-                        <option value="Broadsoft">Phone</option>
-                        <option value="EMAIL">Email</option>
-                        <option value="SMS">SMS</option>
-                      </select>
-                    </div>
-                  </form><br>
                   <div>
-                    <table class="table table-striped">
+                    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-striped">
                       <thead>
                         <tr>
-                          <th>Start</th>
+                          <th>Time stamp</th>
                           <th>Type</th>
                           <th>Cost</th>
                           <th>Duration</th>
@@ -58,7 +45,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="log in logs| filter: filtered | orderBy:ordered : reversed">
+                        <tr ng-repeat="log in logs">
                           <td>
                              
                             {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
