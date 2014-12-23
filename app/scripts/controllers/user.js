@@ -13,44 +13,28 @@ define(
 
           console.log($routeParams);
 
+          $scope.login = {
+            email: '',
+            password: '',
+            validation: {
+              email: false,
+              password: false
+            },
+            error: {
+              state:  false,
+              code:   null
+            },
+            state: false,
+            forgot: false,
+            changePass: false,
+            notification: ''
+          };
+
           if ($routeParams.code && $routeParams.id){
             chPasswordId = $routeParams.id;
             chPasswordCode = $routeParams.code;
 
-            $scope.login = {
-              email: '',
-              password: '',
-              validation: {
-                email: false,
-                password: false
-              },
-              error: {
-                state:  false,
-                code:   null
-              },
-              state: false,
-              forgot: false,
-              changePass: true,
-              notification: ''
-            };
-          }
-          else {
-            $scope.login = {
-              email: '',
-              password: '',
-              validation: {
-                email: false,
-                password: false
-              },
-              error: {
-                state:  false,
-                code:   null
-              },
-              state: false,
-              forgot: false,
-              changePass: false,
-              notification: ''
-            };
+            $scope.login.changePass = true;
           }
 
           var loginBtn = angular.element('#login button[type=submit]');

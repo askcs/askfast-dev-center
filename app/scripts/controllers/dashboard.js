@@ -21,9 +21,7 @@ define(
                 user: info
               });
 
-              $scope.$apply(function(scope){
-                $rootScope.user = Store('app').get('user');
-              });
+              $rootScope.user = Store('app').get('user');
             });
 
           });
