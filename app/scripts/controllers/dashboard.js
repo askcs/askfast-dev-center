@@ -9,6 +9,20 @@ define(
         '$scope', '$rootScope', 'AskFast', 'Session', 'Store',
         function ($scope, $rootScope, AskFast, Session, Store )
         {
+          $scope.keyRevealTypeString = 'password';
+          $scope.keyButtonString = 'Show';
+
+          $scope.toggleKeyReveal = function () {
+            if ($scope.keyRevealTypeString == 'password'){
+              $scope.keyRevealTypeString = 'text';
+              $scope.keyButtonString = 'Hide';
+            }
+            else {
+              $scope.keyRevealTypeString = 'password';
+              $scope.keyButtonString = 'Show';
+            }
+          };
+
           AskFast.caller('info')
           .then(function (info)
           {

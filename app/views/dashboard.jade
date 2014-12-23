@@ -20,8 +20,11 @@ navbar
                     ng-model='user.id')
                   .form-group
                     label(for='userKey') Your key
-                    input#userKey.form-control(type='text', readonly='',
-                    ng-model='user.refreshToken')
+                    .input-group
+                      input#userKey.form-control(type='{{keyRevealTypeString}}', readonly='',
+                      ng-model='user.refreshToken')
+                      span.input-group-btn
+                        button.btn.btn-default(type='button', ng-click='toggleKeyReveal()') {{keyButtonString}}
                     .help-block Please do not share your private key with other people.
 
 
