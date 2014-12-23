@@ -10,7 +10,7 @@ define(
         function ($resource, $q, $location, $rootScope, Log)
         {
           var AskFast = $resource(
-            $rootScope.config.host + '/:action/:level/:node',
+            $rootScope.config.host + '/:action/:level/:node/:extra',
             {},
             {
               register: {
@@ -60,6 +60,26 @@ define(
                 method: 'GET',
                 params: {
                   action: 'logout'
+                }
+              },
+
+              forgotPass: {
+                method: 'PUT',
+                params: {
+                  action: 'info',
+                  level: 'forgot_password',
+                  node: ''
+                }
+              },
+              changePass: {
+                method: 'PUT',
+                params: {
+                  action: 'info',
+                  level: 'forgot_password',
+                  node: 'verify',
+                  extra: '',
+                  code: '',
+                  password: ''
                 }
               },
 
@@ -153,7 +173,7 @@ define(
                   level: 'token'
                 }
               },
-			  
+
 			   ddr: {
                 method: 'GET',
                 params: {
