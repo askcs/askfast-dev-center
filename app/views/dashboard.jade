@@ -16,11 +16,11 @@ navbar
                   form(role='form')
                   .form-group
                     label(for='accountID') Account ID
-                    input#publicKey.form-control(type='text',
+                    input#publicKey.form-control(type='text', readonly='',
                     ng-model='user.id')
                   .form-group
                     label(for='userKey') Your key
-                    input#userKey.form-control(type='text',
+                    input#userKey.form-control(type='text', readonly='',
                     ng-model='user.refreshToken')
                     .help-block Please do not share your private key with other people.
 
@@ -59,7 +59,7 @@ navbar
                 section
                   h4 Ask Fast API:
                   p.
-                    Host you own questions an answers- high customization,
+                    Host your own questions an answers- high customization,
                   a.btn.btn-default(
                   href='http://docs.askfast.apiary.io/',
                   target='_blank') Ask Fast API
