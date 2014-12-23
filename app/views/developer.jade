@@ -88,13 +88,13 @@ navbar
                   section
                     form(role='form',
                     ng-submit='Dialog.add(dialog)')
-                      .form-group
-                        .input-group
+                      .row
+                        .form-group.col-lg-6.col-md-8
                           input.form-control(type='text',
                           ng-model='dialog.form.name',
                           placeholder='Dialog name')
-                      .form-group
-                        .input-group
+                      .row
+                        .form-group.col-lg-6.col-md-8
                           input.form-control(type='text',
                           ng-model='dialog.form.url',
                           placeholder='URL for dialog')
