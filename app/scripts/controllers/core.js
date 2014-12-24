@@ -31,6 +31,10 @@ define(
               label: 'Phone',
               ids: []
             },
+            voxeo: {
+              label: 'Phone',
+              ids: []
+            },
             xmpp: {
               label: 'Gtalk',
               ids: []
@@ -213,7 +217,7 @@ define(
                     }
                   });
                   Store.save($scope.adapterTypes, 'adapterTypes');
-                  
+
                   $scope.adapters = adapters;
 
                   if (callback) callback.call(null, adapters);
