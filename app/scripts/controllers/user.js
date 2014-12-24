@@ -370,17 +370,18 @@ define(
             }).then( function(result){
               if (!result.hasOwnProperty('error')){
 
+                // Reset used properties
+                $scope.login.email = '';
                 $scope.login.notification = 'Password reset request sent succesfully, please check your email.';
+                $scope.login.forgot = false;
+                loginBtn.removeAttr('disabled');
 
                 setTimeout(function(){
                   $scope.$apply(function(scope){
-                    // Reset used properties
+                    // Remove notification
                     scope.login.notification = '';
-                    scope.login.email = '';
-                    // Go to login
-                    scope.login.forgot = false;
                   });
-                }, 6000);
+                }, 5000);
               }
               else {
                 $scope.login.notification = 'Something went wrong with the reset request, check the email address and try again';
@@ -414,24 +415,23 @@ define(
               .then(function(result){
                 if (!result.hasOwnProperty('error'))
                 {
-                  $scope.login.notification = 'Password succesfully changed, redirecting to Login...';
+                  $scope.login.notification = 'Password succesfully changed.';
+                  //Reset used properties
+                  $scope.data.passwords = {
+                    first: '',
+                    second: ''
+                  };
+                  $scope.data.validation.passwords = false;
+                  //Go to login
+                  $scope.login.changePass = false;
+                  loginBtn.removeAttr('disabled');
 
                   setTimeout(function(){
                     $scope.$apply(function(scope){
-                      //Reset used properties
+                      // Remove notification
                       scope.login.notification = '';
-                      scope.data.passwords = {
-                        first: '',
-                        second: ''
-                      };
-                      scope.data.validation.passwords = false;
-
-                      //Go to login
-                      scope.login.changePass = false;
-                      loginBtn.removeAttr('disabled');
-
                     });
-                  }, 6000);
+                  }, 5000);
                 }
                 else {
                   loginBtn.removeAttr('disabled');
