@@ -134,8 +134,8 @@ navbar
                             h5 Type
                             select.form-control(ng-model='channel.type',
                             ng-change='channelTypeSelected()')
-                              option(ng-repeat='type in adapterTypes',
-                              value='{{type.label}}') {{type.label}}
+                              option(ng-repeat='type in types',
+                              value='{{type}}') {{type}}
                             span.help-block Please select a type first
                           .form-group(ng-hide='(channel.type == null)')
                             h5 adapter

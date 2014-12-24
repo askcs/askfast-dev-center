@@ -138,7 +138,7 @@
                           <div class="form-group">
                             <h5>Type</h5>
                             <select ng-model="channel.type" ng-change="channelTypeSelected()" class="form-control">
-                              <option ng-repeat="type in adapterTypes" value="{{type.label}}">{{type.label}}</option>
+                              <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
                             </select><span class="help-block">Please select a type first</span>
                           </div>
                           <div ng-hide="(channel.type == null)" class="form-group">
