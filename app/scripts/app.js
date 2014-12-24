@@ -9,7 +9,8 @@ define(
     'filters/filters',
     'directives/directives',
     'angular-resource',
-    'angular-route'
+    'angular-route',
+    'angular-datatables'
   ],
   function (angular)
   {
@@ -21,7 +22,8 @@ define(
         'filters',
         'directives',
         'ngResource',
-        'ngRoute'
+        'ngRoute',
+        'datatables'
       ]);
   }
 );
