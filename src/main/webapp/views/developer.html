@@ -94,18 +94,18 @@
                   </header>
                   <section>
                     <form role="form" ng-submit="Dialog.add(dialog)">
-                      <div class="form-group">
-                        <div class="input-group">
+                      <div class="row">
+                        <div class="form-group col-lg-6 col-md-8">
                           <input type="text" ng-model="dialog.form.name" placeholder="Dialog name" class="form-control">
                         </div>
                       </div>
-                      <div class="form-group">
-                        <div class="input-group">
+                      <div class="row">
+                        <div class="form-group col-lg-6 col-md-8">
                           <input type="text" ng-model="dialog.form.url" placeholder="URL for dialog" class="form-control">
                         </div>
                       </div>
                       <div class="form-group">
-                        <button type="button" ng-click="Dialog.add(dialog)" class="btn btn-default">Save dialog</button>
+                        <button type="button" ng-click="Dialog.add(dialog)" class="btn btn-default">Create dialog</button>
                       </div><a ng-click="setSection(&quot;dialogs&quot;)">&nbsp; or go back to the list.</a>
                     </form>
                   </section>

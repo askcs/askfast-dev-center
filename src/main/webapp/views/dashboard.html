@@ -14,11 +14,14 @@
                   <form role="form"></form>
                   <div class="form-group">
                     <label for="accountID">Account ID</label>
-                    <input id="publicKey" type="text" ng-model="user.id" class="form-control">
+                    <input id="publicKey" type="text" readonly="readonly" ng-model="user.id" class="form-control">
                   </div>
                   <div class="form-group">
                     <label for="userKey">Your key</label>
-                    <input id="userKey" type="text" ng-model="user.refreshToken" class="form-control">
+                    <div class="input-group">
+                      <input id="userKey" type="{{keyRevealTypeString}}" readonly="readonly" ng-model="user.refreshToken" class="form-control"><span class="input-group-btn">
+                        <button type="button" ng-click="toggleKeyReveal()" class="btn btn-default">{{keyButtonString}}</button></span>
+                    </div>
                     <div class="help-block">Please do not share your private key with other people.</div>
                   </div>
                 </section>
@@ -56,7 +59,7 @@
                 </header>
                 <section>
                   <h4>Ask Fast API:</h4>
-                  <p>Host you own questions an answers- high customization,</p><a href="http://docs.askfast.apiary.io/" target="_blank" class="btn btn-default">Ask Fast API</a>
+                  <p>Host your own questions an answers- high customization,</p><a href="http://docs.askfast.apiary.io/" target="_blank" class="btn btn-default">Ask Fast API</a>
                   <hr>
                   <h4>Ask Fast Marketplace</h4>
                   <p>
