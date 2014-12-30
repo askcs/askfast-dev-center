@@ -7,12 +7,31 @@ define(
             '$scope', '$rootScope', 'AskFast', 'Session', 'Store', 'DTOptionsBuilder', 'DTColumnDefBuilder',
             function($scope, $rootScope, AskFast, Session, Store, DTOptionsBuilder, DTColumnDefBuilder) {
                 $scope.loading = true;
+                $scope.paypal = false;
+                $scope.creditForm = true;
                 AskFast.caller('info')
                     .then(function(info) {
-                        //console.log(info);
+                        //TODO set propper atribute
+                        
                         Store('app').save({
                             user: info
                         });
+                    });
+                AskFast.caller('paymentMethods')
+                    .then(function(methods){
+                        if(/*methods.indexOf('paypal')>-1*/true){
+                            $scope.paypal = true
+                             paypal.use( ["login"], function(login) {
+                                login.render ({
+                                    "appid": "ARCOQRDKLNqTLrm3_io3FKmaLLCSKqsNVtYRn85OkWnh8H9I1GpYRjkZDRzl",
+                                    "scopes": "profile email address phone https://uri.paypal.com/services/paypalattributes",
+                                    "containerid": "payPalLogin",
+                                    "locale": "nl-nl",
+                                    "returnurl": "portal.ask-fast.com",
+                                    "authend":"sandbox"
+                                });
+                            });
+                        }
                     });
                 AskFast.caller('getAdapters')
                     .then(function(adapters) {
@@ -49,6 +68,9 @@ define(
                             'aButtons': ['csv', 'xls', 'pdf']
                         }
                     ]);
+                    $scope.dtOptions = {
+                         order: [[0, 'desc']]
+                    }
                 $scope.dtColumnDefs = [
                     DTColumnDefBuilder.newColumnDef(0),
                     DTColumnDefBuilder.newColumnDef(1),
@@ -64,6 +86,11 @@ define(
                     } else {
                         return $scope.result = address;
                     }
+                }
+
+                $scope.buyCredits = function(){
+                    $scope.creditButton = true;
+                    $scope.creditForm = false;
                 }
 
             }

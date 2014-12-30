@@ -19,7 +19,15 @@ navbar
                   dl
                     dt Credits
                     dd {{user.credits | currency:"&euro;" }}
-                    dd If you would like to buy credits please send an email to sales@ask-fast.com
+                  div(ng-hide="PayPal")
+                    span(id="payPalLogin")
+                  div(ng-hide="payPall")  
+                    button(ng-click="buyCredits()", ng-hide="creditButton") Buy extra credits
+                    form(ng-hide="creditForm")
+                      label How many credits?
+                      br
+                      input(type="text")
+                      button(type="submit") Go to checkout
           .col-md-12
             .widget
               .inner
@@ -37,7 +45,7 @@ navbar
                             th To
                             th status
                         tbody
-                          tr(ng-repeat='log in logs')
+                          tr(ng-repeat="log in logs")
                             td 
                                 | {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
                             td

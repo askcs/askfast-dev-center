@@ -11,7 +11,6 @@ define(
         {
           var chPasswordId, chPasswordCode;
 
-          console.log($routeParams);
 
           $scope.login = {
             email: '',
