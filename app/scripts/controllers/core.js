@@ -13,6 +13,10 @@ define(
 
           $scope.current = 'debugger';
 
+          $scope.loading = {
+            logs: true
+          };
+
           $scope.setSection = function (selection)
           {
             $scope.current = selection;
@@ -101,6 +105,8 @@ define(
             {
               var _period = (period) ? period : Date.now();
 
+              $scope.loading.logs = true;
+
               AskFast.caller('log', {
                 limit:  $scope.query.limit,
                 end:    parseInt(_period) + (1000 * 60 * 60 * 24)
@@ -133,6 +139,7 @@ define(
 
                   this.categorize();
                   this.severity();
+                  $scope.loading.logs = false;
 
                 }).bind(this));
             },

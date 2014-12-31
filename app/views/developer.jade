@@ -218,9 +218,9 @@ navbar
                           input.checkbox(type='checkbox',
                           ng-model='query.ddr')
                     hr
-                    p(ng-hide='logs.length > 0 || (query.severity != "ALL")')
+                    p(ng-show='loading.logs')
                       | Loading logs..
-                    p(ng-hide='logs.length > 0 || (query.severity == "ALL")')
+                    p(ng-hide='logs.length > 0 || loading.logs')
                       | Your query has no logs..
                     table.table.table-bordered.table-striped(ng-show='logs.length > 0')
                       thead
