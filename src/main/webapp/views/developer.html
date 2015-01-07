@@ -232,8 +232,8 @@
                       </div>
                     </form>
                     <hr>
-                    <p ng-hide="logs.length &gt; 0 || (query.severity != &quot;ALL&quot;)">Loading logs..</p>
-                    <p ng-hide="logs.length &gt; 0 || (query.severity == &quot;ALL&quot;)">Your query has no logs..</p>
+                    <p ng-show="loading.logs">Loading logs..</p>
+                    <p ng-hide="logs.length &gt; 0 || loading.logs">Your query has no logs..</p>
                     <table ng-show="logs.length &gt; 0" class="table table-bordered table-striped">
                       <thead>
                         <tr>

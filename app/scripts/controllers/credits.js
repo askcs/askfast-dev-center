@@ -49,6 +49,9 @@ define(
                             'aButtons': ['csv', 'xls', 'pdf']
                         }
                     ]);
+
+                $scope.dtOptions.order = [[0, 'desc']];
+
                 $scope.dtColumnDefs = [
                     DTColumnDefBuilder.newColumnDef(0),
                     DTColumnDefBuilder.newColumnDef(1),
