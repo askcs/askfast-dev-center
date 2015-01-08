@@ -30,9 +30,9 @@ navbar
                     dt User name
                     dd {{user.userName}}
                     dt Phone number
-                    dd {{user.phoneNumber}}
+                    dd(user-contact="user.contactInfos", type="PHONE")
                     dt Email
-                    dd {{user.email || 'no email is given'}}
+                    dd(user-contact="user.contactInfos", type="EMAIL")
                     dt Account created
                     dd {{user.creationTime | parseTimeStamp}}
                     
