@@ -364,6 +364,9 @@ define(
           $scope.forgotPass = function() {
             loginBtn.attr('disabled', 'disabled');
 
+            // Reset password from login view
+            $scope.login.password = '';
+
             AskFast.caller('forgotPass', {
               node: $scope.login.email,
               guiForwardLink: $location.absUrl()
