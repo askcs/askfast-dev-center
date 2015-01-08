@@ -150,5 +150,21 @@ define(
         }
       ]
     );
+
+    filters.filter('accountType', function(){
+      return function(type){
+        switch (type)
+        {
+          case 'TRIAL':
+            return 'Trial';
+          case 'PRE_PAID':
+            return 'Pre-paid';
+          case 'POST_PAID':
+            return 'Post-paid';
+          default:
+            return type;
+        }
+      };
+    });
   }
 );

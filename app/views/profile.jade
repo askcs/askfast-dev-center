@@ -23,6 +23,8 @@ navbar
                     dd {{user.credits | currency:"&euro;" }}
                     dd If you would like to buy credits please send an email to 
                         a(href='mailto:sales@ask-fast.com') sales@ask-fast
+                    dt Account Type
+                    dd {{user.accountType | accountType}}
                     dt Status
                     dd {{user.status}}
                     dt User name
