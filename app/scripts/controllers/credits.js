@@ -68,7 +68,7 @@ define(
                         }
                     ])
                     .withOption('order',[[0, 'desc']]);
-                    
+
                 $scope.dtColumnDefs = [
                     DTColumnDefBuilder.newColumnDef(0),
                     DTColumnDefBuilder.newColumnDef(1),

@@ -55,6 +55,7 @@ require (
     'modals/askfast',
 
     'directives/navbar',
+    'directives/profile',
 
     'filters/all',
 

@@ -37,11 +37,11 @@ navbar
                   article(ng-show='logs')
                     p
                       | There are&nbsp;
-                      strong {{(logs | dashboardLogs).length}}
+                      strong {{logs.length}}
                       |  SEVERE logs.
 
                     div#accordion.panel-group
-                      div.panel.panel-default(ng-repeat='log in (logs | dashboardLogs)')
+                      div.panel.panel-default(ng-repeat='log in logs')
                         div.panel-heading
                           h4.panel-title
                             a(data-toggle='collapse',

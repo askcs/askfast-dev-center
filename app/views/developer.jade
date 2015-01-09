@@ -204,10 +204,10 @@ navbar
                           option(value='500') 500
                           option(value='1000') 1000
                       .form-group
-                        label Logs until
-                        input.form-control(type='date',
-                        ng-model='query.until',
-                        ng-change='Log.period(this)')
+                        label Logs until 
+                          span.small.text-muted dd/mm/yyyy
+                        input.form-control(ng-model='query.until',
+                        ng-change='Log.period()')
                       .form-group
                         label Filter
                         input.form-control(type='text',
@@ -218,9 +218,9 @@ navbar
                           input.checkbox(type='checkbox',
                           ng-model='query.ddr')
                     hr
-                    p(ng-hide='logs.length > 0 || (query.severity != "ALL")')
+                    p(ng-show='loading.logs')
                       | Loading logs..
-                    p(ng-hide='logs.length > 0 || (query.severity == "ALL")')
+                    p(ng-hide='logs.length > 0 || loading.logs')
                       | Your query has no logs..
                     table.table.table-bordered.table-striped(ng-show='logs.length > 0')
                       thead

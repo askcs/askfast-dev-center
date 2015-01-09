@@ -6,12 +6,16 @@ define(
 
     controllers.controller ('core',
       [
-        '$rootScope', '$scope', 'AskFast', 'Store',
-        function ($rootScope, $scope, AskFast, Store)
+        '$rootScope', '$scope', 'AskFast', 'Store', 'Moment',
+        function ($rootScope, $scope, AskFast, Store, moment)
         {
           Store = Store('data');
 
           $scope.current = 'debugger';
+
+          $scope.loading = {
+            logs: true
+          };
 
           $scope.setSection = function (selection)
           {
@@ -91,7 +95,8 @@ define(
             type: 'ALL',
             severity: 'ALL',
             ddr: false,
-            limit: 100
+            limit: 100,
+            until: moment().format('DD/MM/YYYY')
           };
 
           $scope.Log = {
@@ -99,11 +104,13 @@ define(
 
             list: function (period)
             {
-              var _period = (period) ? period : Date.now();
+              var _period = (period) ? period : moment().endOf('day').valueOf();
+
+              $scope.loading.logs = true;
 
               AskFast.caller('log', {
                 limit:  $scope.query.limit,
-                end:    parseInt(_period) + (1000 * 60 * 60 * 24)
+                end:    _period
               })
                 .then((function (result)
                 {
@@ -133,6 +140,7 @@ define(
 
                   this.categorize();
                   this.severity();
+                  $scope.loading.logs = false;
 
                 }).bind(this));
             },
@@ -191,7 +199,7 @@ define(
 
             period: function ()
             {
-              this.list(Date.parse($scope.query.until));
+              this.list(moment($scope.query.until, 'DD/MM/YYYY').endOf('day').valueOf());
             }
           };
 
@@ -227,7 +235,7 @@ define(
             add: function (adapter)
             {
               AskFast.caller('createAdapter', {
-                level: adapter.configId
+                second: adapter.configId
               }).then((function ()
               {
                 this.list();
@@ -237,7 +245,7 @@ define(
             // TODO: Add changing dialog info later on
 //            update: function (dialog)
 //            {
-//              AskFast.caller('updateAdapter', { level: $scope.channel.adapter },
+//              AskFast.caller('updateAdapter', { second: $scope.channel.adapter },
 //                {
 //                  dialogId: dialog.id
 //                }).then((function ()
@@ -263,7 +271,7 @@ define(
             remove: function (adapter)
             {
               AskFast.caller('removeAdapter', {
-                level: adapter.configId
+                second: adapter.configId
               }).then((function ()
               {
                 this.list();
@@ -306,7 +314,7 @@ define(
             remove: function (dialog)
             {
               AskFast.caller('deleteDialog', {
-                node: dialog.id
+                third: dialog.id
               })
                 .then((function ()
                 {
@@ -346,7 +354,7 @@ define(
 
               update: function (dialogId, adapterId)
               {
-                AskFast.caller('updateAdapter', { level: adapterId },{ dialogId: dialogId })
+                AskFast.caller('updateAdapter', { second: adapterId },{ dialogId: dialogId })
                   .then((function (adapter)
                   {
                     // $scope.dialogAdapters = this.list(dialogId, adapter);
