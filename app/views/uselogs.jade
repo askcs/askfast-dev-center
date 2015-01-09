@@ -1,0 +1,50 @@
+navbar
+
+#wrap
+  .container-fluid
+    section#credits
+      .container-fluid
+
+        #sub-header.row
+          .col-md-12.text-center
+            //p Hurray! Here is your dashboard designed specially for you
+
+        #widgets.row
+          .col-md-12
+            .widget
+              .inner
+                header
+                  h2 Credits information
+                section(ng-hide="loading")
+                    div
+                      table.table.table-striped(datatable="ng", dt-options="dtOptions",dt-column-defs="dtColumnDefs")
+                        thead
+                          tr
+                            th Time stamp
+                            th Type
+                            th Cost
+                            th Duration
+                            th To
+                            th status
+                        tbody
+                          tr(ng-repeat="log in logs")
+                            td 
+                                | {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
+                            td
+                                | {{log.adapterName | mediumToType }}
+                            td
+                                | {{log.totalCost}}
+                            td
+                                | {{getDuration(log.duration)}}
+                            td
+                                ul
+                                    li(ng-repeat="(key, val) in log.statusPerAddress")
+                                        | {{getPropperAdress(key)}}
+                            td
+                                ul
+                                    li(ng-repeat="(key, val) in log.statusPerAddress")
+                                        | {{val}}
+                
+                section(ng-show="loading")
+                    p Hold on loading your records ...
+                

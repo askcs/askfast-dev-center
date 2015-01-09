@@ -52,10 +52,15 @@ define(
               controller:     'profile',
               resolve:        { redirect: redirect }
             })
-			.when('/credits',
+			      .when('/credits',
             {
               templateUrl:    'views/credits.html',
               controller:     'credits',
+              resolve:        { redirect: redirect }
+            })
+            .when('/uselogs',{
+              templateUrl:    'views/uselogs.html',
+              controller:     'uselogs',
               resolve:        { redirect: redirect }
             })
             .otherwise({

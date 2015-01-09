@@ -18,9 +18,8 @@ require.config (
       dom:        '../vendors/lawnchair/src/adapters/dom',
       moment:     '../vendors/momentjs/min/moment.min',
       'angular-datatables':'../vendors/angular-datatables/dist/angular-datatables',
-      'datatables.tools':'../scripts/libs/datatables/1.10.4/extensions/TableTools/js/dataTables.tableTools.min',
-      payPal:'https://www.paypalobjects.com/js/external/api'
-    },
+      'datatables.tools':'../scripts/libs/datatables/1.10.4/extensions/TableTools/js/dataTables.tableTools.min'
+      },
     shim: {
       angular:            { deps: ['jquery','datatables'], exports:  'angular' },
       datatables :        {deps:['jquery'],exports: 'jquery.datatables'},
@@ -69,17 +68,17 @@ require (
 
     'controllers/core',
     'controllers/user',
-	'controllers/profile',
-	'controllers/dashboard',
-	'controllers/credits',
+	  'controllers/profile',
+	  'controllers/dashboard',
+	  'controllers/credits',
+    'controllers/uselogs',
 
     'bootstrap',
 //    'signet',
     'lawnchair',
     'dom',
-    'moment',
-    'payPal'
-  ],
+    'moment'
+    ],
   function (angular, domReady)
   {
     'use strict';

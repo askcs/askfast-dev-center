@@ -14832,7 +14832,6 @@
 	 *  @param {int} column Column index
 	 *  @param {bool} vis `false` if column now hidden, or `true` if visible
 	 */
-    console.log('data tables loaded');
 	return $.fn.dataTable;
 }));
 

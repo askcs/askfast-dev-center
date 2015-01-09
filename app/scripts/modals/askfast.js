@@ -188,7 +188,21 @@ define(
                           method :'GET',
                           params: {
                             action:'paymentmethod'
-                          }
+                          },
+                          isArray: true
+                        },
+                        newPayment:{
+                            method: 'POST',
+                            params: {
+                                action: 'payment'
+                            }
+                        },
+                        getPayments: {
+                            method: 'GET',
+                            params: {
+                                action: 'payment'
+                            },
+                            isArray: true
                         }
                     }
                 );
