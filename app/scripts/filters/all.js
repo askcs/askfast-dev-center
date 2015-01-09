@@ -111,14 +111,18 @@ define(
         {
           return function (logs)
           {
+            var i = 0;
             if (logs)
             {
               var _logs = [];
 
               angular.forEach(logs, function (log)
               {
-                if (log.level == 'SEVERE')
+                if (log.level == 'SEVERE'){
+                  log.logId = i;
+                  i += 1;
                   _logs.push(log);
+                }
               });
 
               return _logs;

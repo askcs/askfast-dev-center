@@ -6,8 +6,8 @@ define(
 
     controllers.controller ('dashboard',
       [
-        '$scope', '$rootScope', '$timeout', 'AskFast', 'Session', 'Store',
-        function ($scope, $rootScope, $timeout, AskFast, Session, Store )
+        '$scope', '$rootScope', '$timeout', 'AskFast', 'Session', 'Store', 'dashboardLogsFilter',
+        function ($scope, $rootScope, $timeout, AskFast, Session, Store, dashboardLogsFilter )
         {
           var keyRevealTimeoutPromise = null;
           $scope.keyRevealTypeString = 'password';
@@ -32,6 +32,15 @@ define(
               $scope.keyButtonString = 'Show';
             }
           };
+
+          AskFast.caller('log', {
+            limit: 100,
+            level: 'SEVERE' // TODO: Should work, doesn't, but doesn't break.
+                            //       Leave this comment until fixed.
+          })
+          .then( function(result){
+            $scope.logs = dashboardLogsFilter(result);
+          });
 
           AskFast.caller('info')
           .then(function (info)
