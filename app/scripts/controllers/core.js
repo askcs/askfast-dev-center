@@ -234,7 +234,7 @@ define(
             add: function (adapter)
             {
               AskFast.caller('createAdapter', {
-                level: adapter.configId
+                second: adapter.configId
               }).then((function ()
               {
                 this.list();
@@ -244,7 +244,7 @@ define(
             // TODO: Add changing dialog info later on
 //            update: function (dialog)
 //            {
-//              AskFast.caller('updateAdapter', { level: $scope.channel.adapter },
+//              AskFast.caller('updateAdapter', { second: $scope.channel.adapter },
 //                {
 //                  dialogId: dialog.id
 //                }).then((function ()
@@ -270,7 +270,7 @@ define(
             remove: function (adapter)
             {
               AskFast.caller('removeAdapter', {
-                level: adapter.configId
+                second: adapter.configId
               }).then((function ()
               {
                 this.list();
@@ -313,7 +313,7 @@ define(
             remove: function (dialog)
             {
               AskFast.caller('deleteDialog', {
-                node: dialog.id
+                third: dialog.id
               })
                 .then((function ()
                 {
@@ -353,7 +353,7 @@ define(
 
               update: function (dialogId, adapterId)
               {
-                AskFast.caller('updateAdapter', { level: adapterId },{ dialogId: dialogId })
+                AskFast.caller('updateAdapter', { second: adapterId },{ dialogId: dialogId })
                   .then((function (adapter)
                   {
                     // $scope.dialogAdapters = this.list(dialogId, adapter);

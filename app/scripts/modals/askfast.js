@@ -10,13 +10,13 @@ define(
         function ($resource, $q, $location, $rootScope, Log)
         {
           var AskFast = $resource(
-            $rootScope.config.host + '/:action/:level/:node/:extra',
+            $rootScope.config.host + '/:first/:second/:third/:fourth',
             {},
             {
               register: {
                 method: 'GET',
                 params: {
-                  action:   'register',
+                  first:   'register',
                   name:     '',
                   username: '',
                   password: '',
@@ -27,14 +27,14 @@ define(
               userExists: {
                 method: 'GET',
                 params: {
-                  action:   'user_exists',
+                  first:   'user_exists',
                   username: ''
                 }
               },
               registerVerify: {
                 method: 'GET',
                 params: {
-                  action: 'register_verify',
+                  first: 'register_verify',
                   id: '',
                   code: ''
                 }
@@ -42,7 +42,7 @@ define(
               resendVerify: {
                 method: 'GET',
                 params: {
-                  action: 'resend_verify',
+                  first: 'resend_verify',
                   code: '',
                   verification: ''
                 }
@@ -51,7 +51,7 @@ define(
               login: {
                 method: 'GET',
                 params: {
-                  action:   'login',
+                  first:   'login',
                   username: '',
                   password: ''
                 }
@@ -59,25 +59,25 @@ define(
               logout: {
                 method: 'GET',
                 params: {
-                  action: 'logout'
+                  first: 'logout'
                 }
               },
 
               forgotPass: {
                 method: 'PUT',
                 params: {
-                  action: 'info',
-                  level: 'forgot_password',
-                  node: ''
+                  first: 'info',
+                  second: 'forgot_password',
+                  third: ''
                 }
               },
               changePass: {
                 method: 'PUT',
                 params: {
-                  action: 'info',
-                  level: 'forgot_password',
-                  node: 'verify',
-                  extra: '',
+                  first: 'info',
+                  second: 'forgot_password',
+                  third: 'verify',
+                  fourth: '',
                   code: '',
                   password: ''
                 }
@@ -86,76 +86,76 @@ define(
               authorizedApp: {
                 method: 'GET',
                 params: {
-                  action: 'authorized_app'
+                  first: 'authorized_app'
                 }
               },
 
               info: {
                 method: 'GET',
                 params: {
-                  action: 'info'
+                  first: 'info'
                 }
               },
 
               getDialog: {
                 method: 'GET',
                 params: {
-                  action: 'dialog'
+                  first: 'dialog'
                 },
                 isArray: true
               },
               createDialog: {
                 method: 'POST',
                 params: {
-                  action: 'dialog'
+                  first: 'dialog'
                 }
               },
               updateDialog: {
                 method: 'PUT',
                 params: {
-                  action: 'dialog',
-                  level: ''
+                  first: 'dialog',
+                  second: ''
                 }
               },
               deleteDialog: {
                 method: 'DELETE',
                 params: {
-                  action: 'dialog'
+                  first: 'dialog'
                 }
               },
 
               getAdapters: {
                 method: 'GET',
                 params: {
-                  action: 'adapter'
+                  first: 'adapter'
                 },
                 isArray: true
               },
               createAdapter: {
                 method: 'POST',
                 params: {
-                  action: 'adapter',
-                  level: ''
+                  first: 'adapter',
+                  second: ''
                 }
               },
               updateAdapter: {
                 method: 'PUT',
                 params: {
-                  action: 'adapter',
-                  level: ''
+                  first: 'adapter',
+                  second: ''
                 }
               },
               removeAdapter: {
                 method: 'DELETE',
                 params: {
-                  action: 'adapter',
-                  level: ''
+                  first: 'adapter',
+                  second: ''
                 }
               },
               freeAdapters: {
                 method: 'GET',
                 params: {
-                  action: 'free_adapters'
+                  first: 'free_adapters'
                 },
                 isArray: true
               },
@@ -163,21 +163,21 @@ define(
               key: {
                 method: 'GET',
                 params: {
-                  action: 'key'
+                  first: 'key'
                 }
               },
               getAccessToken: {
                 method: 'POST',
                 params: {
-                  action: 'keyserver',
-                  level: 'token'
+                  first: 'keyserver',
+                  second: 'token'
                 }
               },
 
 			   ddr: {
                 method: 'GET',
                 params: {
-                  action: 'ddr',
+                  first: 'ddr',
 				  'limit':100
                 },
 				isArray: true
@@ -185,7 +185,7 @@ define(
               log: {
                 method: 'GET',
                 params: {
-                  action: 'log'
+                  first: 'log'
                 },
                 isArray: true
               }

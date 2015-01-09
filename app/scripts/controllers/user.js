@@ -368,7 +368,7 @@ define(
             $scope.login.password = '';
 
             AskFast.caller('forgotPass', {
-              node: $scope.login.email,
+              third: $scope.login.email,
               guiForwardLink: $location.absUrl()
             }).then( function(result){
               if (!result.hasOwnProperty('error')){
@@ -411,7 +411,7 @@ define(
 
 
               AskFast.caller('changePass',{
-                extra: chPasswordId,
+                fourth: chPasswordId,
                 code: chPasswordCode,
                 password: MD5($scope.data.passwords.first)
               })
