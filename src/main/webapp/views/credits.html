@@ -16,11 +16,41 @@
                   <h2>Credits information</h2>
                 </header>
                 <section>
+                  <div ng-hide="info">
+                    <h4>{{infomessage}}</h4>
+                  </div>
                   <dl>
                     <dt>Credits</dt>
                     <dd>{{user.credits | currency:"&euro;" }}</dd>
-                    <dd>If you would like to buy credits please send an email to sales@ask-fast.com</dd>
                   </dl>
+                  <div ng-hide="PayPal"><a href="{{paypallink}}"><img src="https://www.paypalobjects.com/webstatic/en_US/developer/docs/lipp/loginwithpaypalbutton.png"></a></div>
+                  <div>
+                    <button ng-click="paymentform()" ng-hide="creditButton">Buy extra credits</button>
+                    <form ng-hide="creditForm">
+                      <dt>How many credits would you like to buy?</dt>
+                      <select ng-model="order.amount">
+                        <option>€ 10</option>
+                        <option>€ 20</option>
+                        <option>€ 30</option>
+                        <option>€ 40</option>
+                        <option>€ 50</option>
+                        <option>€ 50</option>
+                        <option>€ 60</option>
+                        <option>€ 70</option>
+                        <option>€ 80</option>
+                        <option>€ 90</option>
+                        <option>€ 100</option>
+                      </select><br><br>
+                      <dt> Payment method</dt>
+                      <select ng-repeat="method in methods" ng-model="order.method" value="">
+                        <option>{{method.type}}</option>
+                      </select><br><br>
+                      <button ng-click="proceedToCheckOut()" ng-hide="checkoutButton">Go to checkout</button>
+                      <label ng-hide="buyButton">Are you sure you want to by € {{order.amount}}</label><br>
+                      <button type="submit" ng-click="buycredits( order )" value="Save" ng-hide="buyButton">Yes i am sure </button>
+                      <button ng-click="abortSale()" ng-hide="buyButton">No i do not want to buy</button>
+                    </form>
+                  </div>
                 </section>
               </div>
             </div>
@@ -29,49 +59,81 @@
             <div class="widget">
               <div class="inner">
                 <header>
-                  <h2>Credits information</h2>
+                  <h2>Payment history</h2>
                 </header>
-                <section ng-hide="loading">
-                  <div>
+                <section>
+                  <div ng-hide="loading">
                     <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-striped">
                       <thead>
                         <tr>
-                          <th>Time stamp</th>
-                          <th>Type</th>
-                          <th>Cost</th>
-                          <th>Duration</th>
-                          <th>To</th>
-                          <th>status</th>
+                          <th>Date</th>
+                          <th>Amount</th>
+                          <th>Payment method</th>
+                          <th>Status</th>
+                          <th>Description</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="log in logs">
-                          <td>
-                             
-                            {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
-                          </td>
-                          <td>{{log.adapterName | mediumToType }}</td>
-                          <td>{{log.totalCost}}</td>
-                          <td>{{getDuration(log.duration)}}</td>
-                          <td>
-                            <ul>
-                              <li ng-repeat="(key, val) in log.statusPerAddress">{{getPropperAdress(key)}}</li>
-                            </ul>
-                          </td>
-                          <td>
-                            <ul>
-                              <li ng-repeat="(key, val) in log.statusPerAddress">{{val}}</li>
-                            </ul>
-                          </td>
+                        <tr ng-repeat="payment in payments">
+                          <td>{{payment.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                          <td>{{payment.amout |  currency:"&euro;"}}</td>
+                          <td>{{payment.method}}</td>
+                          <td>{{payment.status}}</td>
+                          <td>{{payment.description}} </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                 </section>
                 <section ng-show="loading">
-                  <p>Hold on loading your records ...</p>
+                  <dt>Hold on loading your records ...</dt>
                 </section>
               </div>
+              <!--
+              <header>
+                <h2>Credits information</h2>
+              </header>
+              <section>
+                <div>
+                  <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Time stamp</th>
+                        <th>Type</th>
+                        <th>Cost</th>
+                        <th>Duration</th>
+                        <th>To</th>
+                        <th>status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="log in logs">
+                        <td>
+                           
+                          {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
+                        </td>
+                        <td>{{log.adapterName | mediumToType }}</td>
+                        <td>{{log.totalCost}}</td>
+                        <td>{{getDuration(log.duration)}}</td>
+                        <td>
+                          <ul>
+                            <li ng-repeat="(key, val) in log.statusPerAddress">{{getPropperAdress(key)}}</li>
+                          </ul>
+                        </td>
+                        <td>
+                          <ul>
+                            <li ng-repeat="(key, val) in log.statusPerAddress">{{val}}      </li>
+                          </ul>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+              <section ng-show="loading">
+                <p>Hold on loading your records ...</p>
+              </section>
+              -->
             </div>
           </div>
         </div>

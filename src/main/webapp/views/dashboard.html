@@ -35,9 +35,9 @@
                 <section>
                   <p ng-hide="logs">Loading logs..</p>
                   <article ng-show="logs">
-                    <p>There are&nbsp;<strong>{{(logs | dashboardLogs).length}}</strong> SEVERE logs.</p>
+                    <p>There are&nbsp;<strong>{{logs.length}}</strong> SEVERE logs.</p>
                     <div id="accordion" class="panel-group">
-                      <div ng-repeat="log in (logs | dashboardLogs)" class="panel panel-default">
+                      <div ng-repeat="log in logs" class="panel panel-default">
                         <div class="panel-heading">
                           <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{log.logId}}">{{log.timestamp | parseTimeStamp}} - {{log | translateAdapterType}}</a></h4>
                         </div>
@@ -59,7 +59,7 @@
                 </header>
                 <section>
                   <h4>Ask Fast API:</h4>
-                  <p>Host your own questions an answers- high customization,</p><a href="http://docs.askfast.apiary.io/" target="_blank" class="btn btn-default">Ask Fast API</a>
+                  <p>Host your own questions and answers- high customization,</p><a href="http://docs.askfast.apiary.io/" target="_blank" class="btn btn-default">Ask Fast API</a>
                   <hr>
                   <h4>Ask Fast Marketplace</h4>
                   <p>

@@ -21,18 +21,12 @@ navbar
                     dd {{user.name}}
                     dt Credits
                     dd {{user.credits | currency:"&euro;" }}
-<<<<<<< HEAD
                     dd Go to  
                         a(href='/credits') credits 
                         | to buy extra credits
-                    dt Status
-                    dd {{user.status}}
-=======
-                    dd If you would like to buy credits please send an email to 
-                        a(href='mailto:sales@ask-fast.com') sales@ask-fast
+
                     dt Account Type
                     dd {{user.accountType | accountType}}
->>>>>>> creditTest
                     dt User name
                     dd {{user.userName}}
                     dt Phone number
