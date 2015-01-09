@@ -6,8 +6,8 @@ define(
 
     controllers.controller ('core',
       [
-        '$rootScope', '$scope', 'AskFast', 'Store',
-        function ($rootScope, $scope, AskFast, Store)
+        '$rootScope', '$scope', 'AskFast', 'Store', 'Moment',
+        function ($rootScope, $scope, AskFast, Store, moment)
         {
           Store = Store('data');
 
@@ -95,7 +95,8 @@ define(
             type: 'ALL',
             severity: 'ALL',
             ddr: false,
-            limit: 100
+            limit: 100,
+            until: moment().format('DD/MM/YYYY')
           };
 
           $scope.Log = {
@@ -103,13 +104,13 @@ define(
 
             list: function (period)
             {
-              var _period = (period) ? period : Date.now();
+              var _period = (period) ? period : moment().endOf('day').valueOf();
 
               $scope.loading.logs = true;
 
               AskFast.caller('log', {
                 limit:  $scope.query.limit,
-                end:    parseInt(_period) + (1000 * 60 * 60 * 24)
+                end:    _period
               })
                 .then((function (result)
                 {
@@ -198,7 +199,7 @@ define(
 
             period: function ()
             {
-              this.list(Date.parse($scope.query.until));
+              this.list(moment($scope.query.until, 'DD/MM/YYYY').endOf('day').valueOf());
             }
           };
 

@@ -204,10 +204,10 @@ navbar
                           option(value='500') 500
                           option(value='1000') 1000
                       .form-group
-                        label Logs until
-                        input.form-control(type='date',
-                        ng-model='query.until',
-                        ng-change='Log.period(this)')
+                        label Logs until 
+                          span.small.text-muted mm/dd/yyyy
+                        input.form-control(ng-model='query.until',
+                        ng-change='Log.period()')
                       .form-group
                         label Filter
                         input.form-control(type='text',
