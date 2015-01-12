@@ -72,9 +72,9 @@ navbar
                           td
                              | {{payment.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}
                           td
-                             | {{payment.amout |  currency:"&euro;"}}
+                             | {{payment.amount |  currency:"&euro;"}}
                           td
-                             | {{payment.method}}
+                             | {{payment.type | paymentType }}
                           td
                              | {{payment.status}}
                           td

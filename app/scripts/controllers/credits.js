@@ -18,11 +18,11 @@ define(
                 var paymentMap= {};
 
                 if ($routeParams.redirect == 'paypal') {
-                    infoMessage("Congratulations your PayPal acount is varified");
+                    infoMessage("Congratulations your PayPal account is varified");
                 };
                 /**
                  * refresh the user info and save this in the store
-                 * 
+                 *
                  */
                 function refreshInfo(){
                 AskFast.caller('info')

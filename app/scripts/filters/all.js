@@ -170,5 +170,19 @@ define(
         }
       };
     });
+
+    filters.filter('paymentType', function(){
+      return function(type){
+        switch (type)
+        {
+          case 'PAYPAL':
+            return 'Paypal';
+          case 'CC':
+            return 'Credit Card';
+          default:
+            return type;
+        }
+      };
+    });
   }
 );
