@@ -21,7 +21,9 @@ navbar
                     dd {{user.name}}
                     dt Credits
                     dd {{user.credits | currency:"&euro;" }}
-                    dd Go to  
+                    dd(ng-if="config.feature.payments !== true") If you would like to buy credits please send an email to 
+                        a(href='mailto:sales@ask-fast.com') sales@ask-fast.com
+                    dd(ng-if="config.feature.payments === true") Go to 
                         a(href='#/credits') credits 
                         | to buy extra credits
 
