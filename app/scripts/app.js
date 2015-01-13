@@ -10,7 +10,8 @@ define(
     'directives/directives',
     'angular-resource',
     'angular-route',
-    'angular-datatables'
+    'angular-datatables',
+    'angular-strap'
   ],
   function (angular)
   {
@@ -23,7 +24,8 @@ define(
         'directives',
         'ngResource',
         'ngRoute',
-        'datatables'
+        'datatables',
+        'mgcrea.ngStrap.datepicker'
       ]);
   }
 );

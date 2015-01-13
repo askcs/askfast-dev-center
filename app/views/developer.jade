@@ -205,9 +205,12 @@ navbar
                           option(value='1000') 1000
                       .form-group
                         label Logs until 
-                          span.small.text-muted dd/mm/yyyy
+                          //- span.small.text-muted dd/mm/yyyy
                         input.form-control(ng-model='query.until',
-                        ng-change='Log.period()')
+                        ng-change='Log.period()',
+                        data-date-type='string',
+                        data-date-format='dd/MM/yyyy',
+                        bs-datepicker='')
                       .form-group
                         label Filter
                         input.form-control(type='text',
