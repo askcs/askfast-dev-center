@@ -394,7 +394,10 @@ define(
             $scope.Dialog.open(dialog);
           }
 
-          $scope.Dialog.list();
+          $scope.Dialog.list(function(){
+            if ($scope.dialogs.length > 0)
+                  $scope.Dialog.open($scope.dialogs[0]);
+          });
 
           setTimeout(function ()
           {
