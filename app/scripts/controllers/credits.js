@@ -14,7 +14,7 @@ define(
                     link: ''
                 };
                 $scope.payment = {
-                    showCreditButton: true,
+                    showCreditButton: false,
                     showCreditForm: false,
                     showCheckoutButton: false,
                     showConfirm: false
@@ -81,7 +81,10 @@ define(
                     }
 
                     $scope.methods = methods;
-                    $scope.payment.showCreditButton = true;
+
+                    if(methods.length !== 0){
+                        $scope.payment.showCreditButton = true;
+                    }
                 });
 
                 // Load all the previous payments and load these in the tabel
