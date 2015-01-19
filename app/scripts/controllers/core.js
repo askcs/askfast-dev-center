@@ -398,7 +398,7 @@ define(
 
             open: function (dialog)
             {
-              $scope.dialog = dialog;
+              $scope.dialog = angular.copy(dialog);
 
               if (this.adapters.list(dialog.id))
                 $scope.dialogAdapters = this.adapters.list(dialog.id);
