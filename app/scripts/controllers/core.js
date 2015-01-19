@@ -414,18 +414,6 @@ define(
             if ($scope.dialogs.length > 0)
                   $scope.Dialog.open($scope.dialogs[0]);
           });
-
-          setTimeout(function ()
-          {
-            if ($scope.dialogs)
-            {
-              $scope.$apply(function ()
-              {
-                if ($scope.dialogs.length > 0)
-                  $scope.Dialog.open($scope.dialogs[0]);
-              });
-            }
-          }, 250);
         }
       ]
     );
