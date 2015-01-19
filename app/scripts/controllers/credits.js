@@ -55,6 +55,7 @@ define(
                         Store('app').save({
                             user: info
                         });
+                        $rootScope.user = info;
                     });
                 }
                 //Refresh the data when page is loaded
@@ -75,6 +76,7 @@ define(
                         }
                     }
                     else{
+                        // PayPal isn't authorized, make it possible to do so
                         $scope.paypal.showButton = true;
                     }
 
@@ -83,12 +85,16 @@ define(
                 });
 
                 // Load all the previous payments and load these in the tabel
-                AskFast.caller('getPayments')
-                .then(function(result) {
-                    $scope.payments = result;
-                    $scope.loading = false;
-                });
+                function getPayments(){
+                    $scope.loading = true;
+                    AskFast.caller('getPayments')
+                    .then(function(result) {
+                        $scope.payments = result;
+                        $scope.loading = false;
+                    });
+                }
 
+                getPayments();
 
                 $scope.dtOptions = DTOptionsBuilder
                     .newOptions()
@@ -143,14 +149,20 @@ define(
                                 angular.isDefined(result.type))
                             {
                                 infoMessage('Your payment of ' + $filter('currency')(result.amount, '€') + ' was successful, thank you.');
+                                refreshInfo();
+                                getPayments();
                                 $scope.abortSale(); // Just to reset everything
                             }
                             else{
                                 infoMessage('Something went wrong with the transaction');
+                                refreshInfo();
+                                getPayments();
                                 $scope.abortSale();
                             }
                         },function(result){ //failure
                             infoMessage('Something went wrong with the transaction');
+                            refreshInfo();
+                            getPayments();
                             $scope.abortSale();
                         });
                     }else{
