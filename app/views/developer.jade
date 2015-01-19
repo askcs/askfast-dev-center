@@ -127,8 +127,15 @@ navbar
                       .col-md-9(ng-hide='dialogs.length < 1')
                         button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
                           | Delete dialog
-                        h5 URL
-                        p {{dialog.url}}
+                        form.form-inline
+                          .form-group
+                            h5 Name
+                            input.form-control(ng-model='dialog.name')
+                          .form-group
+                            h5 URL
+                            input.form-control(ng-model='dialog.url')
+                          .form-group
+                            button.btn.btn-default(ng-click="Dialog.update(dialog)") Update dialog
                         form.form-inline(role='form')
                           .form-group
                             h5 Type

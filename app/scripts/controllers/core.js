@@ -332,6 +332,22 @@ define(
                 }).bind(this));
             },
 
+            update: function (dialog)
+            {
+              AskFast.caller('updateDialog', {
+                third: dialog.id
+              },{
+                id: dialog.id,
+                name: dialog.name,
+                url: dialog.url,
+                owner: dialog.owner
+              })
+                .then((function (result)
+                {
+
+                }).bind(this));
+            },
+
             adapters: {
               list: function (dialogId, updated)
               {
