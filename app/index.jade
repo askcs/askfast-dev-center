@@ -1,13 +1,13 @@
 extends layout
 
 
-block brand
+//- block brand
   a.navbar-brand(href='#home',
   ng-click='collapseMenu()') ASK-Fast
 
 
 
-block user-nav
+//- block user-nav
   ul.nav.navbar-nav.navbar-right
     li(ng-repeat='item in config.app.nav.user',
     ng-class="(location.path == item) && 'active'")
@@ -16,7 +16,7 @@ block user-nav
 
 
 
-block navbar
+//- block navbar
   .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(role='navigation',
   ng-hide='isInternPage()')
     .container
@@ -45,5 +45,5 @@ block icons
   link(rel='shortcut icon', href='/favicon.ico')
 
 
-block test
+//- block test
   p Some content here
