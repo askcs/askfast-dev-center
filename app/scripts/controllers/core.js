@@ -342,10 +342,10 @@ define(
                 url: dialog.url,
                 owner: dialog.owner
               })
-                .then((function (result)
-                {
-
-                }).bind(this));
+              .then((function (result)
+              {
+                this.list();
+              }).bind(this));
             },
 
             adapters: {
@@ -410,6 +410,7 @@ define(
             $scope.Dialog.open(dialog);
           }
 
+          // grab the list, then select the first if exists
           $scope.Dialog.list(function(){
             if ($scope.dialogs.length > 0)
                   $scope.Dialog.open($scope.dialogs[0]);
