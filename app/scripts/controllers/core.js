@@ -11,7 +11,7 @@ define(
         {
           Store = Store('data');
 
-          $scope.current = 'debugger';
+          $scope.currentSection = 'debugger';
 
           $scope.loading = {
             logs: true
@@ -19,7 +19,7 @@ define(
 
           $scope.setSection = function (selection)
           {
-            $scope.current = selection;
+            $scope.currentSection = selection;
           };
 
           $scope.types = [
