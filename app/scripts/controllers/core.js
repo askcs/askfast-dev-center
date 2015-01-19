@@ -62,6 +62,8 @@ define(
             adapter: null
           };
 
+          $scope.forms = {};
+
           $scope.candidates = [];
 
           $scope.channelTypeSelected = function ()
@@ -400,6 +402,7 @@ define(
             {
               $scope.dialog = angular.copy(dialog);
 
+              $scope.forms.details.$setPristine();
               if (this.adapters.list(dialog.id))
                 $scope.dialogAdapters = this.adapters.list(dialog.id);
             }
