@@ -33,9 +33,9 @@
                   <h2>Debugger</h2>
                 </header>
                 <section>
-                  <p ng-hide="logs">Loading logs..</p>
-                  <article ng-show="logs">
-                    <p>There are&nbsp;<strong>{{logs.length}}</strong> SEVERE logs.</p>
+                  <p ng-show="loading.logs">Loading logs..</p>
+                  <article ng-hide="loading.logs">
+                    <p>There are <strong>{{logs.length}}</strong> SEVERE logs.</p>
                     <div id="accordion" class="panel-group">
                       <div ng-repeat="log in logs" class="panel panel-default">
                         <div class="panel-heading">

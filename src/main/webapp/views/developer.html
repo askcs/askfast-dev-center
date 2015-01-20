@@ -16,7 +16,7 @@
           <div class="col-md-10"></div>
           <div class="col-md-2 text-right"></div>
         </div>
-        <section ng-switch="" on="current">
+        <section ng-switch="" on="currentSection">
           <div id="widgets" ng-switch-when="adapters" class="row">
             <div class="col-md-12">
               <div class="widget">
@@ -75,7 +75,7 @@
                           <td>{{adapter | translateAdapterType}}</td>
                           <!--td --->
                           <td>
-                            <button ng-click="Adapter.remove(adapter)" class="btn btn-default btn-sm">Remove</button>
+                            <button ng-click="Adapter.remove(adapter)" class="btn btn-default btn-sm">Remove adapter</button>
                           </td>
                         </tr>
                       </tbody>
@@ -131,45 +131,83 @@
                       </div>
                       <div ng-show="dialogs.length &lt; 1" class="col-md-9"></div>
                       <div ng-hide="dialogs.length &lt; 1" class="col-md-9">
-                        <button ng-click="Dialog.remove(dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
-                        <h5>URL</h5>
-                        <p>{{dialog.url}}</p>
-                        <form role="form" class="form-inline">
-                          <div class="form-group">
-                            <h5>Type</h5>
-                            <select ng-model="channel.type" ng-change="channelTypeSelected()" class="form-control">
-                              <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
-                            </select><span class="help-block">Please select a type first</span>
+                        <div class="row">
+                          <div class="col-sm-8">
+                            <form name="forms.details">
+                              <fieldset>
+                                <legend>Details</legend>
+                                <div class="form-group">
+                                  <label>Name</label>
+                                  <div class="row">
+                                    <div class="col-md-9">
+                                      <input ng-model="dialog.name" class="form-control">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label>URL</label>
+                                  <input ng-model="dialog.url" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <button ng-click="Dialog.update(dialog)" class="btn btn-default">Update details</button>
+                                </div>
+                              </fieldset>
+                            </form>
                           </div>
-                          <div ng-hide="(channel.type == null)" class="form-group">
-                            <h5>adapter</h5><span ng-hide="candidates.length &gt; 0">There are sadly no adapters for this one.</span>
-                            <select ng-model="channel.adapter" ng-show="candidates.length &gt; 0" class="form-control">
-                              <option ng-repeat="candidate in candidates" value="{{candidate.configId}}">{{candidate.myAddress}}</option>
-                            </select><span class="help-block">Select the adapter</span>
+                          <div class="col-sm-4">
+                            <button ng-click="Dialog.remove(dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
                           </div>
-                          <div class="form-group">
-                            <button type="button" ng-click="Dialog.adapters.add(dialog)" class="btn btn-default">Add a new channel</button>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-10">
+                            <form name="forms.adapters" role="form">
+                              <fieldset>
+                                <legend>Adapters</legend>
+                                <div class="row">
+                                  <div class="form-group col-sm-5 col-lg-4">
+                                    <label>Type</label>
+                                    <select ng-model="channel.type" ng-change="channelTypeSelected()" class="form-control">
+                                      <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
+                                    </select><span class="help-block">Please select a type first</span>
+                                  </div>
+                                  <div ng-hide="(channel.type == null)" class="form-group col-sm-7">
+                                    <label>Adapter</label>
+                                    <p ng-hide="candidates.length &gt; 0">There are sadly no adapters for this one.</p>
+                                    <select ng-model="channel.adapter" ng-show="candidates.length &gt; 0" class="form-control">
+                                      <option ng-repeat="candidate in candidates" value="{{candidate.configId}}">{{candidate.myAddress}}</option>
+                                    </select><span class="help-block">Select the adapter</span>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="form-group col-md-12">
+                                    <button type="button" ng-click="Dialog.adapters.add(dialog)" class="btn btn-default">Link adapter to dialog</button>
+                                  </div>
+                                </div>
+                              </fieldset>
+                            </form>
                           </div>
-                        </form>
+                        </div>
                         <hr>
-                        <h4>Channels</h4>
-                        <p ng-hide="(adapters | filterAdapters: dialog).length &gt; 0">There are no adapter added in this dialog yet.</p>
-                        <table ng-show="(adapters | filterAdapters: dialog).length &gt; 0" class="table table-bordered table-hover">
-                          <thead>
-                            <tr>
-                              <th>Adapter</th>
-                              <th>Type</th>
-                              <th>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr ng-repeat="adapter in adapters | filterAdapters: dialog">
-                              <th>{{adapter | translateAdapterAddress}}</th>
-                              <th>{{adapter | translateAdapterType}}</th>
-                              <th><a ng-click="Dialog.adapters.remove(adapter)">Remove</a></th>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <fieldset>
+                          <legend>Linked Adapters</legend>
+                          <p ng-hide="(adapters | filterAdapters: dialog).length &gt; 0">There are no adapters linked to this dialog yet.</p>
+                          <table ng-show="(adapters | filterAdapters: dialog).length &gt; 0" class="table table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                <th>Adapter</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="adapter in adapters | filterAdapters: dialog">
+                                <th>{{adapter | translateAdapterAddress}}</th>
+                                <th>{{adapter | translateAdapterType}}</th>
+                                <th><a ng-click="Dialog.adapters.remove(adapter)">Remove link</a></th>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </fieldset>
                       </div>
                     </div>
                   </section>
@@ -217,8 +255,9 @@
                         </select>
                       </div>
                       <div class="form-group">
-                        <label>Logs until <span class="small text-muted">dd/mm/yyyy</span></label>
-                        <input ng-model="query.until" ng-change="Log.period()" class="form-control">
+                        <label>Logs until 
+                        </label>
+                        <input ng-model="query.until" ng-change="Log.period()" data-date-type="string" data-date-format="dd/MM/yyyy" bs-datepicker="" class="form-control">
                       </div>
                       <div class="form-group">
                         <label>Filter</label>
