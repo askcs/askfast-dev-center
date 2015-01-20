@@ -51,7 +51,7 @@ define(
                     .then(function(info) {
                         $scope.paypal.link = $rootScope.config.host +
                                             '/paymentserver/paypal?accountId=' + info.id +
-                                            '&redirect_url=' + $location.absUrl() + '?redirect=successfulpaypal';
+                                            '&redirect_url=' + encodeURIComponent($location.absUrl() + '?redirect=successfulpaypal');
                         Store('app').save({
                             user: info
                         });
