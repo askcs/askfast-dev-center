@@ -75,7 +75,7 @@ navbar
                           //td -
                           td
                             button.btn.btn-default.btn-sm(ng-click='Adapter.remove(adapter)')
-                              | Remove
+                              | Remove adapter
 
 
 
@@ -125,53 +125,67 @@ navbar
                             a(ng-click='Dialog.open(_dialog)') {{_dialog.name}}
                       .col-md-9(ng-show='dialogs.length < 1')
                       .col-md-9(ng-hide='dialogs.length < 1')
-                        button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
-                          | Delete dialog
-                        form.form-inline(name='forms.details')
-                          .form-group
-                            h5 Name
-                            input.form-control(ng-model='dialog.name')
-                          .form-group
-                            h5 URL
-                            input.form-control(ng-model='dialog.url')
-                          .form-group
-                            button.btn.btn-default(ng-click="Dialog.update(dialog)") Update dialog
-                        form.form-inline(name='forms.adapters', role='form')
-                          .form-group
-                            h5 Type
-                            select.form-control(ng-model='channel.type',
-                            ng-change='channelTypeSelected()')
-                              option(ng-repeat='type in types',
-                              value='{{type}}') {{type}}
-                            span.help-block Please select a type first
-                          .form-group(ng-hide='(channel.type == null)')
-                            h5 adapter
-                            span(ng-hide='candidates.length > 0')
-                              | There are sadly no adapters for this one.
-                            select.form-control(ng-model='channel.adapter',
-                            ng-show='candidates.length > 0')
-                              option(ng-repeat='candidate in candidates',
-                              value='{{candidate.configId}}') {{candidate.myAddress}}
-                            span.help-block Select the adapter
-                          .form-group
-                            button.btn.btn-default(type='button',
-                            ng-click='Dialog.adapters.add(dialog)') Add a new channel
+                        .row
+                          .col-sm-8
+                            form(name='forms.details')
+                              fieldset
+                                legend Details
+                                .form-group
+                                  label Name
+                                  .row
+                                    .col-md-9
+                                      input.form-control(ng-model='dialog.name')
+                                .form-group
+                                  label URL
+                                  input.form-control(ng-model='dialog.url')
+                                .form-group
+                                  button.btn.btn-default(ng-click="Dialog.update(dialog)") Update details
+                          .col-sm-4
+                            button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
+                              | Delete dialog
+                        .row
+                          .col-sm-10
+                            form(name='forms.adapters', role='form')
+                              fieldset
+                                legend Adapters
+                                .row
+                                  .form-group.col-sm-5.col-lg-4
+                                    label Type
+                                    select.form-control(ng-model='channel.type',
+                                    ng-change='channelTypeSelected()')
+                                      option(ng-repeat='type in types',
+                                      value='{{type}}') {{type}}
+                                    span.help-block Please select a type first
+                                  .form-group.col-sm-7(ng-hide='(channel.type == null)')
+                                        label Adapter
+                                        p(ng-hide='candidates.length > 0')
+                                          | There are sadly no adapters for this one.
+                                        select.form-control(ng-model='channel.adapter',
+                                        ng-show='candidates.length > 0')
+                                          option(ng-repeat='candidate in candidates',
+                                          value='{{candidate.configId}}') {{candidate.myAddress}}
+                                        span.help-block Select the adapter
+                                .row
+                                  .form-group.col-md-12
+                                    button.btn.btn-default(type='button',
+                                    ng-click='Dialog.adapters.add(dialog)') Link adapter to dialog
                         hr
-                        h4 Channels
-                        p(ng-hide='(adapters | filterAdapters: dialog).length > 0')
-                          | There are no adapter added in this dialog yet.
-                        table.table.table-bordered.table-hover(
-                        ng-show='(adapters | filterAdapters: dialog).length > 0')
-                          thead
-                            tr
-                              th Adapter
-                              th Type
-                              th Actions
-                          tbody
-                            tr(ng-repeat='adapter in adapters | filterAdapters: dialog')
-                              th {{adapter | translateAdapterAddress}}
-                              th {{adapter | translateAdapterType}}
-                              th: a(ng-click='Dialog.adapters.remove(adapter)') Remove
+                        fieldset
+                          legend Linked Adapters
+                          p(ng-hide='(adapters | filterAdapters: dialog).length > 0')
+                            | There are no adapters linked to this dialog yet.
+                          table.table.table-bordered.table-hover(
+                          ng-show='(adapters | filterAdapters: dialog).length > 0')
+                            thead
+                              tr
+                                th Adapter
+                                th Type
+                                th Actions
+                            tbody
+                              tr(ng-repeat='adapter in adapters | filterAdapters: dialog')
+                                th {{adapter | translateAdapterAddress}}
+                                th {{adapter | translateAdapterType}}
+                                th: a(ng-click='Dialog.adapters.remove(adapter)') Remove link
 
 
 
