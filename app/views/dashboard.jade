@@ -33,10 +33,11 @@ navbar
                 header
                   h2 Debugger
                 section
-                  p(ng-hide='logs') Loading logs..
-                  article(ng-show='logs')
+                  p(ng-show='loading.logs')
+                    | Loading logs..
+                  article(ng-hide='loading.logs')
                     p
-                      | There are&nbsp;
+                      | There are 
                       strong {{logs.length}}
                       |  SEVERE logs.
 

@@ -13,6 +13,10 @@ define(
           $scope.keyRevealTypeString = 'password';
           $scope.keyButtonString = 'Show';
 
+          $scope.loading = {
+            logs: true
+          };
+
           $scope.toggleKeyReveal = function () {
             if ($scope.keyRevealTypeString == 'password'){
               $scope.keyRevealTypeString = 'text';
@@ -40,6 +44,7 @@ define(
           })
           .then( function(result){
             $scope.logs = dashboardLogsFilter(result);
+            $scope.loading.logs = false;
           });
 
           AskFast.caller('info')
