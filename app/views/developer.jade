@@ -86,21 +86,32 @@ navbar
                 .inner
                   header: h2 Add a new dialog
                   section
-                    form(role='form',
+                    form(role='form', name='forms.addDialog',
                     ng-submit='Dialog.add(dialog)')
                       .row
-                        .form-group.col-lg-6.col-md-8
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && "has-error"}}')
                           input.form-control(type='text',
+                          name='name',
                           ng-model='dialog.form.name',
-                          placeholder='Dialog name')
+                          placeholder='Dialog name'
+                          required)
+                          p
+                            span.text-danger(ng-show="forms.addDialog.name.$error.required")
+                              | A name is required to make a new dialog.
                       .row
-                        .form-group.col-lg-6.col-md-8
-                          input.form-control(type='text',
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.url.$invalid && "has-error"}}')
+                          input.form-control(type='url',
+                          name='url',
                           ng-model='dialog.form.url',
-                          placeholder='URL for dialog')
+                          placeholder='URL for dialog',
+                          required)
+                          p
+                            span.text-danger(ng-show="forms.addDialog.url.$error.required")
+                              | A URL is required to make a new dialog.
+                            span.text-danger(ng-show="forms.addDialog.url.$error.url")
+                              | The entered URL isn't valid.
                       .form-group
-                        button.btn.btn-default(type='button',
-                        ng-click='Dialog.add(dialog)') Create dialog
+                        button.btn.btn-default(type='submit') Create dialog
                       a(ng-click='setSection("dialogs")') &nbsp; or go back to the list.
 
 

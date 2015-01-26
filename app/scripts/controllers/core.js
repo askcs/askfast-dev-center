@@ -298,19 +298,21 @@ define(
 
             add: function (dialog)
             {
-              AskFast.caller('createDialog', null, {
-                name: dialog.form.name,
-                url: dialog.form.url
-              })
-                .then((function ()
-                {
-                  $scope.addingDialog = false;
-
-                  this.list(function ()
+              if(dialog.form.name && dialog.form.url){
+                AskFast.caller('createDialog', null, {
+                  name: dialog.form.name,
+                  url: dialog.form.url
+                })
+                  .then((function ()
                   {
-                    $scope.setSection('dialogs');
-                  });
-                }).bind(this));
+                    $scope.addingDialog = false;
+
+                    this.list(function ()
+                    {
+                      $scope.setSection('dialogs');
+                    });
+                  }).bind(this));
+              }
             },
 
             remove: function (dialog)
