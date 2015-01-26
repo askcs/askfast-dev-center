@@ -167,7 +167,7 @@ define(
                 angular.forEach(segment, function (log)
                 {
                   if (log.adapterType == type) logs.push(log);
-                })
+                });
               });
 
               $scope.logs = logs;
@@ -402,9 +402,12 @@ define(
             {
               $scope.dialog = angular.copy(dialog);
 
-              $scope.forms.details.$setPristine();
-              if (this.adapters.list(dialog.id))
-                $scope.dialogAdapters = this.adapters.list(dialog.id);
+              // will be undefined on first load
+              if(angular.isDefined($scope.forms.details)){
+                $scope.forms.details.$setPristine();
+                if (this.adapters.list(dialog.id))
+                  $scope.dialogAdapters = this.adapters.list(dialog.id);
+              }
             }
           };
 
