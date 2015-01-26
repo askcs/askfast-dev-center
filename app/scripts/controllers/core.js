@@ -166,7 +166,13 @@ define(
               {
                 angular.forEach(segment, function (log)
                 {
-                  if (log.adapterType == type) logs.push(log);
+                  if (log.adapterType == type){
+                    logs.push(log);
+                  }
+                  // type would be undefined if user selected "All"
+                  else if (angular.isUndefined(type)){
+                    logs.push(log);
+                  }
                 });
               });
 
