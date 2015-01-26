@@ -303,13 +303,14 @@ define(
                   name: dialog.form.name,
                   url: dialog.form.url
                 })
-                  .then((function ()
+                  .then((function (result)
                   {
                     $scope.addingDialog = false;
 
                     this.list(function ()
                     {
                       $scope.setSection('dialogs');
+                      openDialog(result);
                     });
                   }).bind(this));
               }
