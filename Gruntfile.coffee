@@ -387,8 +387,6 @@ module.exports = (grunt) ->
     return grunt.task.run(['karma:watch']) if target is 'watch'
     return grunt.task.run(['karma:continuous']) if target is 'continuous'
     grunt.task.run [
-      'coffee:dist'
-      'connect:test'
       'karma:single'
     ]
 
