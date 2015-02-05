@@ -6,23 +6,64 @@ define(
 
     controllers.controller ('dashboard',
       [
-        '$scope', '$rootScope', 'AskFast', 'Session', 'Store',  
-        function ($scope, $rootScope, AskFast, Session, Store )
+        '$scope', '$rootScope', '$timeout', 'AskFast', 'Session', 'Store', 'dashboardLogsFilter',
+        function ($scope, $rootScope, $timeout, AskFast, Session, Store, dashboardLogsFilter )
         {
-            AskFast.caller('info')
-              .then(function (info)
-				{
-					AskFast.caller('key')
-						.then(function (keys)
-					{
-						info.refreshToken = keys.refreshToken;
-					});
-					Store('app').save({
-                        user: info
-                    });
-				});
-			
-			
+          var keyRevealTimeoutPromise = null;
+          $scope.keyRevealTypeString = 'password';
+          $scope.keyButtonString = 'Show';
+
+          $scope.loading = {
+            logs: true
+          };
+
+          $scope.toggleKeyReveal = function () {
+            if ($scope.keyRevealTypeString == 'password'){
+              $scope.keyRevealTypeString = 'text';
+              $scope.keyButtonString = 'Hide';
+
+              keyRevealTimeoutPromise = $timeout(function() {
+                $scope.toggleKeyReveal();
+              }, 5000)
+            }
+            else {
+              if (keyRevealTimeoutPromise){
+                $timeout.cancel(keyRevealTimeoutPromise);
+                keyRevealTimeoutPromise = null;
+              }
+
+              $scope.keyRevealTypeString = 'password';
+              $scope.keyButtonString = 'Show';
+            }
+          };
+
+          AskFast.caller('log', {
+            limit: 100,
+            level: 'SEVERE' // TODO: Should work, doesn't, but doesn't break.
+                            //       Leave this comment until fixed.
+          })
+          .then( function(result){
+            $scope.logs = dashboardLogsFilter(result);
+            $scope.loading.logs = false;
+          });
+
+          AskFast.caller('info')
+          .then(function (info)
+          {
+            AskFast.caller('key')
+            .then(function (keys)
+            {
+              info.refreshToken = keys.refreshToken;
+
+              Store('app').save({
+                user: info
+              });
+
+              $rootScope.user = Store('app').get('user');
+            });
+
+          });
+
         }
       ]
     );

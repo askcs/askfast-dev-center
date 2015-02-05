@@ -6,16 +6,20 @@ define(
 
     controllers.controller ('core',
       [
-        '$rootScope', '$scope', 'AskFast', 'Store',
-        function ($rootScope, $scope, AskFast, Store)
+        '$rootScope', '$scope', 'AskFast', 'Store', 'Moment',
+        function ($rootScope, $scope, AskFast, Store, moment)
         {
           Store = Store('data');
 
-          $scope.current = 'debugger';
+          $scope.currentSection = 'debugger';
+
+          $scope.loading = {
+            logs: true
+          };
 
           $scope.setSection = function (selection)
           {
-            $scope.current = selection;
+            $scope.currentSection = selection;
           };
 
           $scope.types = [
@@ -58,6 +62,8 @@ define(
             adapter: null
           };
 
+          $scope.forms = {};
+
           $scope.candidates = [];
 
           $scope.channelTypeSelected = function ()
@@ -91,7 +97,8 @@ define(
             type: 'ALL',
             severity: 'ALL',
             ddr: false,
-            limit: 100
+            limit: 100,
+            until: moment().format('DD/MM/YYYY')
           };
 
           $scope.Log = {
@@ -99,11 +106,13 @@ define(
 
             list: function (period)
             {
-              var _period = (period) ? period : Date.now();
+              var _period = (period) ? period : moment().endOf('day').valueOf();
+
+              $scope.loading.logs = true;
 
               AskFast.caller('log', {
                 limit:  $scope.query.limit,
-                end:    parseInt(_period) + (1000 * 60 * 60 * 24)
+                end:    _period
               })
                 .then((function (result)
                 {
@@ -133,6 +142,7 @@ define(
 
                   this.categorize();
                   this.severity();
+                  $scope.loading.logs = false;
 
                 }).bind(this));
             },
@@ -156,8 +166,14 @@ define(
               {
                 angular.forEach(segment, function (log)
                 {
-                  if (log.adapterType == type) logs.push(log);
-                })
+                  if (log.adapterType == type){
+                    logs.push(log);
+                  }
+                  // type would be undefined if user selected "All"
+                  else if (angular.isUndefined(type)){
+                    logs.push(log);
+                  }
+                });
               });
 
               $scope.logs = logs;
@@ -191,7 +207,7 @@ define(
 
             period: function ()
             {
-              this.list(Date.parse($scope.query.until));
+              this.list(moment($scope.query.until, 'DD/MM/YYYY').endOf('day').valueOf());
             }
           };
 
@@ -227,7 +243,7 @@ define(
             add: function (adapter)
             {
               AskFast.caller('createAdapter', {
-                level: adapter.configId
+                second: adapter.configId
               }).then((function ()
               {
                 this.list();
@@ -237,7 +253,7 @@ define(
             // TODO: Add changing dialog info later on
 //            update: function (dialog)
 //            {
-//              AskFast.caller('updateAdapter', { level: $scope.channel.adapter },
+//              AskFast.caller('updateAdapter', { second: $scope.channel.adapter },
 //                {
 //                  dialogId: dialog.id
 //                }).then((function ()
@@ -263,7 +279,7 @@ define(
             remove: function (adapter)
             {
               AskFast.caller('removeAdapter', {
-                level: adapter.configId
+                second: adapter.configId
               }).then((function ()
               {
                 this.list();
@@ -288,25 +304,28 @@ define(
 
             add: function (dialog)
             {
-              AskFast.caller('createDialog', null, {
-                name: dialog.form.name,
-                url: dialog.form.url
-              })
-                .then((function ()
-                {
-                  $scope.addingDialog = false;
-
-                  this.list(function ()
+              if(dialog.form.name && dialog.form.url){
+                AskFast.caller('createDialog', null, {
+                  name: dialog.form.name,
+                  url: dialog.form.url
+                })
+                  .then((function (result)
                   {
-                    $scope.setSection('dialogs');
-                  });
-                }).bind(this));
+                    $scope.addingDialog = false;
+
+                    this.list(function ()
+                    {
+                      $scope.setSection('dialogs');
+                      openDialog(result);
+                    });
+                  }).bind(this));
+              }
             },
 
             remove: function (dialog)
             {
               AskFast.caller('deleteDialog', {
-                node: dialog.id
+                third: dialog.id
               })
                 .then((function ()
                 {
@@ -322,6 +341,22 @@ define(
                     $scope.setSection('dialogs');
                   });
                 }).bind(this));
+            },
+
+            update: function (dialog)
+            {
+              AskFast.caller('updateDialog', {
+                third: dialog.id
+              },{
+                id: dialog.id,
+                name: dialog.name,
+                url: dialog.url,
+                owner: dialog.owner
+              })
+              .then((function (result)
+              {
+                this.list();
+              }).bind(this));
             },
 
             adapters: {
@@ -346,7 +381,7 @@ define(
 
               update: function (dialogId, adapterId)
               {
-                AskFast.caller('updateAdapter', { level: adapterId },{ dialogId: dialogId })
+                AskFast.caller('updateAdapter', { second: adapterId },{ dialogId: dialogId })
                   .then((function (adapter)
                   {
                     // $scope.dialogAdapters = this.list(dialogId, adapter);
@@ -374,10 +409,14 @@ define(
 
             open: function (dialog)
             {
-              $scope.dialog = dialog;
+              $scope.dialog = angular.copy(dialog);
 
-              if (this.adapters.list(dialog.id))
-                $scope.dialogAdapters = this.adapters.list(dialog.id);
+              // will be undefined on first load
+              if(angular.isDefined($scope.forms.details)){
+                $scope.forms.details.$setPristine();
+                if (this.adapters.list(dialog.id))
+                  $scope.dialogAdapters = this.adapters.list(dialog.id);
+              }
             }
           };
 
@@ -386,19 +425,11 @@ define(
             $scope.Dialog.open(dialog);
           }
 
-          $scope.Dialog.list();
-
-          setTimeout(function ()
-          {
-            if ($scope.dialogs)
-            {
-              $scope.$apply(function ()
-              {
-                if ($scope.dialogs.length > 0)
+          // grab the list, then select the first if exists
+          $scope.Dialog.list(function(){
+            if ($scope.dialogs.length > 0)
                   $scope.Dialog.open($scope.dialogs[0]);
-              });
-            }
-          }, 250);
+          });
         }
       ]
     );

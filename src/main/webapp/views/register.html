@@ -23,7 +23,7 @@
                     <p ng-show="data.validation.name.last"><small class="text-danger">This field is required</small></p>
                   </div>
                   <div class="form-group">
-                    <label>Email Adress</label>
+                    <label>Email Address</label>
                     <input name="email" type="email" ng-model="data.user.email" ng-minlength="3" ng-change="userExists()" class="form-control">
                     <p ng-show="data.validation.email"><small class="text-danger">This field is required</small></p>
                     <p ng-hide="registrationForm1.email.$valid"><small class="text-danger">Please enter a valid email address.</small></p>
@@ -35,7 +35,7 @@
                     <label>Password</label>
                     <input type="password" ng-model="data.passwords.first" class="form-control">
                     <p ng-show="data.passwords.first == '' &amp;&amp; data.submitted"><small class="text-danger">This field is required</small></p>
-                    <p ng-show="data.validation.passwords"><small class="text-danger">The supplied passwords does not match.</small></p>
+                    <p ng-show="data.validation.passwords"><small class="text-danger">The supplied passwords do not match.</small></p>
                   </div>
                   <div class="form-group">
                     <label>Retype Password</label>

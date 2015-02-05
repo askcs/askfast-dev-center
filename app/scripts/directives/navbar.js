@@ -15,11 +15,8 @@ define(
             templateUrl: 'views/navbar.html',
             link: function (scope, element, attrs)
             {
-              scope.user = $rootScope.user;
-
               scope.current = $location.path();
-            },
-            scope: {}
+            }
           };
 
         }

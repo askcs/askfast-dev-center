@@ -2,6 +2,9 @@ define app:
   version:  '@@version'
   released: '@@released'
   title: 'DevCen'
+  feature:
+    payments: false
+    paypal: false
   defaults:
     language: 'en'
   app:

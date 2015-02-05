@@ -18,7 +18,7 @@ navbar
 
 
 
-        section(ng-switch='', on='current')
+        section(ng-switch='', on='currentSection')
 
 
 
@@ -75,7 +75,7 @@ navbar
                           //td -
                           td
                             button.btn.btn-default.btn-sm(ng-click='Adapter.remove(adapter)')
-                              | Remove
+                              | Remove adapter
 
 
 
@@ -86,21 +86,32 @@ navbar
                 .inner
                   header: h2 Add a new dialog
                   section
-                    form(role='form',
+                    form(role='form', name='forms.addDialog',
                     ng-submit='Dialog.add(dialog)')
-                      .form-group
-                        .input-group
+                      .row
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && "has-error"}}')
                           input.form-control(type='text',
+                          name='name',
                           ng-model='dialog.form.name',
-                          placeholder='Dialog name')
-                      .form-group
-                        .input-group
-                          input.form-control(type='text',
+                          placeholder='Dialog name'
+                          required)
+                          p
+                            span.text-danger(ng-show="forms.addDialog.name.$error.required")
+                              | A name is required to make a new dialog.
+                      .row
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.url.$invalid && "has-error"}}')
+                          input.form-control(type='url',
+                          name='url',
                           ng-model='dialog.form.url',
-                          placeholder='URL for dialog')
+                          placeholder='URL for dialog',
+                          required)
+                          p
+                            span.text-danger(ng-show="forms.addDialog.url.$error.required")
+                              | A URL is required to make a new dialog.
+                            span.text-danger(ng-show="forms.addDialog.url.$error.url")
+                              | The entered URL isn't valid.
                       .form-group
-                        button.btn.btn-default(type='button',
-                        ng-click='Dialog.add(dialog)') Save dialog
+                        button.btn.btn-default(type='submit') Create dialog
                       a(ng-click='setSection("dialogs")') &nbsp; or go back to the list.
 
 
@@ -125,46 +136,67 @@ navbar
                             a(ng-click='Dialog.open(_dialog)') {{_dialog.name}}
                       .col-md-9(ng-show='dialogs.length < 1')
                       .col-md-9(ng-hide='dialogs.length < 1')
-                        button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
-                          | Delete dialog
-                        h5 URL
-                        p {{dialog.url}}
-                        form.form-inline(role='form')
-                          .form-group
-                            h5 Type
-                            select.form-control(ng-model='channel.type',
-                            ng-change='channelTypeSelected()')
-                              option(ng-repeat='type in types',
-                              value='{{type}}') {{type}}
-                            span.help-block Please select a type first
-                          .form-group(ng-hide='(channel.type == null)')
-                            h5 adapter
-                            span(ng-hide='candidates.length > 0')
-                              | There are sadly no adapters for this one.
-                            select.form-control(ng-model='channel.adapter',
-                            ng-show='candidates.length > 0')
-                              option(ng-repeat='candidate in candidates',
-                              value='{{candidate.configId}}') {{candidate.myAddress}}
-                            span.help-block Select the adapter
-                          .form-group
-                            button.btn.btn-default(type='button',
-                            ng-click='Dialog.adapters.add(dialog)') Add a new channel
+                        .row
+                          .col-sm-8
+                            form(name='forms.details')
+                              fieldset
+                                legend Details
+                                .form-group
+                                  label Name
+                                  .row
+                                    .col-md-9
+                                      input.form-control(ng-model='dialog.name')
+                                .form-group
+                                  label URL
+                                  input.form-control(ng-model='dialog.url')
+                                .form-group
+                                  button.btn.btn-default(ng-click="Dialog.update(dialog)") Update details
+                          .col-sm-4
+                            button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
+                              | Delete dialog
+                        .row
+                          .col-sm-10
+                            form(name='forms.adapters', role='form')
+                              fieldset
+                                legend Adapters
+                                .row
+                                  .form-group.col-sm-5.col-lg-4
+                                    label Type
+                                    select.form-control(ng-model='channel.type',
+                                    ng-change='channelTypeSelected()')
+                                      option(ng-repeat='type in types',
+                                      value='{{type}}') {{type}}
+                                    span.help-block Please select a type first
+                                  .form-group.col-sm-7(ng-hide='(channel.type == null)')
+                                        label Adapter
+                                        p(ng-hide='candidates.length > 0')
+                                          | There are sadly no adapters for this one.
+                                        select.form-control(ng-model='channel.adapter',
+                                        ng-show='candidates.length > 0')
+                                          option(ng-repeat='candidate in candidates',
+                                          value='{{candidate.configId}}') {{candidate.myAddress}}
+                                        span.help-block Select the adapter
+                                .row
+                                  .form-group.col-md-12
+                                    button.btn.btn-default(type='button',
+                                    ng-click='Dialog.adapters.add(dialog)') Link adapter to dialog
                         hr
-                        h4 Channels
-                        p(ng-hide='(adapters | filterAdapters: dialog).length > 0')
-                          | There are no adapter added in this dialog yet.
-                        table.table.table-bordered.table-hover(
-                        ng-show='(adapters | filterAdapters: dialog).length > 0')
-                          thead
-                            tr
-                              th Adapter
-                              th Type
-                              th Actions
-                          tbody
-                            tr(ng-repeat='adapter in adapters | filterAdapters: dialog')
-                              th {{adapter | translateAdapterAddress}}
-                              th {{adapter | translateAdapterType}}
-                              th: a(ng-click='Dialog.adapters.remove(adapter)') Remove
+                        fieldset
+                          legend Linked Adapters
+                          p(ng-hide='(adapters | filterAdapters: dialog).length > 0')
+                            | There are no adapters linked to this dialog yet.
+                          table.table.table-bordered.table-hover(
+                          ng-show='(adapters | filterAdapters: dialog).length > 0')
+                            thead
+                              tr
+                                th Adapter
+                                th Type
+                                th Actions
+                            tbody
+                              tr(ng-repeat='adapter in adapters | filterAdapters: dialog')
+                                th {{adapter | translateAdapterAddress}}
+                                th {{adapter | translateAdapterType}}
+                                th: a(ng-click='Dialog.adapters.remove(adapter)') Remove link
 
 
 
@@ -204,10 +236,13 @@ navbar
                           option(value='500') 500
                           option(value='1000') 1000
                       .form-group
-                        label Logs until
-                        input.form-control(type='date',
-                        ng-model='query.until',
-                        ng-change='Log.period(this)')
+                        label Logs until 
+                          //- span.small.text-muted dd/mm/yyyy
+                        input.form-control(ng-model='query.until',
+                        ng-change='Log.period()',
+                        data-date-type='string',
+                        data-date-format='dd/MM/yyyy',
+                        bs-datepicker='')
                       .form-group
                         label Filter
                         input.form-control(type='text',
@@ -218,9 +253,9 @@ navbar
                           input.checkbox(type='checkbox',
                           ng-model='query.ddr')
                     hr
-                    p(ng-hide='logs.length > 0 || (query.severity != "ALL")')
+                    p(ng-show='loading.logs')
                       | Loading logs..
-                    p(ng-hide='logs.length > 0 || (query.severity == "ALL")')
+                    p(ng-hide='logs.length > 0 || loading.logs')
                       | Your query has no logs..
                     table.table.table-bordered.table-striped(ng-show='logs.length > 0')
                       thead

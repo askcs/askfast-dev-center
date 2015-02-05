@@ -1,7 +1,7 @@
 #wrap
   .container-fluid
     section#login
-      .container(ng-hide='login.state')
+      .container(ng-hide='login.state || login.forgot || login.changePass')
         .row
           .col-md-4.col-md-offset-4
             .panel.panel-default.boxed
@@ -9,11 +9,11 @@
                 div.panel-icon
                 h3.text-pink Login
                 p Please login to continue.
-              .panel-body
-                form(role='form',
-                ng-submit='auth()')
+              form(role='form',
+              ng-submit='auth()')
+                .panel-body
                   .form-group
-                    label Email Adress
+                    label Email Address
                     input.form-control(type='text',
                     ng-model='login.email')
                     p(ng-show="login.validation.email")
@@ -29,14 +29,72 @@
                       input(type='checkbox',
                       ng-model='login.remember')
                       | Remember me
-              .panel-footer.text-right
-                button.btn.btn-primary(type='submit',
-                ng-click='auth()') Login
-                p.text-right(ng-show="login.error.state")
-                  small.text-danger(ng-show='login.error.code == 400') Wrong username or password!
-                  small.text-danger(ng-show='login.error.code == 403') Wrong username or password!
-                  small.text-danger(ng-show='login.error.code == 404') Something went wrong with login!
-                  small.text-danger(ng-show='login.error.code == 500') Server error!
+                .panel-footer.text-right
+                  a.pull-left(ng-click='login.forgot = true') Forgot Password?
+                  button.btn.btn-primary(type='submit',
+                  ng-click='auth()') Login
+                  p.text-right(ng-show="login.error.state")
+                    small.text-danger(ng-show='login.error.code == 400') Wrong username or password!
+                    small.text-danger(ng-show='login.error.code == 403') Wrong username or password!
+                    small.text-danger(ng-show='login.error.code == 404') Something went wrong with login!
+                    small.text-danger(ng-show='login.error.code == 500') Server error!
+                  p.text-right(ng-show="login.notification")
+                    small.text-primary {{login.notification}}
+      .container(ng-show='!login.state && login.forgot')
+        .row
+          .col-md-4.col-md-offset-4
+            .panel.panel-default.boxed
+              .panel-heading
+                div.panel-icon
+                h3.text-pink Forgot Password
+              form(role='form',
+              ng-submit='forgotPass()')
+                .panel-body
+                  .form-group
+                    label Email Address
+                    input.form-control(type='text',
+                    ng-model='login.email')
+                    p(ng-show="login.validation.email")
+                      small.text-danger This field is required
+                .panel-footer.text-right
+                  a.pull-left(ng-click='login.forgot = false') Back to Login
+                  button.btn.btn-primary(type='submit',
+                  ng-click='forgotPass()') Send Reset request
+                  p.text-right(ng-show="login.notification")
+                    small.text-primary {{login.notification}}
+      .container(ng-show='!login.state && login.changePass')
+        .row
+          .col-md-4.col-md-offset-4
+            .panel.panel-default.boxed
+              .panel-heading
+                div.panel-icon
+                h3.text-pink Change Password
+                p Please type a new password.
+              form(role='form',
+              ng-submit='changePass()')
+                .panel-body
+                  .form-group
+                    label New Password
+                    input.form-control(type='password',
+                    ng-model='data.passwords.first')
+                    p(ng-show="data.passwords.first == '' && data.submitted")
+                      small.text-danger This field is required
+                    p(ng-show="data.validation.passwords")
+                      small.text-danger The supplied passwords do not match.
+                  .form-group
+                    label Retype Password
+                    input.form-control(type='password',
+                    ng-model='data.passwords.second')
+                    p(ng-show="data.passwords.second == '' && data.submitted")
+                      small.text-danger This field is required
+                .panel-footer.text-right
+                  button.btn.btn-primary(type='submit',
+                  ng-click='changePass()') Submit New Password
+                  p.text-right(ng-show="login.error.state")
+                    small.text-danger(ng-show='login.error.code == 404') Something went wrong with changing password!
+                    small.text-danger(ng-show='login.error.code == 500') Server error!
+                  p.text-right(ng-show="login.notification")
+                    small.text-primary {{login.notification}}
       .container(ng-show='login.state')
         .row
           .col-md-4.col-md-offset-4

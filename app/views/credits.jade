@@ -16,16 +16,68 @@ navbar
                 header
                   h2 Credits information
                 section
+                  div(ng-show="infomessage")
+                    h4 {{infomessage}}
                   dl
                     dt Credits
                     dd {{user.credits | currency:"&euro;" }}
-                    dd If you would like to buy credits please send an email to sales@ask-fast.com
-          .col-md-12
+                    dd(ng-if="config.feature.payments !== true") If you would like to buy credits please send an email to 
+                        a(href='mailto:sales@ask-fast.com') sales@ask-fast.com
+                  div(ng-if="config.feature.paypal === true")
+                    div(ng-show="paypal.showButton")
+                      a(href="{{paypal.link}}")
+                        img(src="https://www.paypalobjects.com/webstatic/en_US/developer/docs/lipp/loginwithpaypalbutton.png")
+                  div(ng-if="config.feature.payments === true")
+                    button.btn.btn-default(ng-click="paymentform()",ng-show="payment.showCreditButton" ) Buy extra credits
+                    .row(ng-show="payment.showCreditForm")
+                      form.col-sm-5.col-md-4.col-lg-3
+                        .form-group
+                          label How many credits would you like to buy?
+                          select.form-control.order-option(ng-model="order.amount", ng-options='amount.value as amount.name for amount in creditBuyOptions')
+                            option(value="") - Select an amount -
+                        .form-group
+                          label Payment method
+                          select.form-control.order-option(ng-model="order.method", ng-options="method.value as method.name for method in methods")
+                            option(value="") - Select a method -
+                        button.btn.btn-default(ng-click="proceedToCheckOut()", ng-show="payment.showCheckoutButton") Go to checkout
+                        button.btn.btn-default(ng-click="abortSale()", ng-show="payment.showCheckoutButton") Cancel
+                        div(ng-show="payment.showConfirm")
+                          label Are you sure you want to buy {{order.amount | currency:"&euro;"}} worth of credits?
+                          button.btn.btn-default(type="submit", ng-click="buycredits( order )", value="Save",) Yes, I am sure
+                          button.btn.btn-default(ng-click="abortSale()") No, I do not want to buy
+          .col-md-12(ng-if="config.feature.payments === true")
             .widget
               .inner
                 header
+                  h2 Payment history
+                section
+                  div(ng-hide="loading")
+                    table.table.table-striped(datatable="ng", dt-options="dtOptions",dt-column-defs="dtColumnDefs")
+                      thead
+                        tr
+                          th Date
+                          th Amount
+                          th Payment method
+                          th Status
+                          th Description
+                      tbody
+                        tr(ng-repeat="payment in payments")
+                          td
+                             | {{payment.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}
+                          td
+                             | {{payment.amount |  currency:"&euro;"}}
+                          td
+                             | {{payment.type | paymentType }}
+                          td
+                             | {{payment.status}}
+                          td
+                             | {{payment.description}} 
+                section(ng-show="loading")
+                    dt Hold on loading your records ...
+              //
+                header
                   h2 Credits information
-                section(ng-hide="loading")
+                section()
                     div
                       table.table.table-striped(datatable="ng", dt-options="dtOptions",dt-column-defs="dtColumnDefs")
                         thead
@@ -37,7 +89,7 @@ navbar
                             th To
                             th status
                         tbody
-                          tr(ng-repeat='log in logs')
+                          tr(ng-repeat="log in logs")
                             td 
                                 | {{log.start | date:'yyyy-MM-dd HH:mm:ss'}}
                             td
@@ -53,8 +105,7 @@ navbar
                             td
                                 ul
                                     li(ng-repeat="(key, val) in log.statusPerAddress")
-                                        | {{val}}
-                
+                                        | {{val}}      
                 section(ng-show="loading")
                     p Hold on loading your records ...
                   

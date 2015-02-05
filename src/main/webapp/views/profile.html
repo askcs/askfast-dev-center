@@ -21,15 +21,16 @@
                     <dd>{{user.name}}</dd>
                     <dt>Credits</dt>
                     <dd>{{user.credits | currency:"&euro;" }}</dd>
-                    <dd>If you would like to buy credits please send an email to <a href="mailto:sales@ask-fast.com">sales@ask-fast</a></dd>
-                    <dt>Status</dt>
-                    <dd>{{user.status}}</dd>
+                    <dd ng-if="config.feature.payments !== true">If you would like to buy credits please send an email to <a href="mailto:sales@ask-fast.com">sales@ask-fast.com</a></dd>
+                    <dd ng-if="config.feature.payments === true">Go to <a href="#/credits">credits </a>to buy extra credits</dd>
+                    <dt>Account Type</dt>
+                    <dd>{{user.accountType | accountType}}</dd>
                     <dt>User name</dt>
                     <dd>{{user.userName}}</dd>
                     <dt>Phone number</dt>
-                    <dd>{{user.phoneNumber}}</dd>
+                    <dd user-contact="user.contactInfos" type="PHONE"></dd>
                     <dt>Email</dt>
-                    <dd>{{user.email || 'no email is given'}}</dd>
+                    <dd user-contact="user.contactInfos" type="EMAIL"></dd>
                     <dt>Account created</dt>
                     <dd>{{user.creationTime | parseTimeStamp}}</dd>
                   </dl>

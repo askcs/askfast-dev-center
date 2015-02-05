@@ -11,6 +11,8 @@ require.config (
       datatables: '../scripts/libs/datatables/1.10.4/media/js/jquery.dataTables',
       angular:  '../vendors/angular/angular',
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
+      'angular-strap': '../vendors/angular-strap/dist/angular-strap.min',
+      'angular-strap-tpl': '../vendors/angular-strap/dist/angular-strap.tpl.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
 //      signet:     '../vendors/signet/signet.min',
@@ -19,13 +21,15 @@ require.config (
       moment:     '../vendors/momentjs/min/moment.min',
       'angular-datatables':'../vendors/angular-datatables/dist/angular-datatables',
       'datatables.tools':'../scripts/libs/datatables/1.10.4/extensions/TableTools/js/dataTables.tableTools.min'
-    },
+      },
     shim: {
       angular:            { deps: ['jquery','datatables'], exports:  'angular' },
       datatables :        {deps:['jquery'],exports: 'jquery.datatables'},
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
       bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
+      'angular-strap':    { deps: ['angular'] },
+      'angular-strap-tpl':{ deps: ['angular', 'angular-strap'] },
       lawnchair:          { exports: 'lawnchair' },
       dom:                { deps: ['lawnchair'], exports: 'dom' },
       moment:             { exports: 'moment' },
@@ -45,7 +49,10 @@ require (
     'datatables',
     'angular-datatables',
     'datatables.tools',
-    
+
+    'angular-strap',
+    'angular-strap-tpl',
+
     'localization',
     'config',
     'app',
@@ -55,6 +62,7 @@ require (
     'modals/askfast',
 
     'directives/navbar',
+    'directives/profile',
 
     'filters/all',
 
@@ -68,16 +76,17 @@ require (
 
     'controllers/core',
     'controllers/user',
-	'controllers/profile',
-	'controllers/dashboard',
-	'controllers/credits',
+	  'controllers/profile',
+	  'controllers/dashboard',
+	  'controllers/credits',
+    'controllers/uselogs',
 
     'bootstrap',
 //    'signet',
     'lawnchair',
     'dom',
     'moment'
-  ],
+    ],
   function (angular, domReady)
   {
     'use strict';

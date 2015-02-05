@@ -393,7 +393,6 @@
         controller: [
           '$scope',
           function ($scope) {
-          console.log('directive called');
             var _renderer;
             this.showLoading = function ($elem) {
               DTRendererService.showLoading($elem);
@@ -1164,5 +1163,4 @@
     };
     
   });
-  console.log('angular datatables loaded'+$.fn.DataTable);
 }(window, document, jQuery, angular));

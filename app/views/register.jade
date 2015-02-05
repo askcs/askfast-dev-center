@@ -27,7 +27,7 @@
                     p(ng-show="data.validation.name.last")
                       small.text-danger This field is required
                   .form-group
-                    label Email Adress
+                    label Email Address
                     input.form-control(name='email',
                     type='email',
                     ng-model='data.user.email',
@@ -48,7 +48,7 @@
                     p(ng-show="data.passwords.first == '' && data.submitted")
                       small.text-danger This field is required
                     p(ng-show="data.validation.passwords")
-                      small.text-danger The supplied passwords does not match.
+                      small.text-danger The supplied passwords do not match.
                   .form-group
                     label Retype Password
                     input.form-control(type='password',

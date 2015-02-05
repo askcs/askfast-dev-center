@@ -6,9 +6,12 @@ define(
 
     controllers.controller ('user',
       [
-        '$scope', '$rootScope', 'AskFast', 'Session', 'Store', '$location', 'MD5',
-        function ($scope, $rootScope, AskFast, Session, Store, $location, MD5)
+        '$scope', '$rootScope', '$routeParams', 'AskFast', 'Session', 'Store', '$location', 'MD5',
+        function ($scope, $rootScope, $routeParams, AskFast, Session, Store, $location, MD5)
         {
+          var chPasswordId, chPasswordCode;
+
+
           $scope.login = {
             email: '',
             password: '',
@@ -20,8 +23,18 @@ define(
               state:  false,
               code:   null
             },
-            state: false
+            state: false,
+            forgot: false,
+            changePass: false,
+            notification: ''
           };
+
+          if ($routeParams.code && $routeParams.id){
+            chPasswordId = $routeParams.id;
+            chPasswordCode = $routeParams.code;
+
+            $scope.login.changePass = true;
+          }
 
           var loginBtn = angular.element('#login button[type=submit]');
 
@@ -78,8 +91,8 @@ define(
                             {
                                 adatperMap[adapter.configId] =  adapter.adapterType;
                             });
-                            Store('adatperMap').save(adatperMap);   
-                            
+                            Store('adatperMap').save(adatperMap);
+
                         AskFast.caller('key')
                           .then(function(keys)
                           {
@@ -345,6 +358,91 @@ define(
                   $scope.data.error.verify = true;
                 }
               });
+          };
+
+          $scope.forgotPass = function() {
+            loginBtn.attr('disabled', 'disabled');
+
+            // Reset password from login view
+            $scope.login.password = '';
+
+            AskFast.caller('forgotPass', {
+              third: $scope.login.email,
+              guiForwardLink: $location.absUrl()
+            }).then( function(result){
+              if (!result.hasOwnProperty('error')){
+
+                // Reset used properties
+                $scope.login.email = '';
+                $scope.login.notification = 'Password reset request sent succesfully, please check your email.';
+                $scope.login.forgot = false;
+                loginBtn.removeAttr('disabled');
+
+                setTimeout(function(){
+                  $scope.$apply(function(scope){
+                    // Remove notification
+                    scope.login.notification = '';
+                  });
+                }, 5000);
+              }
+              else {
+                $scope.login.notification = 'Something went wrong with the reset request, check the email address and try again';
+                loginBtn.removeAttr('disabled');
+              }
+            });
+          };
+
+          $scope.changePass = function() {
+            loginBtn.attr('disabled', 'disabled');
+
+            $scope.data.submitted = true;
+
+            $scope.data.validation.passwords = (
+              ($scope.data.passwords.first == '') || ($scope.data.passwords.second == '') ||
+              ($scope.data.passwords.first != $scope.data.passwords.second)
+              );
+
+            if ($scope.data.validation.passwords){
+              loginBtn.text('Submit New Password')
+                      .removeAttr('disabled');
+            }
+            else {
+
+
+              AskFast.caller('changePass',{
+                fourth: chPasswordId,
+                code: chPasswordCode,
+                password: MD5($scope.data.passwords.first)
+              })
+              .then(function(result){
+                if (!result.hasOwnProperty('error'))
+                {
+                  $scope.login.notification = 'Password succesfully changed.';
+                  //Reset used properties
+                  $scope.data.passwords = {
+                    first: '',
+                    second: ''
+                  };
+                  $scope.data.validation.passwords = false;
+                  //Go to login
+                  $scope.login.changePass = false;
+                  loginBtn.removeAttr('disabled');
+
+                  setTimeout(function(){
+                    $scope.$apply(function(scope){
+                      // Remove notification
+                      scope.login.notification = '';
+                    });
+                  }, 5000);
+                }
+                else {
+                  loginBtn.removeAttr('disabled');
+                  $scope.login.notification = 'Something went wrong when changing the password';
+                }
+
+              });
+            }
+
           };
 
           $scope.resend = function ()
