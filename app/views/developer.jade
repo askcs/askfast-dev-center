@@ -89,24 +89,24 @@ navbar
                     form(role='form', name='forms.addDialog',
                     ng-submit='Dialog.add(dialog)')
                       .row
-                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && "has-error"}}')
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && forms.addDialog.name.$dirty && "has-error"}}')
                           input.form-control(type='text',
                           name='name',
                           ng-model='dialog.form.name',
                           placeholder='Dialog name'
                           required)
                           p
-                            span.text-danger(ng-show="forms.addDialog.name.$error.required")
+                            span.text-danger(ng-show="forms.addDialog.name.$error.required && forms.addDialog.name.$dirty")
                               | A name is required to make a new dialog.
                       .row
-                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.url.$invalid && "has-error"}}')
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.url.$invalid && forms.addDialog.url.$dirty && "has-error"}}')
                           input.form-control(type='url',
                           name='url',
                           ng-model='dialog.form.url',
                           placeholder='URL for dialog',
                           required)
                           p
-                            span.text-danger(ng-show="forms.addDialog.url.$error.required")
+                            span.text-danger(ng-show="forms.addDialog.url.$error.required && forms.addDialog.url.$dirty")
                               | A URL is required to make a new dialog.
                             span.text-danger(ng-show="forms.addDialog.url.$error.url")
                               | The entered URL isn't valid.
