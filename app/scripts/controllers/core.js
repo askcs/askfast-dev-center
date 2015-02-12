@@ -6,8 +6,8 @@ define(
 
     controllers.controller ('core',
       [
-        '$rootScope', '$scope', 'AskFast', 'Store', 'Moment',
-        function ($rootScope, $scope, AskFast, Store, moment)
+        '$rootScope', '$scope', '$q', '$timeout','AskFast', 'Store', 'Moment',
+        function ($rootScope, $scope, $q, $timeout, AskFast, Store, moment)
         {
           Store = Store('data');
 
@@ -85,6 +85,12 @@ define(
             });
 
             $scope.candidates = candidates;
+          };
+
+          $scope.dialogAuth = {
+            open: false,
+            message: '',
+            messageType: ''
           };
 
           $scope.resetAdapterMenu = function ()
@@ -343,20 +349,55 @@ define(
                 }).bind(this));
             },
 
-            update: function (dialog)
+            update: function (dialog, deferred)
             {
-              AskFast.caller('updateDialog', {
-                third: dialog.id
-              },{
+              var dialogObject = {
                 id: dialog.id,
                 name: dialog.name,
                 url: dialog.url,
                 owner: dialog.owner
-              })
+              };
+
+              if(angular.isDefined(dialog.userName) &&
+                 angular.isDefined(dialog.password) &&
+                 angular.isDefined(dialog.useBasicAuth)){
+                dialogObject.userName = dialog.userName;
+                dialogObject.password = dialog.password;
+                dialogObject.useBasicAuth = dialog.useBasicAuth;
+              }
+
+              AskFast.caller('updateDialog', {
+                third: dialog.id
+              },dialogObject)
               .then((function (result)
               {
                 this.list();
+                if(deferred){
+
+                  if (result.error){
+                    deferred.reject(result);
+                  }
+                  else {
+                    deferred.resolve(result);
+                  }
+
+                }
               }).bind(this));
+            },
+
+            updateDetails: function (dialog)
+            {
+               var dialogArr = $scope.dialogs.filter(function(_dialog){
+                if(_dialog.id === dialog.id){
+                  return true;
+                } else { return false; }
+              })
+
+              //we're not updating other properties, reset
+              dialog.userName = dialogArr[0].userName;
+              dialog.password = dialogArr[0].password;
+
+              this.update(dialog);
             },
 
             adapters: {
@@ -411,11 +452,115 @@ define(
             {
               $scope.dialog = angular.copy(dialog);
 
+              // cancel auth notification if any
+              $scope.Dialog.authentication.notify(null, null, true);
+
               // will be undefined on first load
               if(angular.isDefined($scope.forms.details)){
                 $scope.forms.details.$setPristine();
                 if (this.adapters.list(dialog.id))
                   $scope.dialogAdapters = this.adapters.list(dialog.id);
+              }
+            },
+            authentication:{
+              enable: function(dialog)
+              {
+                //check with falsiness, could be null, undefined or empty string
+                if(!!dialog.userName && !!dialog.password){
+                  dialog.useBasicAuth = true;
+                }
+                else {
+                  this.notify('Please fill in both a Username and a Password', 'warning');
+                  return;
+                }
+
+                var dialogArr = $scope.dialogs.filter(function(_dialog){
+                  if(_dialog.id === dialog.id){
+                    return true;
+                  } else { return false; }
+                })
+
+                //we're not updating other properties, reset
+                dialog.name = dialogArr[0].name;
+                dialog.url = dialogArr[0].url;
+
+                var deferred = $q.defer();
+                $scope.Dialog.update(dialog, deferred);
+
+                deferred.promise
+                .then(function(result){
+                  //success
+                  $scope.dialogAuth.open = false;
+                  this.notify('Basic Authentication applied successfully', 'success');
+                }.bind(this))
+                .catch(function(result){
+                  //something went wrong, handle it
+                  console.log('error -> ', result);
+                  this.notify('Something went wrong with the request', 'danger');
+                }.bind(this));
+              },
+              disable: function(dialog)
+              {
+
+                dialog.userName = null;
+                dialog.password = null;
+                dialog.useBasicAuth = false;
+
+                var dialogArr = $scope.dialogs.filter(function(_dialog){
+                  if(_dialog.id === dialog.id){
+                    return true;
+                  } else { return false; }
+                })
+
+                 //we're not updating other properties, reset
+                dialog.name = dialogArr[0].name;
+                dialog.url = dialogArr[0].url;
+
+                var deferred = $q.defer();
+                $scope.Dialog.update(dialog, deferred);
+
+                deferred.promise
+                .then(function(result){
+                  //success
+                  $scope.dialogAuth.open = false;
+                  this.notify('Basic Authentication successfully disabled', 'success');
+                }.bind($scope.Dialog.authentication))
+                .catch(function(result){
+                  //something went wrong, handle it
+                  console.log('error -> ', result);
+                  this.notify('Something went wrong with the request', 'danger');
+                }.bind($scope.Dialog.authentication));
+              },
+              notify: function(message, type, cancel)
+              {
+                if(cancel){
+                  $scope.dialogAuth.message = '';
+                }
+
+                $scope.dialogAuth.message = message;
+                $scope.dialogAuth.messageType = type;
+
+                if($scope.authNotifyTimeoutPromise){
+                  $timeout.cancel($scope.authNotifyTimeoutPromise);
+                }
+
+                $scope.authNotifyTimeoutPromise = $timeout(function(){
+                    $scope.dialogAuth.message = '';
+                }, 6000);
+              },
+              cancel: function(dialog)
+              {
+                var dialogArr = $scope.dialogs.filter(function(_dialog){
+                  if(_dialog.id === dialog.id){
+                    return true;
+                  } else { return false; }
+                });
+                // Only reset userName and password
+                $scope.dialog.userName = dialogArr[0].userName;
+                $scope.dialog.password = dialogArr[0].password;
+
+                $scope.dialogAuth.open = false;
+                $scope.forms.auth.$setPristine();
               }
             }
           };
@@ -424,6 +569,17 @@ define(
           {
             $scope.Dialog.open(dialog);
           }
+
+          $scope.authenticateDialog = function(dialog){
+            $scope.Dialog.authentication.enable(dialog);
+          }
+          $scope.disableDialogAuthentication = function(dialog){
+           $scope.Dialog.authentication.disable(dialog);
+          }
+          $scope.cancelAuthentication = function(dialog){
+            $scope.Dialog.authentication.cancel(dialog);
+          }
+
 
           // grab the list, then select the first if exists
           $scope.Dialog.list(function(){

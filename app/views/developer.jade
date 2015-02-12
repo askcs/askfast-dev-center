@@ -137,7 +137,7 @@ navbar
                       .col-md-9(ng-show='dialogs.length < 1')
                       .col-md-9(ng-hide='dialogs.length < 1')
                         .row
-                          .col-sm-8
+                          .col-md-6
                             form(name='forms.details')
                               fieldset
                                 legend Details
@@ -150,12 +150,39 @@ navbar
                                   label URL
                                   input.form-control(ng-model='dialog.url')
                                 .form-group
-                                  button.btn.btn-default(ng-click="Dialog.update(dialog)") Update details
-                          .col-sm-4
+                                  button.btn.btn-default(ng-click='Dialog.updateDetails(dialog)') Update details
+                          .col-md-4
+                            form(name='forms.auth')
+                              fieldset
+                                legend Authentication 
+                                  span.small.text-primary(ng-show='dialog.useBasicAuth') &nbsp;enabled
+                                p If desired, you can set Basic Authentication credentials for this dialog.
+                                p(ng-show='dialogAuth.message', class="{{(dialogAuth.messageType) && 'text-' + dialogAuth.messageType}}")
+                                  | {{dialogAuth.message}}
+                                div(ng-hide='dialogAuth.open')
+                                  .form-group
+                                    button.btn.btn-default(ng-click='dialogAuth.open = true') Configure
+                                div(ng-show='dialogAuth.open')
+                                  .form-group
+                                    label Username
+                                    input.form-control(name='username', ng-model='dialog.userName')
+                                  .form-group
+                                    label Password
+                                    input.form-control(name='password', ng-model='dialog.password', type='password')
+                                  .form-groups
+                                    button.btn.btn-default(ng-click='authenticateDialog(dialog)')
+                                      | {{(dialog.useBasicAuth) && 'Update' || 'Submit'}}
+                                    button.btn.btn-default(ng-click='cancelAuthentication(dialog)')
+                                      | Cancel
+                                    button.btn.btn-danger.pull-right(ng-click='disableDialogAuthentication(dialog)',
+                                      ng-show='dialog.useBasicAuth')
+                                      | Disable
+
+                          .col-md-2
                             button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
                               | Delete dialog
                         .row
-                          .col-sm-10
+                          .col-md-10
                             form(name='forms.adapters', role='form')
                               fieldset
                                 legend Adapters
