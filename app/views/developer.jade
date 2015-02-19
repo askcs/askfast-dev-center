@@ -171,7 +171,7 @@ navbar
                                     input.form-control(name='password', ng-model='dialog.password', type='password')
                                   .form-groups
                                     button.btn.btn-default(ng-click='authenticateDialog(dialog)')
-                                      | {{(dialog.useBasicAuth) && 'Update' || 'Submit'}}
+                                      | {{(dialog.useBasicAuth) && 'Update' || 'Enable'}}
                                     button.btn.btn-default(ng-click='cancelAuthentication(dialog)')
                                       | Cancel
                                     button.btn.btn-danger.pull-right(ng-click='disableDialogAuthentication(dialog)',

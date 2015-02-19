@@ -323,6 +323,8 @@ define(
                     {
                       $scope.setSection('dialogs');
                       openDialog(result);
+                      // close auth menu if it was open
+                      $scope.dialogAuth = false;
                     });
                   }).bind(this));
               }
@@ -371,17 +373,18 @@ define(
               },dialogObject)
               .then((function (result)
               {
-                this.list();
-                if(deferred){
 
+                if(deferred){
                   if (result.error){
                     deferred.reject(result);
                   }
                   else {
                     deferred.resolve(result);
                   }
-
                 }
+
+                this.list();
+
               }).bind(this));
             },
 
@@ -501,9 +504,8 @@ define(
               },
               disable: function(dialog)
               {
+                var dialogObj;
 
-                dialog.userName = null;
-                dialog.password = null;
                 dialog.useBasicAuth = false;
 
                 var dialogArr = $scope.dialogs.filter(function(_dialog){
@@ -516,8 +518,13 @@ define(
                 dialog.name = dialogArr[0].name;
                 dialog.url = dialogArr[0].url;
 
+                dialogObj = angular.copy(dialog);
+
+                dialogObj.userName = null;
+                dialogObj.password = null;
+
                 var deferred = $q.defer();
-                $scope.Dialog.update(dialog, deferred);
+                $scope.Dialog.update(dialogObj, deferred);
 
                 deferred.promise
                 .then(function(result){
