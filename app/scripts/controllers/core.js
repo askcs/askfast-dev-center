@@ -31,11 +31,7 @@ define(
           ];
 
           $scope.adapterTypes = {
-            broadsoft: {
-              label: 'Phone',
-              ids: []
-            },
-            voxeo: {
+            call: {
               label: 'Phone',
               ids: []
             },
@@ -161,7 +157,7 @@ define(
               {
                 case 'GTALK':   type = 'xmpp';      break;
                 case 'TWITTER': type = 'twitter';   break;
-                case 'PHONE':   type = 'broadsoft'; break;
+                case 'PHONE':   type = 'call'; break;
                 case 'SMS':     type = 'sms';       break;
                 case 'EMAIL':   type = 'email';     break;
               }

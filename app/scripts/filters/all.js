@@ -31,7 +31,7 @@ define(
             {
               switch (adapter.adapterType)
               {
-                case 'broadsoft':
+                case 'call':
 
                   if (/@/.test(adapter.myAddress))
                     return adapter.myAddress.split('@')[0];
@@ -56,8 +56,7 @@ define(
 
             switch (address)
             {
-              case 'broadsoft':
-              case 'voxeo':
+              case 'call':
                 return 'Phone';
               case 'xmpp':
                 return 'Gtalk';
@@ -138,8 +137,7 @@ define(
           return function(medium) {
             switch (medium)
             {
-              case 'broadsoft':
-              case 'voxeo':
+              case 'call':
                 return 'Phone';
               case 'xmpp':
                 return 'Gtalk';
