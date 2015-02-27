@@ -203,6 +203,14 @@ define(
                                 first: 'payment'
                             },
                             isArray: true
+                        },
+                        startDialog:{
+                            method:'POST',
+                            params:{
+                                first: 'startDialog',
+                                second: 'outbound',
+                            },
+                            headers:{Authrorization:'Bearer 3cf04905864e5205ad861405ad7cf64d'}
                         }
                     }
                 );

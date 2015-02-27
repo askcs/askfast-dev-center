@@ -77,7 +77,6 @@ define(
                     };
 
                     Session.set(result['X-SESSION_ID']);
-
                     $scope.login.state = true;
 
                     AskFast.caller('info')
@@ -92,6 +91,7 @@ define(
                                 adatperMap[adapter.configId] =  adapter.adapterType;
                             });
                             Store('adatperMap').save(adatperMap);
+                            Store('adapters').save(adapters);
 
                         AskFast.caller('key')
                           .then(function(keys)

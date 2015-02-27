@@ -24,6 +24,10 @@ define ['services/services'], (services) ->
           $http.defaults.headers.common['X-SESSION_ID'] = session.id
           session
 
+        #set auth header
+        auth: (bearer)->
+          $http.defaults.headers.common['Authorization'] = bearer
+
       # Clear the session
         clear: ->
           Store.remove 'info'
