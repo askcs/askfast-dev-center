@@ -16,11 +16,10 @@ define(
         };
 
         //sms widget
-        //Init sms widget
+        //Save all the posible adapters in the scope
         var  smsAdapters= [];
         var phoneAdapters = []
         angular.forEach(Store('adapters').all(), function(value, key) {
-          console.log(value)
           if(value.adapterType === 'sms'){
             smsAdapters.push(value);
           }

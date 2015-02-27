@@ -22,6 +22,9 @@
             $http.defaults.headers.common['X-SESSION_ID'] = session.id;
             return session;
           },
+          auth: function(bearer) {
+            return $http.defaults.headers.common['Authorization'] = bearer;
+          },
           clear: function() {
             Store.remove('info');
             $http.defaults.headers.common['X-SESSION_ID'] = null;
