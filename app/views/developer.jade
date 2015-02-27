@@ -29,8 +29,9 @@ navbar
                 .inner
                   header
                     h2 Adapters
-                    select.form-control(ng-model='adapterType',
-                    ng-change='Adapter.query(adapterType)')
+                    //- access parent's scope, since ng-switch creates own scope
+                    select.form-control(ng-model='$parent.adapterType',
+                    ng-change='Adapter.query($parent.adapterType)')
                       option(value='', selected) Add a new adapter
                       option(value='email') Email
                       option(value='call') Phone
@@ -38,7 +39,7 @@ navbar
                       option(value='xmpp') Gtalk
                       option(value='twitter') Twitter
                   section
-                    article(ng-show='adapterType')
+                    article(ng-show='$parent.adapterType')
                       h3 Available adapters
                       p(ng-hide='freeAdapters.length > 0')
                         | There are not any available adapter for this type.

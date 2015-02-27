@@ -249,6 +249,9 @@ define(
               }).then((function ()
               {
                 this.list();
+
+                // reset adapter add form
+                $scope.adapterType= '';
               }).bind(this));
             },
 
