@@ -33,8 +33,12 @@ define(
               {
                 case 'call':
 
-                  if (/@/.test(adapter.myAddress))
+                  if (/@/.test(adapter.myAddress)){
                     return adapter.myAddress.split('@')[0];
+                  }
+                  else {
+                    return adapter.myAddress;
+                  }
 
                   break;
                 default:
