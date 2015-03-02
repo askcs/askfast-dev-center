@@ -20,7 +20,7 @@
                     <dt>Name</dt>
                     <dd>{{user.name}}</dd>
                     <dt>Credits</dt>
-                    <dd>{{user.credits | currency:"&euro;" }}</dd>
+                    <dd>{{user.credits | ownCurrency:"&euro;" }}</dd>
                     <dd ng-if="config.feature.payments !== true">If you would like to buy credits please send an email to <a href="mailto:sales@ask-fast.com">sales@ask-fast.com</a></dd>
                     <dd ng-if="config.feature.payments === true">Go to <a href="#/credits">credits </a>to buy extra credits</dd>
                     <dt>Account Type</dt>

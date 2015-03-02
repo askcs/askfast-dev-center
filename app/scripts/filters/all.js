@@ -186,5 +186,19 @@ define(
         }
       };
     });
+
+    filters.filter('ownCurrency', function($filter){
+      // http://stackoverflow.com/a/22348267
+      return function(amount, symbol){
+        var currency = $filter('currency');
+
+        if(amount < 0){
+            return currency(amount, symbol).replace('(', '-').replace(')', '');
+        }
+
+        return currency(amount, symbol);
+
+      }
+    });
   }
 );

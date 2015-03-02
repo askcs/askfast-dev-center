@@ -22,7 +22,7 @@ ng-controller='user')
         //  a(href='#/help') HELP
       ul.nav.navbar-nav.navbar-right
         li(class='{{(current == "/credits") && "active"}}')
-          a(href='#/credits') CREDITS: &nbsp {{user.credits | currency:"&euro;"}} 
+          a(href='#/credits') CREDITS: &nbsp {{user.credits | ownCurrency:"&euro;"}} 
         li(class='{{(current == "/profile") && "active"}}')
           a(href='#/profile') {{user.name}}
         li
