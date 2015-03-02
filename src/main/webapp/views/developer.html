@@ -23,17 +23,17 @@
                 <div class="inner">
                   <header>
                     <h2>Adapters</h2>
-                    <select ng-model="adapterType" ng-change="Adapter.query(adapterType)" class="form-control">
+                    <select ng-model="$parent.adapterType" ng-change="Adapter.query($parent.adapterType)" class="form-control">
                       <option value="" selected="selected">Add a new adapter</option>
                       <option value="email">Email</option>
-                      <option value="broadsoft">Phone</option>
+                      <option value="call">Phone</option>
                       <option value="sms">SMS</option>
                       <option value="xmpp">Gtalk</option>
                       <option value="twitter">Twitter</option>
                     </select>
                   </header>
                   <section>
-                    <article ng-show="adapterType">
+                    <article ng-show="$parent.adapterType">
                       <h3>Available adapters</h3>
                       <p ng-hide="freeAdapters.length &gt; 0">There are not any available adapter for this type.</p>
                       <table ng-show="freeAdapters.length &gt; 0" class="table table-bordered table-hover">

@@ -31,10 +31,14 @@ define(
             {
               switch (adapter.adapterType)
               {
-                case 'broadsoft':
+                case 'call':
 
-                  if (/@/.test(adapter.myAddress))
+                  if (/@/.test(adapter.myAddress)){
                     return adapter.myAddress.split('@')[0];
+                  }
+                  else {
+                    return adapter.myAddress;
+                  }
 
                   break;
                 default:
@@ -56,8 +60,7 @@ define(
 
             switch (address)
             {
-              case 'broadsoft':
-              case 'voxeo':
+              case 'call':
                 return 'Phone';
               case 'xmpp':
                 return 'Gtalk';
@@ -138,8 +141,7 @@ define(
           return function(medium) {
             switch (medium)
             {
-              case 'broadsoft':
-              case 'voxeo':
+              case 'call':
                 return 'Phone';
               case 'xmpp':
                 return 'Gtalk';
@@ -183,6 +185,20 @@ define(
             return type;
         }
       };
+    });
+
+    filters.filter('ownCurrency', function($filter){
+      // http://stackoverflow.com/a/22348267
+      return function(amount, symbol){
+        var currency = $filter('currency');
+
+        if(amount < 0){
+            return currency(amount, symbol).replace('(', '-').replace(')', '');
+        }
+
+        return currency(amount, symbol);
+
+      }
     });
   }
 );

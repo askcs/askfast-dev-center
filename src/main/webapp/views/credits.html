@@ -21,7 +21,7 @@
                   </div>
                   <dl>
                     <dt>Credits</dt>
-                    <dd>{{user.credits | currency:"&euro;" }}</dd>
+                    <dd>{{user.credits | ownCurrency:"&euro;" }}</dd>
                     <dd ng-if="config.feature.payments !== true">If you would like to buy credits please send an email to <a href="mailto:sales@ask-fast.com">sales@ask-fast.com</a></dd>
                   </dl>
                   <div ng-if="config.feature.paypal === true">
@@ -46,7 +46,7 @@
                         <button ng-click="proceedToCheckOut()" ng-show="payment.showCheckoutButton" class="btn btn-default">Go to checkout</button>
                         <button ng-click="abortSale()" ng-show="payment.showCheckoutButton" class="btn btn-default">Cancel</button>
                         <div ng-show="payment.showConfirm">
-                          <label>Are you sure you want to buy {{order.amount | currency:"&euro;"}} worth of credits?</label>
+                          <label>Are you sure you want to buy {{order.amount | ownCurrency:"&euro;"}} worth of credits?</label>
                           <button type="submit" ng-click="buycredits( order )" value="Save" class="btn btn-default">Yes, I am sure</button>
                           <button ng-click="abortSale()" class="btn btn-default">No, I do not want to buy</button>
                         </div>
@@ -78,7 +78,7 @@
                       <tbody>
                         <tr ng-repeat="payment in payments">
                           <td>{{payment.creationDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                          <td>{{payment.amount |  currency:"&euro;"}}</td>
+                          <td>{{payment.amount |  ownCurrency:"&euro;"}}</td>
                           <td>{{payment.type | paymentType }}</td>
                           <td>{{payment.status}}</td>
                           <td>{{payment.description}} </td>
