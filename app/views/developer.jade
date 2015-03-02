@@ -29,16 +29,17 @@ navbar
                 .inner
                   header
                     h2 Adapters
-                    select.form-control(ng-model='adapterType',
-                    ng-change='Adapter.query(adapterType)')
+                    //- access parent's scope, since ng-switch creates own scope
+                    select.form-control(ng-model='$parent.adapterType',
+                    ng-change='Adapter.query($parent.adapterType)')
                       option(value='', selected) Add a new adapter
                       option(value='email') Email
-                      option(value='broadsoft') Phone
+                      option(value='call') Phone
                       option(value='sms') SMS
                       option(value='xmpp') Gtalk
                       option(value='twitter') Twitter
                   section
-                    article(ng-show='adapterType')
+                    article(ng-show='$parent.adapterType')
                       h3 Available adapters
                       p(ng-hide='freeAdapters.length > 0')
                         | There are not any available adapter for this type.
@@ -89,24 +90,24 @@ navbar
                     form(role='form', name='forms.addDialog',
                     ng-submit='Dialog.add(dialog)')
                       .row
-                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && "has-error"}}')
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && forms.addDialog.name.$dirty && "has-error"}}')
                           input.form-control(type='text',
                           name='name',
                           ng-model='dialog.form.name',
                           placeholder='Dialog name'
                           required)
                           p
-                            span.text-danger(ng-show="forms.addDialog.name.$error.required")
+                            span.text-danger(ng-show="forms.addDialog.name.$error.required && forms.addDialog.name.$dirty")
                               | A name is required to make a new dialog.
                       .row
-                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.url.$invalid && "has-error"}}')
+                        .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.url.$invalid && forms.addDialog.url.$dirty && "has-error"}}')
                           input.form-control(type='url',
                           name='url',
                           ng-model='dialog.form.url',
                           placeholder='URL for dialog',
                           required)
                           p
-                            span.text-danger(ng-show="forms.addDialog.url.$error.required")
+                            span.text-danger(ng-show="forms.addDialog.url.$error.required && forms.addDialog.url.$dirty")
                               | A URL is required to make a new dialog.
                             span.text-danger(ng-show="forms.addDialog.url.$error.url")
                               | The entered URL isn't valid.
@@ -137,7 +138,7 @@ navbar
                       .col-md-9(ng-show='dialogs.length < 1')
                       .col-md-9(ng-hide='dialogs.length < 1')
                         .row
-                          .col-sm-8
+                          .col-md-6
                             form(name='forms.details')
                               fieldset
                                 legend Details
@@ -150,12 +151,39 @@ navbar
                                   label URL
                                   input.form-control(ng-model='dialog.url')
                                 .form-group
-                                  button.btn.btn-default(ng-click="Dialog.update(dialog)") Update details
-                          .col-sm-4
+                                  button.btn.btn-default(ng-click='Dialog.updateDetails(dialog)') Update details
+                          .col-md-4
+                            form(name='forms.auth')
+                              fieldset
+                                legend Authentication 
+                                  span.small.text-primary(ng-show='dialog.useBasicAuth') &nbsp;enabled
+                                p If desired, you can set Basic Authentication credentials for this dialog.
+                                p(ng-show='dialogAuth.message', class="{{(dialogAuth.messageType) && 'text-' + dialogAuth.messageType}}")
+                                  | {{dialogAuth.message}}
+                                div(ng-hide='dialogAuth.open')
+                                  .form-group
+                                    button.btn.btn-default(ng-click='dialogAuth.open = true') Configure
+                                div(ng-show='dialogAuth.open')
+                                  .form-group
+                                    label Username
+                                    input.form-control(name='username', ng-model='dialog.userName')
+                                  .form-group
+                                    label Password
+                                    input.form-control(name='password', ng-model='dialog.password', type='password')
+                                  .form-groups
+                                    button.btn.btn-default(ng-click='authenticateDialog(dialog)')
+                                      | {{(dialog.useBasicAuth) && 'Update' || 'Enable'}}
+                                    button.btn.btn-default(ng-click='cancelAuthentication(dialog)')
+                                      | Cancel
+                                    button.btn.btn-danger.pull-right(ng-click='disableDialogAuthentication(dialog)',
+                                      ng-show='dialog.useBasicAuth')
+                                      | Disable
+
+                          .col-md-2
                             button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
                               | Delete dialog
                         .row
-                          .col-sm-10
+                          .col-md-10
                             form(name='forms.adapters', role='form')
                               fieldset
                                 legend Adapters

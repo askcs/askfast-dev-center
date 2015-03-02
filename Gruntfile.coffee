@@ -88,7 +88,7 @@ module.exports = (grunt) ->
           middleware: (connect) ->
             [
               mountFolder(connect, '.tmp')
-              mountFolder(connect, 'test')
+              mountFolder(connect, appConfig.app)
             ]
       dist:
         options:
@@ -152,22 +152,6 @@ module.exports = (grunt) ->
           dest: '.tmp/scripts'
           ext: '.js'
         ]
-      testUnit:
-        files: [
-          expand: true
-          cwd: 'test/coffee/spec'
-          src: '{,*/}*.coffee'
-          dest: 'test/tests/spec'
-          ext: '.js'
-        ]
-      testEnd:
-        files: [
-          expand: true
-          cwd: 'test/coffee/e2e'
-          src: '{,*/}*.coffee'
-          dest: 'test/tests/e2e'
-          ext: '.js'
-        ]
 
     compass:
       options:
@@ -186,7 +170,7 @@ module.exports = (grunt) ->
       server:
         options:
           debugInfo: false
-  
+
     rev:
       dist:
         files:
@@ -227,7 +211,7 @@ module.exports = (grunt) ->
         ]
 
     cssmin: {}
-  
+
     htmlmin:
       dist:
         options: {}
@@ -288,12 +272,6 @@ module.exports = (grunt) ->
         'jade'
         'copy:styles'
       ]
-      test: [
-        'coffee:testUnit'
-        'coffee:testEnd'
-        'compass'
-        'copy:styles'
-      ]
       dist: [
         'coffee:dist'
         'compass:dist'
@@ -304,13 +282,15 @@ module.exports = (grunt) ->
       ]
 
     karma:
-      unit:
+      options:
         configFile: 'karma.conf.js'
-        singleRun: false
-
-      end:
-        configFile: 'karma-e2e.conf.js'
-        singleRun: false
+      single:
+        singleRun: true
+      watch:
+        autoWatch: true
+      continuous:
+        singleRun: true
+        reporters: ['junit']
 
     ngmin:
       dist:
@@ -403,18 +383,20 @@ module.exports = (grunt) ->
       'watch'
     ]
 
+  grunt.registerTask 'test:unit', 'run karma unit tests, add :watch for live reloading', (target) ->
+    return grunt.task.run(['karma:watch']) if target is 'watch'
+    return grunt.task.run(['karma:continuous']) if target is 'continuous'
+    grunt.task.run [
+      'karma:single'
+    ]
+
   grunt.registerTask 'test', [
-    'clean:server'
-    'concurrent:test'
-    'connect:test'
-    'karma'
+    'test:unit'
   ]
 
   grunt.registerTask 'build', [
     'clean:dist'
     'coffee:dist'
-    'coffee:testUnit'
-    'coffee:testEnd'
     'compass:dist'
     'jade'
     'useminPrepare'

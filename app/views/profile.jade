@@ -20,7 +20,7 @@ navbar
                     dt Name
                     dd {{user.name}}
                     dt Credits
-                    dd {{user.credits | currency:"&euro;" }}
+                    dd {{user.credits | ownCurrency:"&euro;" }}
                     dd(ng-if="config.feature.payments !== true") If you would like to buy credits please send an email to 
                         a(href='mailto:sales@ask-fast.com') sales@ask-fast.com
                     dd(ng-if="config.feature.payments === true") Go to 

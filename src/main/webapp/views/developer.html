@@ -23,17 +23,17 @@
                 <div class="inner">
                   <header>
                     <h2>Adapters</h2>
-                    <select ng-model="adapterType" ng-change="Adapter.query(adapterType)" class="form-control">
+                    <select ng-model="$parent.adapterType" ng-change="Adapter.query($parent.adapterType)" class="form-control">
                       <option value="" selected="selected">Add a new adapter</option>
                       <option value="email">Email</option>
-                      <option value="broadsoft">Phone</option>
+                      <option value="call">Phone</option>
                       <option value="sms">SMS</option>
                       <option value="xmpp">Gtalk</option>
                       <option value="twitter">Twitter</option>
                     </select>
                   </header>
                   <section>
-                    <article ng-show="adapterType">
+                    <article ng-show="$parent.adapterType">
                       <h3>Available adapters</h3>
                       <p ng-hide="freeAdapters.length &gt; 0">There are not any available adapter for this type.</p>
                       <table ng-show="freeAdapters.length &gt; 0" class="table table-bordered table-hover">
@@ -95,15 +95,15 @@
                   <section>
                     <form role="form" name="forms.addDialog" ng-submit="Dialog.add(dialog)">
                       <div class="row">
-                        <div class="form-group col-lg-6 col-md-8 {{forms.addDialog.name.$invalid &amp;&amp; &quot;has-error&quot;}}">
+                        <div class="form-group col-lg-6 col-md-8 {{forms.addDialog.name.$invalid &amp;&amp; forms.addDialog.name.$dirty &amp;&amp; &quot;has-error&quot;}}">
                           <input type="text" name="name" ng-model="dialog.form.name" placeholder="Dialog name" required="required" class="form-control">
-                          <p><span ng-show="forms.addDialog.name.$error.required" class="text-danger">A name is required to make a new dialog.</span></p>
+                          <p><span ng-show="forms.addDialog.name.$error.required &amp;&amp; forms.addDialog.name.$dirty" class="text-danger">A name is required to make a new dialog.</span></p>
                         </div>
                       </div>
                       <div class="row">
-                        <div class="form-group col-lg-6 col-md-8 {{forms.addDialog.url.$invalid &amp;&amp; &quot;has-error&quot;}}">
+                        <div class="form-group col-lg-6 col-md-8 {{forms.addDialog.url.$invalid &amp;&amp; forms.addDialog.url.$dirty &amp;&amp; &quot;has-error&quot;}}">
                           <input type="url" name="url" ng-model="dialog.form.url" placeholder="URL for dialog" required="required" class="form-control">
-                          <p><span ng-show="forms.addDialog.url.$error.required" class="text-danger">A URL is required to make a new dialog.</span><span ng-show="forms.addDialog.url.$error.url" class="text-danger">The entered URL isn't valid.</span></p>
+                          <p><span ng-show="forms.addDialog.url.$error.required &amp;&amp; forms.addDialog.url.$dirty" class="text-danger">A URL is required to make a new dialog.</span><span ng-show="forms.addDialog.url.$error.url" class="text-danger">The entered URL isn't valid.</span></p>
                         </div>
                       </div>
                       <div class="form-group">
@@ -134,7 +134,7 @@
                       <div ng-show="dialogs.length &lt; 1" class="col-md-9"></div>
                       <div ng-hide="dialogs.length &lt; 1" class="col-md-9">
                         <div class="row">
-                          <div class="col-sm-8">
+                          <div class="col-md-6">
                             <form name="forms.details">
                               <fieldset>
                                 <legend>Details</legend>
@@ -151,17 +151,46 @@
                                   <input ng-model="dialog.url" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                  <button ng-click="Dialog.update(dialog)" class="btn btn-default">Update details</button>
+                                  <button ng-click="Dialog.updateDetails(dialog)" class="btn btn-default">Update details</button>
                                 </div>
                               </fieldset>
                             </form>
                           </div>
-                          <div class="col-sm-4">
+                          <div class="col-md-4">
+                            <form name="forms.auth">
+                              <fieldset>
+                                <legend>Authentication <span ng-show="dialog.useBasicAuth" class="small text-primary">&nbsp;enabled</span></legend>
+                                <p>If desired, you can set Basic Authentication credentials for this dialog.</p>
+                                <p ng-show="dialogAuth.message" class="{{(dialogAuth.messageType) &amp;&amp; 'text-' + dialogAuth.messageType}}">{{dialogAuth.message}}</p>
+                                <div ng-hide="dialogAuth.open">
+                                  <div class="form-group">
+                                    <button ng-click="dialogAuth.open = true" class="btn btn-default">Configure</button>
+                                  </div>
+                                </div>
+                                <div ng-show="dialogAuth.open">
+                                  <div class="form-group">
+                                    <label>Username</label>
+                                    <input name="username" ng-model="dialog.userName" class="form-control">
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Password</label>
+                                    <input name="password" ng-model="dialog.password" type="password" class="form-control">
+                                  </div>
+                                  <div class="form-groups">
+                                    <button ng-click="authenticateDialog(dialog)" class="btn btn-default">{{(dialog.useBasicAuth) && 'Update' || 'Enable'}}</button>
+                                    <button ng-click="cancelAuthentication(dialog)" class="btn btn-default">Cancel</button>
+                                    <button ng-click="disableDialogAuthentication(dialog)" ng-show="dialog.useBasicAuth" class="btn btn-danger pull-right">Disable</button>
+                                  </div>
+                                </div>
+                              </fieldset>
+                            </form>
+                          </div>
+                          <div class="col-md-2">
                             <button ng-click="Dialog.remove(dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-sm-10">
+                          <div class="col-md-10">
                             <form name="forms.adapters" role="form">
                               <fieldset>
                                 <legend>Adapters</legend>
