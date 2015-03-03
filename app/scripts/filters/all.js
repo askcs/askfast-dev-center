@@ -187,7 +187,9 @@ define(
       };
     });
 
-    filters.filter('ownCurrency', function($filter){
+    filters.filter('ownCurrency',[
+      '$filter',
+      function($filter){
       // http://stackoverflow.com/a/22348267
       return function(amount, symbol){
         var currency = $filter('currency');
@@ -197,8 +199,7 @@ define(
         }
 
         return currency(amount, symbol);
-
-      }
-    });
+      };
+    }]);
   }
 );
