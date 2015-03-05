@@ -28,6 +28,10 @@ define ['services/services'], (services) ->
         auth: (bearer)->
           $http.defaults.headers.common['Authorization'] = bearer
 
+        #set content type
+        setHeader: (type)->  
+          $http.defaults.headers.post['Content-Type'] = type
+
       # Clear the session
         clear: ->
           Store.remove 'info'

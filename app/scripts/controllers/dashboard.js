@@ -7,7 +7,7 @@ define(
       '$scope', '$rootScope', '$timeout', 'AskFast', 'Session', 'Store', 'dashboardLogsFilter', '$q',
       function($scope, $rootScope, $timeout, AskFast, Session, Store, dashboardLogsFilter,$q) {
         var keyRevealTimeoutPromise = null;
-        var bearerToken = '1ff8fff590dcd7a49eca80f506e02cc1';
+        var bearerToken = '';
         $scope.keyRevealTypeString = 'password';
         $scope.keyButtonString = 'Show';
 
@@ -37,14 +37,12 @@ define(
               url: $scope.sms.url,
               from: $scope.sms.from
             }
-          sendMessage(message)
+            //check if there is a bearer token present before sending
+          checkToken(message)
           .then(function(result){
-            console.log('reslove')
             console.log(result)
           })
-          .catch(function(error){
 
-          })
         };
 
         //Phone widget
@@ -55,13 +53,11 @@ define(
             url: $scope.call.url,
             to: $scope.call.to
           }
-          sendMessage(message)
-          .then(function(result){
+          //check if there is a bearer token present before sending
+          checkToken(message).then(function(result){
             console.log(result)
           })
-          .catch(function(error){
 
-          })
         }
 
         /**
@@ -70,10 +66,8 @@ define(
          * @return {Promise}        
          */
         function sendMessage(message) {
-          if(bearerToken == ''){
-           return checkToken(message);
-          }
           var deferd = $q.defer()
+
           var dialog = {
             "method": "outboundCall",
             "params": {
@@ -83,49 +77,64 @@ define(
               "bearerToken": bearerToken
             }
           }
-
-          Session.auth(bearerToken)
+          // Set auth header
+          Session.auth('Bearer '+bearerToken);
 
           AskFast.caller('startDialog', null, dialog)
             .then(function(response){
               if(response.error){
                 deferd.reject(response)
+                $scope.alert="Scomething when wrong please try again later, check the logs and request below"
+
               }else{
                 deferd.resolve(response)
-                $scope.request = {
-                  host:'http:api.ask-fast.com/',
+                $scope.alert= "sucsessfull request see your resquest below"
+              }
+              var request ={
+                  host:$rootScope.config.host,
                   path:'startDialog/outbound',
                   header:{
                     Authrorization: 'Bearer '+bearerToken
                   },
                   payload:dialog
                 }
-              }
+              $scope.request =  JSON.stringify(request,null,2); 
             })
-            return deferd.promise;
+            return deferd.promise
         }
 
+        // check if there is a bear token, if there is: send message. If there is nog bearer, fetch bearer and send message
         function checkToken(message){
+          var deferd = $q.defer()
           if(bearerToken !=''){
-            sendMessage(message)
+            sendMessage(message).then(function(respnse){
+              promise.resolve(response)
+            })
           }else{
             getBearer().then(function(result){
               sendMessage(message);
             })
           }
-
+            return deferd.promise
         }
+
 
         function getBearer(){
           console.log('fetch bearerToken')
+
+          //set proper header
+          Session.setHeader('application/x-www-form-urlencoded');
+
           var deferd = $q.defer()
-          AskFast.caller('getAccessToken',null,{
+
+          AskFast.caller('getAccessToken',null,$.param({
             client_id: $scope.user.id,
             grant_type: 'refresh_token',
             refresh_token:$scope.user.refreshToken,
             client_secret:'none'
-          }).then(function(result){
+          })).then(function(result){
             if(!result.error){
+              Session.setHeader('application/json')
               bearerToken = result.access_token
               deferd.resolve();
             }else{

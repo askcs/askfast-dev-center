@@ -81,6 +81,10 @@ navbar
                 header
                   h2 Example
                 Section
+                  div.alert.alert-warning.alert-dismissible.fade.in(ng-show="alert != null",role='alert') 
+                    button.close(type='button',data-dismiss="alert",aria-label='Close' )
+                      span( aria-hidden="true") &times;
+                    | {{alert}}
                   h4 Send SMS message or start a call
                   form(role='form')
                   .form-group
@@ -94,8 +98,6 @@ navbar
                     select#SMSFrom.form-control( ng-model='sms.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters")
                   .form-group
                       a.btn.btn-default(ng-click='sendSMS()') Send SMS
-                  code#SMSRequest
-                    | {{request}}
                   hr
                   h4 Start phone call
                   form(role='form')
@@ -109,8 +111,8 @@ navbar
                     label(for='Callfrom') From number
                     select#SMSFrom.form-control( ng-model='call.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters")
                   .form-group
-                    a.btn.btn-default(ng-click='sendCall()') Start call
-                  code#CallRequest
+                    a.btn.btn-default(ng-click='startCall()') Start call
+                  pre(ng-show="request != null") {{request}}
 
 
 
