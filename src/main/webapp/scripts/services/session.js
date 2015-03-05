@@ -25,6 +25,9 @@
           auth: function(bearer) {
             return $http.defaults.headers.common['Authorization'] = bearer;
           },
+          setHeader: function(type) {
+            return $http.defaults.headers.post['Content-Type'] = type;
+          },
           clear: function() {
             Store.remove('info');
             $http.defaults.headers.common['X-SESSION_ID'] = null;
