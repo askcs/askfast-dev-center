@@ -292,6 +292,23 @@ module.exports = (grunt) ->
         singleRun: true
         reporters: ['junit']
 
+    protractor_webdriver:
+      start:
+        options:
+          keepAlive:true
+      stop: {}
+
+    protractor:
+      options:
+        configFile: 'protractor.conf.js'
+      single:
+        options:
+          keepAlive: false
+        continuous:
+          options:
+            configFile: 'protractor.conf.junit.js'
+            keepAlive: false
+
     ngmin:
       dist:
         files: [
@@ -390,8 +407,16 @@ module.exports = (grunt) ->
       'karma:single'
     ]
 
+  grunt.registerTask 'test:e2e', 'run protractor e2e test', (target) ->
+    return grunt.task.run(['protractor_webdriver:start','protractor:continuous']) if target is 'continuous'
+    grunt.task.run [
+      'protractor_webdriver:start'
+      'protractor:single'
+    ]
+    
   grunt.registerTask 'test', [
     'test:unit'
+    'test:e2e'
   ]
 
   grunt.registerTask 'build', [
