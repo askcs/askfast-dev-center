@@ -1,14 +1,13 @@
-describe('The dashboard page',function () {
+describe('the use log page',function () {
 	'use strict'
 
-	var env 	= require('../environment.js'),
-		auth 	= require('../authActions.js');
+	var auth 					= require('../authActions.js');
 
-	//Api key widget
-	var acountIDField			= element(By.id('publicKey'))
+	//navbar
+	var useLogbutton 			= element(By.linkText('USE LOGS'))
 
-	//nav bar
-	var dashboardButoon 		= element(By.linkText('DASHBOARD'))
+	//use logs
+	var useLogs					= element(by.exactRepeater('log in logs'))
 
 	beforeEach(function(){
 		browser.getLocationAbsUrl()
@@ -27,11 +26,18 @@ describe('The dashboard page',function () {
 			})
 		browser.waitForAngular()
 		browser.wait(function() {
-			return browser.isElementPresent(dashboardButoon)
+			return browser.isElementPresent(useLogbutton)
 		})
-		dashboardButoon.click()
+		useLogbutton.click()
+	})
+	
+	it('should show some logs ',function(){
+		browser.wait(function(){
+			return browser.isElementPresent(useLogs)
+		})
+		
+		//the logs are visible
+		expect(true).toBe(true);
 	})
 
-	it('should show all widgets',function(){
-	})
 })

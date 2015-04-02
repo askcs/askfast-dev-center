@@ -18,10 +18,9 @@ describe('The login page',function () {
 	var acountIDField			= element(By.id('publicKey'))
 	var logoutButton			= element(By.linkText('LOGOUT'))
 
-	browser.driver.get(env.ciUrl);
+	//Go to the homepage
+	browser.get(env.ciUrl);
 
-	//to avoid warning that agular is not found
-	browser.sleep(3000)
 	beforeEach(function(){
   	});
 
