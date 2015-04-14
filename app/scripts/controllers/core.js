@@ -213,7 +213,12 @@ define(
             }
           };
 
-          $scope.$watch('query.ddr', function () { $scope.Log.list(); });
+          $scope.$watch('query.ddr', function (newVal, oldVal) {
+            if (newVal === oldVal){
+              return;
+            }
+            $scope.Log.list();
+          });
 
           $scope.Log.list();
 
