@@ -126,6 +126,7 @@
                   <section>
                     <div class="row">
                       <div class="col-md-3">
+                        <p ng-show="loadingDialogs">Hold on dialogs are loading...</p>
                         <p ng-show="dialogs.length &lt; 1">There are no dialogs yet. Please add one.</p>
                         <ul ng-hide="dialogs.length &lt; 1" class="nav nav-pills nav-stacked">
                           <li ng-repeat="_dialog in dialogs" class="{{(_dialog.id == dialog.id) &amp;&amp; &quot;active&quot;}}"><a ng-click="Dialog.open(_dialog)">{{_dialog.name}}</a></li>

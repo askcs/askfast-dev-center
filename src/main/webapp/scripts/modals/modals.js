@@ -1,1 +1,1 @@
-define(["angular"],function(e){return e.module("modals",[])});
+define(["angular"],function(e){"use strict";return e.module("modals",[])});
