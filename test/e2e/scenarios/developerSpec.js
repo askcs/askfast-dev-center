@@ -1,10 +1,11 @@
-describe('the developer page',function () {
+xdescribe('the developer page',function () {
 	'use strict'
 
 	var auth 					= require('../authActions.js');
 
 	//navbar
-	var developerbutton 			= element(By.linkText('DEVELOPER TOOLS'))
+	var developerbutton 		= element(By.linkText('DEVELOPER TOOLS'))
+	var useLogbutton			= element(By.linkText('USE LOGS'))
 
 	//debugger
 	var useLogs					= element(by.exactRepeater('log in logs'))

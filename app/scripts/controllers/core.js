@@ -302,7 +302,7 @@ define(
                 .then(function (dialogs)
                 {
                   $scope.dialogs = dialogs;
-
+                  $scope.loadingDialogs = false
                   if (callback) callback.call();
                 });
             },

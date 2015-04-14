@@ -1,4 +1,4 @@
-describe('The login page',function () {
+xdescribe('The login page',function () {
 	'use strict'
 	
 	browser.driver.manage().window().setSize(1600, 900);

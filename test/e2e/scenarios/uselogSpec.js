@@ -1,4 +1,4 @@
-describe('the use log page',function () {
+xdescribe('the use log page',function () {
 	'use strict'
 
 	var auth 					= require('../authActions.js');
