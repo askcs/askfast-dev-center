@@ -130,7 +130,7 @@ navbar
                     
                     .row
                       .col-md-3
-                        p(ng-show='loadingDialogs') Hold on dialogs are loading...
+                        p(ng-hide='loadingDialogs') Hold on dialogs are loading...
                         p(ng-show='dialogs.length < 1')
                           | There are no dialogs yet. Please add one.
                         ul.nav.nav-pills.nav-stacked(ng-hide='dialogs.length < 1')

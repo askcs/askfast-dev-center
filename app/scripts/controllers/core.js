@@ -11,7 +11,7 @@ define(
         {
           Store = Store('data');
 
-          $scope.currentSection = 'dialogs';
+          $scope.currentSection = 'debugger';
 
           $scope.loading = {
             logs: true
@@ -302,7 +302,7 @@ define(
                 .then(function (dialogs)
                 {
                   $scope.dialogs = dialogs;
-                  $scope.loadingDialogs = false
+                  $scope.loadingDialogs = true
                   if (callback) callback.call();
                 });
             },
