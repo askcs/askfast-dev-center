@@ -11,7 +11,7 @@ define(
         {
           Store = Store('data');
 
-          $scope.currentSection = 'debugger';
+          $scope.currentSection = 'dialogs';
 
           $scope.loading = {
             logs: true
