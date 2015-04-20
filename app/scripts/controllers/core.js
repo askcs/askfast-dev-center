@@ -6,7 +6,7 @@ define(
 
     controllers.controller ('core',
       [
-        '$rootScope', '$scope', '$q', '$timeout','AskFast', 'Store', 'Moment',
+        '$rootScope', '$scope', '$q', '$timeout','AskFast', 'Store', 'moment',
         function ($rootScope, $scope, $q, $timeout, AskFast, Store, moment)
         {
           Store = Store('data');

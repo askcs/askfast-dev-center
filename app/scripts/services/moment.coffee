@@ -2,7 +2,7 @@ define ['services/services', 'moment'], (services, moment) ->
 
   'use strict'
 
-  services.factory 'Moment', [
+  services.factory 'moment', [
     ->
       moment
   ]
