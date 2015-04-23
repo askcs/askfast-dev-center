@@ -265,24 +265,16 @@
                   <section>
                     <form role="form" class="form-inline">
                       <div class="form-group">
-                        <label>Adapter type:</label>
-                        <select ng-model="query.type" ng-change="Log.categorize()" class="form-control">
+                        <label>DDR Type:</label>
+                        <select ng-model="query.category" ng-change="Log.categorize()" class="form-control">
                           <option value="ALL">All</option>
-                          <option value="GTALK">Gtalk</option>
-                          <option value="TWITTER">Twitter</option>
-                          <option value="PHONE">Phone</option>
-                          <option value="EMAIL">Email</option>
-                          <option value="SMS">SMS</option>
-                        </select>
-                      </div>
-                      <div style="margin-left: 15px" class="form-group">
-                        <label>Severity level:</label>
-                        <select ng-model="query.severity" ng-change="Log.severity()" class="form-control">
-                          <option value="ALL">All</option>
-                          <option value="DEBUG">Debug</option>
-                          <option value="INFO">Info</option>
-                          <option value="WARNING">Warning</option>
-                          <option value="SEVERE">Severe</option>
+                          <option value="OUTGOING">Outgoing</option>
+                          <option value="INCOMING">Incoming</option>
+                          <option value="ADAPTER">Adapter Purchase</option>
+                          <option value="SERVICE">Service Cost</option>
+                          <option value="START_UP">Start Up Cost</option>
+                          <option value="SUBSCRIPTION">Subscription Cost</option>
+                          <option value="TTS">TTS Cost</option>
                         </select>
                       </div>
                       <div style="margin-left: 15px" class="form-group">
@@ -303,36 +295,115 @@
                         <label>Filter</label>
                         <input type="text" ng-model="queryLogs" class="form-control">
                       </div>
-                      <div class="form-group">
-                        <label>Show DDR:</label>
-                        <div class="input-group">
-                          <input type="checkbox" ng-model="query.ddr" class="checkbox">
-                        </div>
-                      </div>
                     </form>
                     <hr>
                     <p ng-show="loading.logs">Loading logs..</p>
                     <p ng-hide="logs.length &gt; 0 || loading.logs">Your query has no logs..</p>
-                    <table ng-show="logs.length &gt; 0" class="table table-bordered table-striped">
+                    <table ng-show="logs.length &gt; 0" class="table">
                       <thead>
                         <tr>
-                          <th>Time</th>
-                          <th>Level</th>
-                          <th>Adapter</th>
+                          <th>Date</th>
                           <th>Type</th>
-                          <th>Message</th>
+                          <th>From</th>
+                          <th>To</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="log in logs | filter:queryLogs | orderBy: &quot;timestamp&quot; : true">
-                          <td>{{log.timestamp | parseTimeStamp}}</td>
-                          <td>{{log.level}}</td>
-                          <td>{{log | translateAdapterAddress}}</td>
-                          <td>{{log | translateAdapterType}}</td>
-                          <td>{{log.message}}</td>
+                        <tr ng-repeat="log in logs | filter:queryLogs | orderBy: &quot;start&quot; : true">
+                          <td><a href="/#/developer?ddrId={{log._id}}">{{log.startString}}<a></a></a></td>
+                          <td>{{log.ddrTypeString}}</td>
+                          <td>{{log.fromAddress}}</td>
+                          <td>{{log.toAddress}}</td>
                         </tr>
                       </tbody>
                     </table>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="widgets" ng-switch-when="details" class="row">
+            <div class="col-md-12">
+              <div class="widget">
+                <div class="inner">
+                  <header>
+                    <h2>Details for {{ddrId}}</h2>
+                  </header>
+                  <section class="ddr-detail">
+                    <div class="row">
+                      <div class="col-md-4 col-md-offset-2 ddr-details">
+                        <dl class="dl-horizontal">
+                          <dt>Type</dt>
+                          <dd>{{ddrDetails.ddrTypeString}}</dd>
+                          <dt>Duration</dt>
+                          <dd ng-show="ddrDetails.duration !== null">{{ddrDetails.duration}} ms</dd>
+                          <dd ng-show="ddrDetails.duration === null">No duration</dd>
+                          <dt>Time Started</dt>
+                          <dd>{{ddrDetails.startString}}</dd>
+                          <dt>Timestamp</dt>
+                          <dd>{{ddrDetails.start}}</dd>
+                          <hr>
+                          <dt>From</dt>
+                          <dd>{{ddrDetails.fromAddress}}</dd>
+                          <dt>To</dt>
+                          <dd>{{ddrDetails.toAddress}}</dd>
+                        </dl>
+                      </div>
+                      <div class="col-md-4">
+                        <div ng-show="ddrDetails.statusPerAddress">
+                          <h5>Address Status</h5>
+                          <dl class="dl-horizontal">
+                            <div ng-repeat="statusObj in ddrDetails.statusPerAddress">
+                              <dt>{{statusObj.index}}</dt>
+                              <dd>{{statusObj.status}}</dd>
+                            </div>
+                          </dl>
+                        </div>
+                        <div ng-show="ddrDetails.additionalInfo.message">
+                          <h5>Message</h5>
+                          <div class="well">
+                            <pre>{{ddrDetails.additionalInfo.message}}</pre>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-8 col-sm-offset-2">
+                        <div ng-show="logs" class="row">
+                          <div class="col-xs-5"><strong>Time </strong></div>
+                          <div class="col-xs-2"><strong>Level </strong></div>
+                          <div class="col-xs-5">
+                            <button ng-click="expandAll()" class="pull-right btn btn-default">Expand All</button>
+                            <button ng-click="collapseAll()" class="pull-right btn btn-default">Collapse All</button>
+                          </div>
+                          <hr>
+                        </div>
+                      </div>
+                      <div class="col-sm-8 col-sm-offset-2">
+                        <div ng-repeat="log in logs | orderBy: &quot;timestamp&quot;">
+                          <!--.panel(ng-class='log.level === "INFO" ? "panel-primary" : "panel-default"')-->
+                          <div ng-class="{INFO:&quot;panel-info&quot;, SEVERE: &quot;panel-danger&quot;, DDR: &quot;panel-default&quot;, DEBUG: &quot;panel-success&quot;, WARNING: &quot;panel-warning&quot; }[log.level]" class="panel">
+                            <div class="panel-heading"><a data-toggle="collapse" href="#collapse{{$index}}">
+                                <div class="row">
+                                  <div class="col-xs-5">{{log.timeString}}</div>
+                                  <div class="col-xs-5">{{log.level}}</div>
+                                </div></a></div>
+                            <div id="collapse{{$index}}" class="panel-body panel-collapse collapse">
+                              <div class="container">
+                                <dl>
+                                  <dt>Timestamp</dt>
+                                  <dd>{{log.timestamp}}</dd>
+                                </dl>
+                              </div>
+                              <div ng-show="log.message">
+                                <h5>Message</h5>
+                                <div class="well">
+                                  <pre>{{log.message}}</pre>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </section>
                 </div>
               </div>
