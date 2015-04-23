@@ -93,6 +93,34 @@ define(
                             Store('adatperMap').save(adatperMap);
                             Store('adapters').save(adapters);
 
+
+                            
+                          AskFast.caller('ddrTypes', {
+                          }).then(function(ddrTypes){
+                            
+                            var ddrTypeCategories = 
+                            {
+                              "OUTGOING_COMMUNICATION_COST": "Outgoing",
+                              "ADAPTER_PURCHASE": "Adapter Purchase",
+                              "INCOMING_COMMUNICATION_COST": "Incoming",
+                              "SERVICE_COST": "Service Cost",
+                              "SUBSCRIPTION_COST": "Subscription Cost",
+                              "START_UP_COST": "Start Up Cost",
+                              "TTS_COST": "TTS Cost"
+                            };
+                            
+                            var ddrTypesObject = {};
+                            
+                            angular.forEach(ddrTypes, function(ddrType){
+                              ddrTypesObject[ddrType.typeId] = {
+                                name: ddrType.name,
+                                category: ddrType.category,
+                                categoryString: ddrTypeCategories[ddrType.category]
+                              };
+                            });
+                            
+                            Store('data').save(ddrTypesObject,'ddrTypes');
+                            
                         AskFast.caller('key')
                           .then(function(keys)
                           {
@@ -118,6 +146,12 @@ define(
                               $location.path('/dashboard');
                             }
                           });
+                            
+                            
+                          });
+
+
+
                          });
                       });
                   }

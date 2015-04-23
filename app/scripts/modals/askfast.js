@@ -177,6 +177,20 @@ define(
                             },
                             isArray: true
                         },
+                        ddrRecord: {
+                            method: 'GET',
+                            params: {
+                                first: 'ddr',
+                            }
+                        },
+                        ddrTypes: {
+                            method: 'GET',
+                            params: {
+                              first: 'ddr',
+                              second: 'types'
+                            },
+                            isArray: true
+                        },
                         log: {
                             method: 'GET',
                             params: {
