@@ -1,5 +1,5 @@
 define ['services/services'], (services) ->
-
+  # Not used, for reference only, use .js instead
   'use strict'
 
   services.factory 'Offline', [

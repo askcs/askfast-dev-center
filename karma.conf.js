@@ -37,20 +37,6 @@ module.exports = function (karma)
     autoWatch: false,
     browsers: ['PhantomJS'],
     captureTimeout: 10000,
-    singleRun: false,
-    preprocessors: {
-      '**/*.coffee': ['coffee']
-    },
-    coffeePreprocessor: {
-      // options passed to the coffee compiler
-      options: {
-        bare: true,
-        map: false
-      },
-      // transforming the filenames
-      transformPath: function(path) {
-        return path.replace(/\.coffee$/, '.js');
-      }
-    }
+    singleRun: false
   });
 };
