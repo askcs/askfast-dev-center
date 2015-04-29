@@ -85,12 +85,12 @@ define(
                       AskFast.caller('getAdapters')
                         .then(function(adapters)
                         {
-                            var adatperMap =  {};
+                            var adapterMap =  {};
                             angular.forEach(adapters, function (adapter)
                             {
-                                adatperMap[adapter.configId] =  adapter.adapterType;
+                                adapterMap[adapter.configId] =  adapter.adapterType;
                             });
-                            Store('adatperMap').save(adatperMap);
+                            Store('adapterMap').save(adapterMap);
                             Store('adapters').save(adapters);
 
 

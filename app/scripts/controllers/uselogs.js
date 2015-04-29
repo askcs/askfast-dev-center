@@ -10,14 +10,14 @@ define(
                 
                 AskFast.caller('getAdapters')
                     .then(function(adapters) {
-                        var adatperMap = {};
+                        var adapterMap = {};
                         angular.forEach(adapters, function(adapter) {
-                            adatperMap[adapter.configId] = adapter.adapterType;
+                            adapterMap[adapter.configId] = adapter.adapterType;
                         });
                         AskFast.caller('ddr')
                             .then(function(ddr) {
                                 angular.forEach(ddr, function(drrlog) {
-                                    drrlog['adapterName'] = adatperMap[drrlog['adapterId']];
+                                    drrlog['adapterName'] = adapterMap[drrlog['adapterId']];
                                 });
                                 $scope.logs = ddr;
                                 $scope.loading = false;
