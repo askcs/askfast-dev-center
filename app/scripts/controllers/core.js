@@ -10,15 +10,15 @@ define(
         function ($rootScope, $scope, $q, $route, $location, $timeout, AskFast, Store, moment)
         {
           Store = Store('data');
-          
+
           $scope.ddrId = null;
           $scope.currentSection = 'debugger';
-          
+
           if ($route.current.params.ddrId) {
             $scope.currentSection = 'details';
             $scope.ddrId = $route.current.params.ddrId;
           }
-          
+
           $scope.loading = {
             logs: true
           };
@@ -28,9 +28,9 @@ define(
             if ($route.current.params.ddrId){
               $location.path('/developer');
             }
-            
+
             $scope.currentSection = selection;
-            
+
             if(selection === 'debugger'){
               $scope.logs = [];
               $scope.Log.list();
@@ -119,9 +119,16 @@ define(
           function processDdr(ddrLog, ddrTypes){
             if(ddrLog.start){
               ddrLog.startString = moment(ddrLog.start).format('HH:mm:ss Z YYYY-MM-DD');
+              if(ddrLog.duration !== null){
+                ddrLog.endString = moment(ddrLog.start + ddrLog.duration).format('HH:mm:ss Z YYYY-MM-DD');
+              }
+              else{
+                ddrLog.endString = '-';
+              }
             }
             else{
               ddrLog.startString = '-';
+              ddrLog.endString = '-';
             }
             ddrLog.fromAddress = ddrLog.fromAddress || '-';
             ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString))[0] : '-';
@@ -134,7 +141,7 @@ define(
             }
             return ddrLog;
           }
-          
+
           $scope.Log = {
             data: null,
 
@@ -161,9 +168,9 @@ define(
                     SUBSCRIPTION_COST: [],
                     TTS_COST: [],
                   };
-                  
+
                   var allLogs = [];
-                  
+
                   angular.forEach(ddr, function(ddrLog){
                     allLogs.push(processDdr(ddrLog, ddrTypes));
                   });
@@ -178,7 +185,7 @@ define(
                           logs[ddrType.category].push(ddrLog);
                         }
                       }
-                      
+
                     });
                   });
 
@@ -223,7 +230,7 @@ define(
 
                 $scope.logs = logs;
               }
-            
+
             },
 
             period: function ()
@@ -245,15 +252,15 @@ define(
                 $scope.ddrDetails = processDdr(resultArray[0], ddrTypes);
                 
                 var logs = resultArray[1];
-                
+
                 angular.forEach(logs, function(item){
                   if (item.timestamp){
                     item.timeString = moment(item.timestamp).format('HH:mm:ss Z YYYY-MM-DD')
                   }
                 });
-                
+
                 $scope.logs = logs;
-                
+
                 $timeout(function(){
                   // makes sure that first call to collapse doesn't toggle.
                   // if not done, collapseAll will expand untouched panels
@@ -262,10 +269,10 @@ define(
               }, function(result){
                 console.warn('error ',result);
               });
-              
+
             }
           };
-          
+
           if(!$scope.ddrId){
             $scope.Log.list();
           }
@@ -641,7 +648,7 @@ define(
           $scope.cancelAuthentication = function(dialog){
             $scope.Dialog.authentication.cancel(dialog);
           }
-          
+
           $scope.expandAll = function(){
             $('.ddr-detail .panel-collapse').collapse('show');
           };

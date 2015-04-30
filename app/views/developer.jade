@@ -307,10 +307,10 @@ navbar
                           dt Duration
                           dd(ng-show='ddrDetails.duration !== null') {{ddrDetails.duration}} ms
                           dd(ng-show='ddrDetails.duration === null') No duration
-                          dt Time Started
+                          dt Start Time
                           dd {{ddrDetails.startString}}
-                          dt Timestamp
-                          dd {{ddrDetails.start}}
+                          dt(ng-show='ddrDetails.duration !== null') End Time
+                          dd(ng-show='ddrDetails.duration !== null') {{ddrDetails.endString}}
                           hr
                           dt From
                           dd {{ddrDetails.fromAddress}}
