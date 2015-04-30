@@ -303,7 +303,7 @@ navbar
                 .inner
                   header: h2 Details for {{ddrId}}
                   section.ddr-detail
-                    .row
+                    .row(ng-show="ddrDetails")
                       .col-md-4.col-md-offset-2.ddr-details
                         dl.dl-horizontal
                           dt Type
@@ -367,3 +367,5 @@ navbar
                                 .well
                                   pre
                                     | {{log.message}}
+                    .row(ng-hide="ddrDetails")
+                      .col-md-4.col-md-offset-2 Loading log details...
