@@ -1,10 +1,8 @@
-define(
-  ['controllers/controllers'],
-  function (controllers)
-  {
-    'use strict';
+import controllers = require('controllers/controllers')
 
-    controllers.controller ('core',
+'use strict';
+
+export = controllers.controller ('core',
       [
         '$rootScope', '$scope', '$q','$route', '$location','$timeout','AskFast', 'Store', 'moment',
         function ($rootScope, $scope, $q, $route, $location, $timeout, AskFast, Store, moment)
@@ -675,5 +673,3 @@ define(
         }
       ]
     );
-  }
-);
