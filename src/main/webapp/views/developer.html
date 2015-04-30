@@ -265,16 +265,14 @@
                   <section>
                     <form role="form" class="form-inline">
                       <div class="form-group">
-                        <label>DDR Type:</label>
+                        <label>Adapter Type:</label>
                         <select ng-model="query.category" ng-change="Log.categorize()" class="form-control">
-                          <option value="ALL">All</option>
-                          <option value="OUTGOING">Outgoing</option>
-                          <option value="INCOMING">Incoming</option>
-                          <option value="ADAPTER">Adapter Purchase</option>
-                          <option value="SERVICE">Service Cost</option>
-                          <option value="START_UP">Start Up Cost</option>
-                          <option value="SUBSCRIPTION">Subscription Cost</option>
-                          <option value="TTS">TTS Cost</option>
+                          <option value="all">All</option>
+                          <option value="call">Phone</option>
+                          <option value="email">Email</option>
+                          <option value="sms">SMS</option>
+                          <option value="xmpp">Gtalk</option>
+                          <option value="twitter">Twitter</option>
                         </select>
                       </div>
                       <div style="margin-left: 15px" class="form-group">
@@ -292,8 +290,12 @@
                         <input ng-model="query.until" ng-change="Log.period()" data-date-type="string" data-date-format="dd/MM/yyyy" bs-datepicker="" class="form-control">
                       </div>
                       <div class="form-group">
-                        <label>Filter</label>
-                        <input type="text" ng-model="queryLogs" class="form-control">
+                        <label>From </label>
+                        <input type="text" ng-model="queryLogs.fromAddress" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label>To </label>
+                        <input type="text" ng-model="queryLogs.toAddress" class="form-control">
                       </div>
                     </form>
                     <hr>
@@ -304,6 +306,7 @@
                         <tr>
                           <th>Date</th>
                           <th>Type</th>
+                          <th>Adapter Type</th>
                           <th>From</th>
                           <th>To</th>
                         </tr>
@@ -312,6 +315,7 @@
                         <tr ng-repeat="log in logs | filter:queryLogs | orderBy: &quot;start&quot; : true">
                           <td><a href="/#/developer?ddrId={{log._id}}">{{log.startString}}<a></a></a></td>
                           <td>{{log.ddrTypeString}}</td>
+                          <td>{{log.adapterTypeString}}</td>
                           <td>{{log.fromAddress}}</td>
                           <td>{{log.toAddress}}</td>
                         </tr>
@@ -335,13 +339,15 @@
                         <dl class="dl-horizontal">
                           <dt>Type</dt>
                           <dd>{{ddrDetails.ddrTypeString}}</dd>
+                          <dt>Adapter Type</dt>
+                          <dd>{{ddrDetails.adapterTypeString}}</dd>
                           <dt>Duration</dt>
                           <dd ng-show="ddrDetails.duration !== null">{{ddrDetails.duration}} ms</dd>
                           <dd ng-show="ddrDetails.duration === null">No duration</dd>
-                          <dt>Time Started</dt>
+                          <dt>Start Time</dt>
                           <dd>{{ddrDetails.startString}}</dd>
-                          <dt>Timestamp</dt>
-                          <dd>{{ddrDetails.start}}</dd>
+                          <dt ng-show="ddrDetails.duration !== null">End Time</dt>
+                          <dd ng-show="ddrDetails.duration !== null">{{ddrDetails.endString}}</dd>
                           <hr>
                           <dt>From</dt>
                           <dd>{{ddrDetails.fromAddress}}</dd>
@@ -388,10 +394,6 @@
                                 </div></a></div>
                             <div id="collapse{{$index}}" class="panel-body panel-collapse collapse">
                               <div class="container">
-                                <dl>
-                                  <dt>Timestamp</dt>
-                                  <dd>{{log.timestamp}}</dd>
-                                </dl>
                               </div>
                               <div ng-show="log.message">
                                 <h5>Message</h5>
