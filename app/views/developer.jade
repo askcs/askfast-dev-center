@@ -244,17 +244,15 @@ navbar
                   section
                     form.form-inline(role='form')
                       .form-group
-                        label DDR Type:
+                        label Adapter Type:
                         select.form-control(ng-model='query.category',
                         ng-change='Log.categorize()')
-                          option(value='ALL') All
-                          option(value='OUTGOING') Outgoing
-                          option(value='INCOMING') Incoming
-                          option(value='ADAPTER') Adapter Purchase
-                          option(value='SERVICE') Service Cost
-                          option(value='START_UP') Start Up Cost
-                          option(value='SUBSCRIPTION') Subscription Cost
-                          option(value='TTS') TTS Cost
+                          option(value='all') All
+                          option(value='call') Phone
+                          option(value='email') Email
+                          option(value='sms') SMS
+                          option(value='xmpp') Gtalk
+                          option(value='twitter') Twitter
                       .form-group(style='margin-left: 15px;')
                         label Limit:
                         select.form-control(ng-model='query.limit',
@@ -285,12 +283,14 @@ navbar
                         tr
                           th Date
                           th Type
+                          th Adapter Type
                           th From
                           th To
                       tbody
                         tr(ng-repeat='log in logs | filter:queryLogs | orderBy: "start" : true')
                           td <a href="/#/developer?ddrId={{log._id}}">{{log.startString}}<a>
                           td {{log.ddrTypeString}}
+                          td {{log.adapterTypeString}}
                           td {{log.fromAddress}}
                           td {{log.toAddress}}
           #widgets.row(ng-switch-when='details')
@@ -304,6 +304,8 @@ navbar
                         dl.dl-horizontal
                           dt Type
                           dd {{ddrDetails.ddrTypeString}}
+                          dt Adapter Type
+                          dd {{ddrDetails.adapterTypeString}}
                           dt Duration
                           dd(ng-show='ddrDetails.duration !== null') {{ddrDetails.duration}} ms
                           dd(ng-show='ddrDetails.duration === null') No duration

@@ -23,10 +23,15 @@ define(
             logs: true
           };
 
-          $scope.setSection = function (selection)
+          $scope.setSection = function (selection, clearDdrId)
           {
             if ($route.current.params.ddrId){
-              $location.path('/developer');
+              $scope.ddrId = null;
+              $location.url('/developer');
+            }
+
+            if(clearDdrId){
+              $scope.ddrId = null;
             }
 
             $scope.currentSection = selection;
@@ -36,6 +41,19 @@ define(
               $scope.Log.list();
             }
           };
+
+          $scope.$on('$routeUpdate', function(){
+            if ($route.current.params.ddrId && $scope.ddrId === null){
+              $scope.ddrId = $route.current.params.ddrId;
+              $scope.currentSection = 'details';
+              $scope.Log.detail($scope.ddrId);
+            }
+            else if($scope.currentSection === 'details'){
+              // means the user went back
+              // the only links to 'details' are from 'debugger'
+              $scope.setSection('debugger', true);
+            }
+          });
 
           $scope.types = [
             'Phone',
@@ -111,12 +129,12 @@ define(
           };
 
           $scope.query = {
-            category: 'ALL',
+            category: 'all',
             limit: 100,
             until: moment().format('DD/MM/YYYY')
           };
-          
-          function processDdr(ddrLog, ddrTypes){
+
+          function processDdr(ddrLog, ddrTypes, adapterMap){
             if(ddrLog.start){
               ddrLog.startString = moment(ddrLog.start).format('HH:mm:ss Z YYYY-MM-DD');
               if(ddrLog.duration !== null){
@@ -139,6 +157,8 @@ define(
                 ddrLog.statusPerAddress[index] =  {index: index, status: item};
               });
             }
+            ddrLog.adapterTypeString = ddrLog.adapterId ?  $scope.adapterTypes[adapterMap[ddrLog.adapterId]].label : '-';
+
             return ddrLog;
           }
 
@@ -158,31 +178,31 @@ define(
                 .then((function (ddr)
                 {
                   var ddrTypes = Store.get('ddrTypes');
-                  
+
+                  var adapterMap = Store.get('adapterMap');
+
                   var logs = {
-                    ADAPTER_PURCHASE: [],
-                    INCOMING_COMMUNICATION_COST: [],
-                    OUTGOING_COMMUNICATION_COST: [],
-                    SERVICE_COST: [],
-                    START_UP_COST: [],
-                    SUBSCRIPTION_COST: [],
-                    TTS_COST: [],
+                    call: [],
+                    email: [],
+                    sms: [],
+                    xmpp: [],
+                    twitter: []
                   };
 
                   var allLogs = [];
 
                   angular.forEach(ddr, function(ddrLog){
-                    allLogs.push(processDdr(ddrLog, ddrTypes));
+                    allLogs.push(processDdr(ddrLog, ddrTypes, adapterMap));
                   });
 
                   angular.forEach(allLogs, function (ddrLog)
                   {
-                    angular.forEach(ddrTypes, function (ddrType, ddrTypeId)
+                    angular.forEach(adapterMap, function (adapterType, adapterId)
                     {
-                      
-                      if (ddrLog.ddrTypeId == ddrTypeId){
-                        if (logs[ddrType.category]){
-                          logs[ddrType.category].push(ddrLog);
+
+                      if (ddrLog.adapterId == adapterId){
+                        if (logs[adapterMap[ddrLog.adapterId]]){
+                          logs[adapterMap[ddrLog.adapterId]].push(ddrLog);
                         }
                       }
 
@@ -199,20 +219,9 @@ define(
 
             categorize: function ()
             {
-              var category;
+              var category = $scope.query.category;
 
-              switch ($scope.query.category)
-              {
-                case 'OUTGOING':   category = 'OUTGOING_COMMUNICATION_COST';      break;
-                case 'INCOMING': category = 'INCOMING_COMMUNICATION_COST';   break;
-                case 'ADAPTER':   category = 'ADAPTER_PURCHASE'; break;
-                case 'SERVICE':     category = 'SERVICE_COST';       break;
-                case 'START_UP':   category = 'START_UP_COST';     break;
-                case 'SUBSCRIPTION':   category = 'SUBSCRIPTION_COST';     break;
-                case 'TTS':   category = 'TTS_COST';     break;
-              }
-
-              if(category){
+              if(category && category !== 'all'){
                 $scope.logs = this.data[category];
               }
               else{
@@ -240,7 +249,8 @@ define(
             detail: function(ddrId)
             {
               var ddrTypes = Store.get('ddrTypes');
-              
+              var adapterMap = Store.get('adapterMap');
+
               $q.all([AskFast.caller('ddrRecord', {
                 second: ddrId
               }),
@@ -248,9 +258,9 @@ define(
                 ddrRecordId: ddrId
               })])
               .then(function(resultArray){
-                
-                $scope.ddrDetails = processDdr(resultArray[0], ddrTypes);
-                
+
+                $scope.ddrDetails = processDdr(resultArray[0], ddrTypes, adapterMap);
+
                 var logs = resultArray[1];
 
                 angular.forEach(logs, function(item){

@@ -90,15 +90,14 @@ define(
                             {
                                 adapterMap[adapter.configId] =  adapter.adapterType;
                             });
-                            Store('adapterMap').save(adapterMap);
-                            Store('adapters').save(adapters);
+                            Store('data').save(adapterMap, 'adapterMap');
+                            // Store('data').save(adapters, 'adapters');
 
 
-                            
                           AskFast.caller('ddrTypes', {
                           }).then(function(ddrTypes){
-                            
-                            var ddrTypeCategories = 
+
+                            var ddrTypeCategories =
                             {
                               "OUTGOING_COMMUNICATION_COST": "Outgoing",
                               "ADAPTER_PURCHASE": "Adapter Purchase",
@@ -108,9 +107,9 @@ define(
                               "START_UP_COST": "Start Up Cost",
                               "TTS_COST": "TTS Cost"
                             };
-                            
+
                             var ddrTypesObject = {};
-                            
+
                             angular.forEach(ddrTypes, function(ddrType){
                               ddrTypesObject[ddrType.typeId] = {
                                 name: ddrType.name,
@@ -118,9 +117,9 @@ define(
                                 categoryString: ddrTypeCategories[ddrType.category]
                               };
                             });
-                            
+
                             Store('data').save(ddrTypesObject,'ddrTypes');
-                            
+
                         AskFast.caller('key')
                           .then(function(keys)
                           {
@@ -146,8 +145,8 @@ define(
                               $location.path('/dashboard');
                             }
                           });
-                            
-                            
+
+
                           });
 
 
