@@ -270,9 +270,13 @@ navbar
                         data-date-format='dd/MM/yyyy',
                         bs-datepicker='')
                       .form-group
-                        label Filter
+                        label From 
                         input.form-control(type='text',
-                        ng-model='queryLogs')
+                        ng-model='queryLogs.fromAddress')
+                      .form-group
+                        label To 
+                        input.form-control(type='text',
+                        ng-model='queryLogs.toAddress')
                     hr
                     p(ng-show='loading.logs')
                       | Loading logs..
