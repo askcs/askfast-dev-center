@@ -266,11 +266,20 @@ module.exports = function(grunt) {
         dest: ".tmp/styles/",
         src: "{,*/}*.css"
       },
-      rest: {
-        expand: true,
-        cwd: ".tmp/scripts",
-        dest: "<%= paths.dist %>/scripts/",
-        src: "{,*/}*"
+      js: {
+        files: [
+          {
+            expand: true,
+            cwd: "<%= paths.app %>/scripts",
+            dest: ".tmp/scripts/",
+            src: "{,*/}*"
+          }, {
+            expand: true,
+            cwd: "<%= paths.app %>/scripts",
+            dest: "<%= paths.dist %>/scripts/",
+            src: "{,*/}*"
+          }
+        ]
       }
     },
 
@@ -327,7 +336,7 @@ module.exports = function(grunt) {
       }
     },
 
-    ngmin: {
+    ngAnnotate: {
       dist: {
         files: [
           {
@@ -484,13 +493,12 @@ module.exports = function(grunt) {
     'htmlmin',
     'concat',
     'copy',
-    'ngmin',
+    'ngAnnotate',
     'cssmin',
     'requirejs',
     'rev',
     'usemin',
-    'replace',
-    'copy:rest'
+    'replace'
   ]);
 
   grunt.registerTask('patch', [
