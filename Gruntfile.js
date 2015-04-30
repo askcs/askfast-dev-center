@@ -17,21 +17,21 @@ semver = require('semver');
 module.exports = function(grunt) {
   var appConfig;
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  
+
   appConfig = {
     app: 'app',
     dist: 'src/main/webapp'
   };
-  
+
   try {
     appConfig.app = require('./bower.json').appPath || appConfig.app;
   } catch (_e) {}
-  
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    
+
     paths: appConfig,
-    
+
     jade: {
       index: {
         options: {
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
         ]
       }
     },
-    
+
     watch: {
       jade: {
         files: ['<%= paths.app %>/{,*/}*.jade'],
@@ -78,7 +78,7 @@ module.exports = function(grunt) {
         ]
       }
     },
-    
+
     connect: {
       options: {
         port: 9000,
@@ -106,7 +106,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     autoprefixer: {
       options: ["last 1 version"],
       dist: {
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
         ]
       }
     },
-    
+
     clean: {
       dist: {
         files: [
@@ -137,14 +137,14 @@ module.exports = function(grunt) {
       },
       server: '.tmp',
     },
-    
+
     jshint: {
       options: {
         jshintrc: '.jshintrc'
       },
       all: ['Gruntfile.js', '<%= paths.app %>/scripts/{,*/}*.js']
     },
-    
+
     compass: {
       options: {
         sassDir: '<%= paths.app %>/styles',
@@ -166,7 +166,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     rev: {
       dist: {
         files: {
@@ -179,14 +179,14 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     useminPrepare: {
       html: '.tmp/index.html',
       options: {
         dest: '<%= paths.dist %>'
       }
     },
-    
+
     usemin: {
       html: ['<%= paths.dist %>/{,*/}*.html'],
       css: ['<%= paths.dist %>/styles/{,*/}*.css'],
@@ -194,7 +194,7 @@ module.exports = function(grunt) {
         dirs: ['<%= paths.dist %>']
       }
     },
-    
+
     imagemin: {
       dist: {
         files: [
@@ -207,7 +207,7 @@ module.exports = function(grunt) {
         ]
       }
     },
-    
+
     svgmin: {
       dist: {
         files: [
@@ -220,9 +220,9 @@ module.exports = function(grunt) {
         ]
       }
     },
-    
+
     cssmin: {},
-    
+
     htmlmin: {
       dist: {
         options: {},
@@ -236,7 +236,7 @@ module.exports = function(grunt) {
         ]
       }
     },
-    
+
     copy: {
       dist: {
         files: [
@@ -273,7 +273,7 @@ module.exports = function(grunt) {
         src: "{,*/}*"
       }
     },
-    
+
     concurrent: {
       server: ['compass:server', 'jade', 'copy:styles'],
       dist: [
@@ -284,7 +284,7 @@ module.exports = function(grunt) {
         'htmlmin'
       ]
     },
-    
+
     karma: {
       options: {
         configFile: 'karma.conf.js'
@@ -300,7 +300,7 @@ module.exports = function(grunt) {
         reporters: ['junit']
       }
     },
-    
+
     protractor_webdriver: {
       start: {
         options: {
@@ -309,7 +309,7 @@ module.exports = function(grunt) {
       },
       stop: {}
     },
-    
+
     protractor: {
       options: {
         configFile: 'protractor.conf.js'
@@ -326,7 +326,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     ngmin: {
       dist: {
         files: [
@@ -339,7 +339,7 @@ module.exports = function(grunt) {
         ]
       }
     },
-    
+
     requirejs: {
       compile: {
         options: {
@@ -355,14 +355,14 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     changelog: {
       options: {
         dest: 'CHANGELOG.md',
         versionFile: 'package.json'
       }
     },
-    
+
     release: {
       options: {
         commitMessage: '<%= version %>',
@@ -378,13 +378,13 @@ module.exports = function(grunt) {
         npm: false
       }
     },
-    
+
     stage: {
       options: {
         files: ['CHANGELOG.md']
       }
     },
-    
+
     replace: {
       dist: {
         options: {
@@ -405,10 +405,10 @@ module.exports = function(grunt) {
       }
     }
   });
-  
+
   grunt.registerTask('bump', 'bump manifest version', function(type) {
     var config, options, setup;
-    
+
     setup = function(file, type) {
       var newVersion, pkg;
       pkg = grunt.file.readJSON(file);
@@ -426,7 +426,7 @@ module.exports = function(grunt) {
     grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
     return grunt.log.ok('Version bumped to ' + config.newVersion);
   });
-  
+
   grunt.registerTask('stage', 'git add files before running the release task', function() {
     var files;
     files = this.options().files;
@@ -435,7 +435,7 @@ module.exports = function(grunt) {
       args: ['add'].concat(files)
     }, grunt.task.current.async());
   });
-  
+
   grunt.registerTask('server', 'start a web server with extras', function(target) {
     if (target === 'dist') {
       return grunt.task.run([
@@ -451,7 +451,7 @@ module.exports = function(grunt) {
       'watch'
     ]);
   });
-  
+
   grunt.registerTask('test:unit', 'run karma unit tests, add :watch for live reloading', function(target) {
     if (target === 'watch') {
       return grunt.task.run(['karma:watch']);
@@ -461,19 +461,19 @@ module.exports = function(grunt) {
     }
     return grunt.task.run(['karma:single']);
   });
-  
+
   grunt.registerTask('test:e2e', 'run protractor e2e test', function(target) {
     if (target === 'continuous') {
       return grunt.task.run(['protractor_webdriver:start', 'protractor:continuous']);
     }
     return grunt.task.run(['protractor_webdriver:start', 'protractor:single']);
   });
-  
+
   grunt.registerTask('test', [
     'test:unit',
     'test:e2e'
   ]);
-  
+
   grunt.registerTask('build', [
     'clean:dist',
     'compass:dist',
@@ -490,10 +490,9 @@ module.exports = function(grunt) {
     'rev',
     'usemin',
     'replace',
-    'copy:rest',
-    'clean:rest'
+    'copy:rest'
   ]);
-  
+
   grunt.registerTask('patch', [
     'bump:patch',
     'changelog',
@@ -501,7 +500,7 @@ module.exports = function(grunt) {
     'release:patch',
     'replace'
   ]);
-  
+
   grunt.registerTask('minor', [
     'bump:minor',
     'changelog',
@@ -509,7 +508,7 @@ module.exports = function(grunt) {
     'release:minor',
     'replace'
   ]);
-  
+
   grunt.registerTask('major', [
     'bump:major',
     'changelog',
@@ -517,11 +516,11 @@ module.exports = function(grunt) {
     'release:major',
     'replace'
   ]);
-  
+
   grunt.registerTask('default', [
     'jshint',
     'test',
     'build'
   ]);
-  
+
 };
