@@ -14,6 +14,7 @@
     ],
     "files": [
         "./app/scripts/controllers/controllers.ts",
+        "./app/scripts/controllers/core.ts",
         "./app/scripts/typings/angularjs/angular-resource.d.ts",
         "./app/scripts/typings/angularjs/angular-route.d.ts",
         "./app/scripts/typings/angularjs/angular.d.ts",
