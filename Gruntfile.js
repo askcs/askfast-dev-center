@@ -272,12 +272,12 @@ module.exports = function(grunt) {
             expand: true,
             cwd: "<%= paths.app %>/scripts",
             dest: ".tmp/scripts/",
-            src: "{,*/}*"
+            src: "{,**/}*"
           }, {
             expand: true,
             cwd: "<%= paths.app %>/scripts",
             dest: "<%= paths.dist %>/scripts/",
-            src: "{,*/}*"
+            src: "{,**/}*"
           }
         ]
       }
@@ -341,9 +341,9 @@ module.exports = function(grunt) {
         files: [
           {
             expand: true,
-            cwd: '<%= paths.dist %>/scripts',
+            cwd: '.tmp/scripts',
             src: '**/*.js',
-            dest: '<%= paths.dist %>/scripts'
+            dest: '.tmp/scripts'
           }
         ]
       }
@@ -352,11 +352,11 @@ module.exports = function(grunt) {
     requirejs: {
       compile: {
         options: {
-          appDir: '<%= paths.app %>/scripts/',
+          appDir: '.tmp/scripts/',
           baseUrl: '.',
           dir: '<%= paths.dist %>/scripts/',
           optimize: 'uglify',
-          mainConfigFile: './<%= paths.app %>/scripts/main.js',
+          mainConfigFile: './.tmp/scripts/main.js',
           logLevel: 0,
           findNestedDependencies: true,
           fileExclusionRegExp: /^\./,
