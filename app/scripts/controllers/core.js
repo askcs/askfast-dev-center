@@ -34,6 +34,8 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                     $scope.Log.detail($scope.ddrId);
                 }
                 else if ($scope.currentSection === 'details') {
+                    // means the user went back
+                    // the only links to 'details' are from 'debugger'
                     $scope.setSection('debugger', true);
                 }
             });
@@ -117,6 +119,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 ddrLog.fromAddress = ddrLog.fromAddress || '-';
                 ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString))[0] : '-';
                 ddrLog.ddrTypeString = ddrLog.ddrTypeId ? ddrTypes[ddrLog.ddrTypeId].categoryString : '-';
+                // there's no way to get the index from ng-repeat, make an object out of it
                 if (ddrLog.statusPerAddress) {
                     angular.forEach(ddrLog.statusPerAddress, function (item, index) {
                         ddrLog.statusPerAddress[index] = { index: index, status: item };
@@ -168,6 +171,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         $scope.logs = this.data[category];
                     }
                     else {
+                        // $scope.query.category is ALL
                         var logs = [], data = this.data;
                         angular.forEach(data, function (segment) {
                             angular.forEach(segment, function (log) {
@@ -199,6 +203,8 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         });
                         $scope.logs = logs;
                         $timeout(function () {
+                            // makes sure that first call to collapse doesn't toggle.
+                            // if not done, collapseAll will expand untouched panels
                             $('.ddr-detail .panel-collapse').collapse({ toggle: false });
                         });
                     }, function (result) {
@@ -235,9 +241,23 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         second: adapter.configId
                     }).then((function () {
                         this.list();
+                        // reset adapter add form
                         $scope.adapterType = '';
                     }).bind(this));
                 },
+                // TODO: Add changing dialog info later on
+                //            update: function (dialog)
+                //            {
+                //              AskFast.caller('updateAdapter', { second: $scope.channel.adapter },
+                //                {
+                //                  dialogId: dialog.id
+                //                }).then((function ()
+                //              {
+                //                this.list();
+                //
+                //                $scope.Adapter.adapters();
+                //              }).bind(this));
+                //            },
                 query: function (type) {
                     AskFast.caller('freeAdapters', {
                         adapterType: type
@@ -276,6 +296,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                             this.list(function () {
                                 $scope.setSection('dialogs');
                                 openDialog(result);
+                                // close auth menu if it was open
                                 $scope.dialogAuth = false;
                             });
                         }).bind(this));
@@ -333,6 +354,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                             return false;
                         }
                     });
+                    //we're not updating other properties, reset
                     dialog.userName = dialogArr[0].userName;
                     dialog.password = dialogArr[0].password;
                     this.update(dialog);
@@ -370,7 +392,9 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 },
                 open: function (dialog) {
                     $scope.dialog = angular.copy(dialog);
+                    // cancel auth notification if any
                     $scope.Dialog.authentication.notify(null, null, true);
+                    // will be undefined on first load
                     if (angular.isDefined($scope.forms.details)) {
                         $scope.forms.details.$setPristine();
                         if (this.adapters.list(dialog.id))
@@ -379,6 +403,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 },
                 authentication: {
                     enable: function (dialog) {
+                        //check with falsiness, could be null, undefined or empty string
                         if (!!dialog.userName && !!dialog.password) {
                             dialog.useBasicAuth = true;
                         }
@@ -394,16 +419,19 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                                 return false;
                             }
                         });
+                        //we're not updating other properties, reset
                         dialog.name = dialogArr[0].name;
                         dialog.url = dialogArr[0].url;
                         var deferred = $q.defer();
                         $scope.Dialog.update(dialog, deferred);
                         deferred.promise
                             .then(function (result) {
+                            //success
                             $scope.dialogAuth.open = false;
                             this.notify('Basic Authentication applied successfully', 'success');
                         }.bind(this))
                             .catch(function (result) {
+                            //something went wrong, handle it
                             console.log('error -> ', result);
                             this.notify('Something went wrong with the request', 'danger');
                         }.bind(this));
@@ -419,6 +447,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                                 return false;
                             }
                         });
+                        //we're not updating other properties, reset
                         dialog.name = dialogArr[0].name;
                         dialog.url = dialogArr[0].url;
                         dialogObj = angular.copy(dialog);
@@ -428,10 +457,12 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         $scope.Dialog.update(dialogObj, deferred);
                         deferred.promise
                             .then(function (result) {
+                            //success
                             $scope.dialogAuth.open = false;
                             this.notify('Basic Authentication successfully disabled', 'success');
                         }.bind($scope.Dialog.authentication))
                             .catch(function (result) {
+                            //something went wrong, handle it
                             console.log('error -> ', result);
                             this.notify('Something went wrong with the request', 'danger');
                         }.bind($scope.Dialog.authentication));
@@ -458,6 +489,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                                 return false;
                             }
                         });
+                        // Only reset userName and password
                         $scope.dialog.userName = dialogArr[0].userName;
                         $scope.dialog.password = dialogArr[0].password;
                         $scope.dialogAuth.open = false;
@@ -483,6 +515,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
             $scope.collapseAll = function () {
                 $('.ddr-detail .panel-collapse').collapse('hide');
             };
+            // grab the list, then select the first if exists
             $scope.Dialog.list(function () {
                 if ($scope.dialogs.length > 0)
                     $scope.Dialog.open($scope.dialogs[0]);

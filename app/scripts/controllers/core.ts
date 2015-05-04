@@ -1,8 +1,10 @@
+/// <reference path="../typings/angularjs/angular.d.ts"/>
+/// <reference path="../typings/bootstrap/bootstrap.d.ts"/>
 import controllers = require('controllers/controllers')
 
 'use strict';
 
-export = controllers.controller ('core',
+export = controllers.controller('core',
       [
         '$rootScope', '$scope', '$q','$route', '$location','$timeout','AskFast', 'Store', 'moment',
         function ($rootScope, $scope, $q, $route, $location, $timeout, AskFast, Store, moment)
@@ -423,7 +425,7 @@ export = controllers.controller ('core',
 
             update: function (dialog, deferred)
             {
-              var dialogObject = {
+              var dialogObject:any = {
                 id: dialog.id,
                 name: dialog.name,
                 url: dialog.url,
