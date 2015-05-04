@@ -1,6 +1,6 @@
 define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
     'use strict';
-    return controllers.controller('core', [
+    var core = controllers.controller('core', [
         '$rootScope', '$scope', '$q', '$route', '$location', '$timeout', 'AskFast', 'Store', 'moment',
         function ($rootScope, $scope, $q, $route, $location, $timeout, AskFast, Store, moment) {
             Store = Store('data');
@@ -522,4 +522,5 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
             });
         }
     ]);
+    return core;
 });

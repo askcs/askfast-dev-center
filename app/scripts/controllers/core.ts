@@ -4,7 +4,7 @@ import controllers = require('controllers/controllers')
 
 'use strict';
 
-export = controllers.controller('core',
+var core = controllers.controller('core',
       [
         '$rootScope', '$scope', '$q','$route', '$location','$timeout','AskFast', 'Store', 'moment',
         function ($rootScope, $scope, $q, $route, $location, $timeout, AskFast, Store, moment)
@@ -675,3 +675,5 @@ export = controllers.controller('core',
         }
       ]
     );
+
+export = core;

@@ -1,4 +1,6 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 import angular = require('angular');
 
-export = angular.module('controllers', ['datatables']);
+var controllers = angular.module('controllers', ['datatables']);
+
+export = controllers;
