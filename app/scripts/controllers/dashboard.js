@@ -72,11 +72,11 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                     .then(function (response) {
                     if (response.error) {
                         deferd.reject(response);
-                        $scope.alert = "Scomething when wrong please try again later, check the logs and request below";
+                        $scope.alert = "Something went wrong, please try again later. Check the logs and request below";
                     }
                     else {
                         deferd.resolve(response);
-                        $scope.alert = "sucsessfull request see your resquest below";
+                        $scope.alert = "Successful request, see your request below";
                     }
                     var request = {
                         host: $rootScope.config.host,
@@ -90,12 +90,12 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 });
                 return deferd.promise;
             }
-            // check if there is a bear token, if there is: send message. If there is nog bearer, fetch bearer and send message
+            // check if there is a bear token, if there is: send message. If there is no bearer, fetch bearer and send message
             function checkToken(message) {
-                var deferd = $q.defer();
+                var deferred = $q.defer();
                 if (bearerToken != '') {
-                    sendMessage(message).then(function (respnse) {
-                        promise.resolve(response);
+                    sendMessage(message).then(function (response) {
+                        deferred.resolve(response);
                     });
                 }
                 else {
@@ -103,7 +103,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         sendMessage(message);
                     });
                 }
-                return deferd.promise;
+                return deferred.promise;
             }
             function getBearer() {
                 console.log('fetch bearerToken');
