@@ -15,7 +15,6 @@ require.config (
       'angular-strap-tpl': '../vendors/angular-strap/dist/angular-strap.tpl.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-//      signet:     '../vendors/signet/signet.min',
       lawnchair:  '../vendors/lawnchair/src/Lawnchair',
       dom:        '../vendors/lawnchair/src/adapters/dom',
       moment:     '../vendors/momentjs/min/moment.min',
@@ -82,7 +81,6 @@ require (
     'controllers/uselogs',
 
     'bootstrap',
-//    'signet',
     'lawnchair',
     'dom',
     'moment'
