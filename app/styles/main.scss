@@ -425,7 +425,12 @@ hr {
   border-bottom: 1px solid $light-gray;
 }
 
-
+// remove padding from .container-fluid
+// when a revamp happens, remove this
+.container-fluid{
+  padding-left:  0;
+  padding-right: 0;
+}
 
 @media (max-width: 480px) {
   .boxed {
