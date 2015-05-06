@@ -1,25 +1,26 @@
 @import "variables";
 
-@import "../vendors/bootstrap-sass/lib/mixins";
-@import "../vendors/bootstrap-sass/lib/normalize";
-@import "../vendors/bootstrap-sass/lib/scaffolding";
-@import "../vendors/bootstrap-sass/lib/type";
-@import "../vendors/bootstrap-sass/lib/grid";
-@import "../vendors/bootstrap-sass/lib/tables";
-@import "../vendors/bootstrap-sass/lib/forms";
-@import "../vendors/bootstrap-sass/lib/buttons";
-@import "../vendors/bootstrap-sass/lib/component-animations";
-@import "../vendors/bootstrap-sass/lib/input-groups";
-@import "../vendors/bootstrap-sass/lib/navs";
-@import "../vendors/bootstrap-sass/lib/navbar";
-@import "../vendors/bootstrap-sass/lib/panels";
-@import "../vendors/bootstrap-sass/lib/utilities";
-@import "../vendors/bootstrap-sass/lib/responsive-utilities";
-@import "../vendors/bootstrap-sass/lib/dropdowns";
-@import "../vendors/bootstrap-sass/lib/glyphicons";
-@import "../vendors/bootstrap-sass/lib/alerts";
-@import "../vendors/bootstrap-sass/lib/close";
-@import "../vendors/bootstrap-sass/lib/wells";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/type";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/tables";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/forms";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/navs";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/navbar";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/panels";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/alerts";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/close";
+@import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/wells";
 
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700|Titillium+Web);
 
@@ -410,11 +411,11 @@ body {
     padding: 0;
     margin: 0;
   }
-  
+
   .panel-heading a{
     color: inherit;
   }
-  
+
   .panel-body dl{
     margin-bottom: 15px;
   }
@@ -440,7 +441,7 @@ hr {
 }
 
 @media (min-width: 768px) {
-  
+
   .ddr-details {
     dt {
       width: 110px;
