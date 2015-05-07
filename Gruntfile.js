@@ -62,9 +62,9 @@ module.exports = function(grunt) {
         files: ['<%= paths.app %>/{,*/}*.jade'],
         tasks: ['jade']
       },
-      compass: {
+      sass: {
         files: ['<%= paths.app %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server']
+        tasks: ['sass']
       },
       livereload: {
         options: {
@@ -145,25 +145,17 @@ module.exports = function(grunt) {
       all: ['Gruntfile.js', '<%= paths.app %>/scripts/{,*/}*.js']
     },
 
-    compass: {
+    sass: {
       options: {
-        sassDir: '<%= paths.app %>/styles',
-        cssDir: '.tmp/styles',
-        generatedImagesDir: '.tmp/images/generated',
-        imagesDir: '<%= paths.app %>/images',
-        javascriptsDir: '<%= paths.app %>/scripts',
-        fontsDir: '<%= paths.app %>/styles/fonts',
-        importPath: '<%= paths.app %>/vendors',
-        httpImagesPath: '/images',
-        httpGeneratedImagesPath: '/images/generated',
-        httpFontsPath: '/styles/fonts',
-        relativeAssets: false
       },
-      dist: {},
-      server: {
-        options: {
-          debugInfo: false
-        }
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%= paths.app %>/styles',
+          src: ['*.scss'],
+          dest: '.tmp/styles',
+          ext: '.css'
+        }]
       }
     },
 
@@ -284,9 +276,9 @@ module.exports = function(grunt) {
     },
 
     concurrent: {
-      server: ['compass:server', 'jade', 'copy:styles'],
+      server: ['sass', 'jade', 'copy:styles'],
       dist: [
-        'compass:dist',
+        'sass',
         'copy:styles',
         'imagemin',
         'svgmin',
@@ -485,7 +477,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'compass:dist',
+    'sass',
     'jade',
     'useminPrepare',
     'imagemin',

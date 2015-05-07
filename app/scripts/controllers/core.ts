@@ -157,9 +157,18 @@ var coreController = controllers.controller('core',
                 ddrLog.statusPerAddress[index] =  {index: index, status: item};
               });
             }
-            ddrLog.adapterTypeString = ddrLog.adapterId ?  $scope.adapterTypes[adapterMap[ddrLog.adapterId]].label : '-';
+            ddrLog.adapterTypeString = ddrLog.adapterId ? getAdapterTypeString(ddrLog.adapterId, adapterMap) : '-';
 
             return ddrLog;
+          }
+
+          function getAdapterTypeString(adapterId, adapterMap){
+            if(typeof adapterMap[adapterId] !== 'undefined'){
+              return $scope.adapterTypes[adapterMap[adapterId]].label;
+            }
+            else {
+              return 'Unknown';
+            }
           }
 
           $scope.Log = {
@@ -186,7 +195,8 @@ var coreController = controllers.controller('core',
                     email: [],
                     sms: [],
                     xmpp: [],
-                    twitter: []
+                    twitter: [],
+                    other: []
                   };
 
                   var allLogs = [];
@@ -197,16 +207,23 @@ var coreController = controllers.controller('core',
 
                   angular.forEach(allLogs, function (ddrLog)
                   {
+                    var gotPushed = false;
                     angular.forEach(adapterMap, function (adapterType, adapterId)
                     {
 
                       if (ddrLog.adapterId == adapterId){
                         if (logs[adapterMap[ddrLog.adapterId]]){
                           logs[adapterMap[ddrLog.adapterId]].push(ddrLog);
+                          gotPushed = true;
                         }
                       }
 
                     });
+
+                    if(!gotPushed){
+                      logs.other.push(ddrLog);
+                    }
+
                   });
 
                   this.data = logs;
