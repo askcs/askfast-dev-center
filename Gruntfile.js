@@ -79,6 +79,22 @@ module.exports = function(grunt) {
       }
     },
 
+    ts: {
+      options: {
+        target: 'es5',
+        module: 'amd',
+        declaration: false,
+        noImplicitAny: false,
+        removeComments: false,
+        noLib: false,
+        sourceMap: false,
+        fast: 'never'
+      },
+      dist: {
+        src: ['<%= paths.app %>/scripts/{,**/}*.ts']
+      }
+    },
+
     connect: {
       options: {
         port: 9000,
@@ -276,7 +292,7 @@ module.exports = function(grunt) {
     },
 
     concurrent: {
-      server: ['sass', 'jade', 'copy:styles'],
+      server: ['sass', 'jade', 'copy:styles', 'ts'],
       dist: [
         'sass',
         'copy:styles',
@@ -484,6 +500,7 @@ module.exports = function(grunt) {
     'svgmin',
     'htmlmin',
     'concat',
+    'ts',
     'copy',
     'ngAnnotate',
     'cssmin',
