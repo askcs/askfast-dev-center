@@ -1,1 +1,1 @@
-define(["directives/directives"],function(e){e.directive("navbar",["$rootScope","$location",function(e,t){return{restrict:"E",rep1ace:!0,templateUrl:"views/navbar.html",link:function(e,n,r){e.current=t.path()}}}])});
+define(["directives/directives"],function(e){"use strict";e.directive("navbar",["$rootScope","$location",function(e,t){return{restrict:"E",rep1ace:!0,templateUrl:"views/navbar.html",link:function(e,n,r){e.current=t.path()}}}])});

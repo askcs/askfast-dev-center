@@ -75,12 +75,12 @@ define(
     );
 
     filters.filter('parseTimeStamp',
-      ['Moment',
-        function (Moment)
+      ['moment',
+        function (moment)
         {
           return function (stamp)
           {
-            return Moment(stamp).format("dddd, MMMM Do YYYY, h:mm:ss a");
+            return moment(stamp).format("dddd, MMMM Do YYYY, h:mm:ss a");
           }
         }
       ]

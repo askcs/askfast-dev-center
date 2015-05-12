@@ -69,6 +69,50 @@
                 </section>
               </div>
             </div>
+            <div class="widget widget-right">
+              <div class="inner">
+                <header>
+                  <h2>Example</h2>
+                </header>
+                <section>
+                  <div ng-show="alert != null" role="alert" class="alert alert-warning alert-dismissible fade in"> 
+                    <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>{{alert}}
+                  </div>
+                  <h4>Send SMS message or start a call</h4>
+                  <form role="form"></form>
+                  <div class="form-group">
+                    <label for="SMSTo">To adress</label>
+                    <input id="SMSTo" type="text" ng-model="sms.to" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="SMSUrl">Question URL</label>
+                    <input id="SMSUrl" type="text" ng-model="sms.url" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="SMSfrom">From number</label>
+                    <select id="SMSFrom" ng-model="sms.from" ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters" class="form-control"></select>
+                  </div>
+                  <div class="form-group"><a ng-click="sendSMS()" class="btn btn-default">Send SMS</a></div>
+                  <hr>
+                  <h4>Start phone call</h4>
+                  <form role="form"></form>
+                  <div class="form-group">
+                    <label for="CallTo">To adress</label>
+                    <input id="CallTo" type="text" ng-model="call.to" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="CallUrl">Question URL</label>
+                    <input id="CallUrl" type="text" ng-model="call.url" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="Callfrom">From number</label>
+                    <select id="SMSFrom" ng-model="call.from" ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters" class="form-control"></select>
+                  </div>
+                  <div class="form-group"><a ng-click="startCall()" class="btn btn-default">Start call</a></div>
+                  <pre ng-show="request != null">{{request}}</pre>
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </div>

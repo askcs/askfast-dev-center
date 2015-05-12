@@ -10,12 +10,11 @@ require.config (
       domReady: '../vendors/requirejs-domready/domReady',
       datatables: '../scripts/libs/datatables/1.10.4/media/js/jquery.dataTables',
       angular:  '../vendors/angular/angular',
-      bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
+      bootstrap:          '../vendors/bootstrap-sass/assets/javascripts/bootstrap.min',
       'angular-strap': '../vendors/angular-strap/dist/angular-strap.min',
       'angular-strap-tpl': '../vendors/angular-strap/dist/angular-strap.tpl.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       'angular-route':    '../vendors/angular-route/angular-route.min',
-//      signet:     '../vendors/signet/signet.min',
       lawnchair:  '../vendors/lawnchair/src/Lawnchair',
       dom:        '../vendors/lawnchair/src/adapters/dom',
       moment:     '../vendors/momentjs/min/moment.min',
@@ -82,7 +81,6 @@ require (
     'controllers/uselogs',
 
     'bootstrap',
-//    'signet',
     'lawnchair',
     'dom',
     'moment'

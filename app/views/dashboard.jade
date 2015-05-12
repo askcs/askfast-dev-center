@@ -75,3 +75,46 @@ navbar
                   a.btn.btn-default(
                   href='http://docs.askfastmarketplace.apiary.io/',
                   target='_blank') Ask Fast Marketplace
+
+            .widget.widget-right
+              .inner
+                header
+                  h2 Example
+                Section
+                  div.alert.alert-warning.alert-dismissible.fade.in(ng-show="alert != null",role='alert') 
+                    button.close(type='button',data-dismiss="alert",aria-label='Close' )
+                      span( aria-hidden="true") &times;
+                    | {{alert}}
+                  h4 Send SMS message or start a call
+                  form(role='form')
+                  .form-group
+                    label(for='SMSTo') To adress
+                    input#SMSTo.form-control(type='text', ng-model='sms.to')
+                  .form-group
+                    label(for='SMSUrl') Question URL
+                    input#SMSUrl.form-control(type='text', ng-model='sms.url')
+                  .form-group
+                    label(for='SMSfrom') From number
+                    select#SMSFrom.form-control( ng-model='sms.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters")
+                  .form-group
+                      a.btn.btn-default(ng-click='sendSMS()') Send SMS
+                  hr
+                  h4 Start phone call
+                  form(role='form')
+                  .form-group
+                    label(for='CallTo') To adress
+                    input#CallTo.form-control(type='text', ng-model='call.to')
+                  .form-group
+                    label(for='CallUrl') Question URL
+                    input#CallUrl.form-control(type='text', ng-model='call.url')
+                  .form-group
+                    label(for='Callfrom') From number
+                    select#SMSFrom.form-control( ng-model='call.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters")
+                  .form-group
+                    a.btn.btn-default(ng-click='startCall()') Start call
+                  pre(ng-show="request != null") {{request}}
+
+
+
+
+

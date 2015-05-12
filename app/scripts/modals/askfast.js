@@ -177,6 +177,20 @@ define(
                             },
                             isArray: true
                         },
+                        ddrRecord: {
+                            method: 'GET',
+                            params: {
+                                first: 'ddr',
+                            }
+                        },
+                        ddrTypes: {
+                            method: 'GET',
+                            params: {
+                              first: 'ddr',
+                              second: 'types'
+                            },
+                            isArray: true
+                        },
                         log: {
                             method: 'GET',
                             params: {
@@ -203,6 +217,13 @@ define(
                                 first: 'payment'
                             },
                             isArray: true
+                        },
+                        startDialog:{
+                            method:'POST',
+                            params:{
+                                first: 'startDialog',
+                                second: 'outbound',
+                            }
                         }
                     }
                 );

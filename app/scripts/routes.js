@@ -44,7 +44,8 @@ define(
             {
               templateUrl:    'views/developer.html',
               controller:     'core',
-              resolve:        { redirect: redirect }
+              resolve:        { redirect: redirect },
+              reloadOnSearch: false
             })
             .when('/profile',
             {

@@ -1,11 +1,1 @@
-(function() {
-  define(['services/services', 'moment'], function(services, moment) {
-    'use strict';
-    services.factory('Moment', [
-      function() {
-        return moment;
-      }
-    ]);
-  });
-
-}).call(this);
+define(["services/services","moment"],function(e,t){"use strict";e.factory("moment",[function(){return t}])});

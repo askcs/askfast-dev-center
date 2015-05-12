@@ -62,10 +62,19 @@ define(
           get: function(){},
         };
       };
+      
+      var mockRoute = {
+        current: {
+          params: {
+            
+          }
+        }
+      };
 
       module('controllers', function($provide) {
         $provide.value('AskFast', mockAskFast);
         $provide.value('Store', mockStore);
+        $provide.value('$route', mockRoute);
       })
     });
 

@@ -127,8 +127,10 @@ navbar
                     button.btn.btn-default(type='button',
                     ng-click='setSection("addDialog")') Add a dialog
                   section
+                    
                     .row
                       .col-md-3
+                        p(ng-hide='loadingDialogs') Hold on dialogs are loading...
                         p(ng-show='dialogs.length < 1')
                           | There are no dialogs yet. Please add one.
                         ul.nav.nav-pills.nav-stacked(ng-hide='dialogs.length < 1')
@@ -242,24 +244,15 @@ navbar
                   section
                     form.form-inline(role='form')
                       .form-group
-                        label Adapter type:
-                        select.form-control(ng-model='query.type',
+                        label Adapter Type:
+                        select.form-control(ng-model='query.category',
                         ng-change='Log.categorize()')
-                          option(value='ALL') All
-                          option(value='GTALK') Gtalk
-                          option(value='TWITTER') Twitter
-                          option(value='PHONE') Phone
-                          option(value='EMAIL') Email
-                          option(value='SMS') SMS
-                      .form-group(style='margin-left: 15px;')
-                        label Severity level:
-                        select.form-control(ng-model='query.severity',
-                        ng-change='Log.severity()')
-                          option(value='ALL') All
-                          option(value='DEBUG') Debug
-                          option(value='INFO') Info
-                          option(value='WARNING') Warning
-                          option(value='SEVERE') Severe
+                          option(value='all') All
+                          option(value='call') Phone
+                          option(value='email') Email
+                          option(value='sms') SMS
+                          option(value='xmpp') Gtalk
+                          option(value='twitter') Twitter
                       .form-group(style='margin-left: 15px;')
                         label Limit:
                         select.form-control(ng-model='query.limit',
@@ -277,31 +270,102 @@ navbar
                         data-date-format='dd/MM/yyyy',
                         bs-datepicker='')
                       .form-group
-                        label Filter
+                        label From 
                         input.form-control(type='text',
-                        ng-model='queryLogs')
+                        ng-model='queryLogs.fromAddress')
                       .form-group
-                        label Show DDR:
-                        .input-group
-                          input.checkbox(type='checkbox',
-                          ng-model='query.ddr')
+                        label To 
+                        input.form-control(type='text',
+                        ng-model='queryLogs.toAddress')
                     hr
                     p(ng-show='loading.logs')
                       | Loading logs..
                     p(ng-hide='logs.length > 0 || loading.logs')
                       | Your query has no logs..
-                    table.table.table-bordered.table-striped(ng-show='logs.length > 0')
+                    table.table(ng-show='logs.length > 0')
                       thead
                         tr
-                          th Time
-                          th Level
-                          th Adapter
+                          th Date
                           th Type
-                          th Message
+                          th Adapter Type
+                          th From
+                          th To
                       tbody
-                        tr(ng-repeat='log in logs | filter:queryLogs | orderBy: "timestamp" : true')
-                          td {{log.timestamp | parseTimeStamp}}
-                          td {{log.level}}
-                          td {{log | translateAdapterAddress}}
-                          td {{log | translateAdapterType}}
-                          td {{log.message}}
+                        tr(ng-repeat='log in logs | filter:queryLogs | orderBy: "start" : true')
+                          td <a href="/#/developer?ddrId={{log._id}}">{{log.startString}}<a>
+                          td {{log.ddrTypeString}}
+                          td {{log.adapterTypeString}}
+                          td {{log.fromAddress}}
+                          td {{log.toAddress}}
+          #widgets.row(ng-switch-when='details')
+            .col-md-12
+              .widget
+                .inner
+                  header: h2 Details for {{ddrId}}
+                  section.ddr-detail
+                    .row(ng-show="ddrDetails")
+                      .col-md-4.col-md-offset-2.ddr-details
+                        dl.dl-horizontal
+                          dt Type
+                          dd {{ddrDetails.ddrTypeString}}
+                          dt Adapter Type
+                          dd {{ddrDetails.adapterTypeString}}
+                          dt Duration
+                          dd(ng-show='ddrDetails.duration !== null') {{ddrDetails.duration}} ms
+                          dd(ng-show='ddrDetails.duration === null') No duration
+                          dt Start Time
+                          dd {{ddrDetails.startString}}
+                          dt(ng-show='ddrDetails.duration !== null') End Time
+                          dd(ng-show='ddrDetails.duration !== null') {{ddrDetails.endString}}
+                          hr
+                          dt From
+                          dd {{ddrDetails.fromAddress}}
+                          dt To
+                          dd {{ddrDetails.toAddress}}
+                      .col-md-4
+                        div(ng-show='ddrDetails.statusPerAddress')
+                          h5 Address Status
+                          dl.dl-horizontal
+                            div(ng-repeat='statusObj in ddrDetails.statusPerAddress')
+                              dt {{statusObj.index}}
+                              dd {{statusObj.status}}
+                        div(ng-show='ddrDetails.additionalInfo.message')
+                          h5 Message
+                          .well
+                            pre
+                              | {{ddrDetails.additionalInfo.message}}
+                          
+                      .col-sm-8.col-sm-offset-2
+                        .row(ng-show='logs')
+                          .col-xs-5
+                            strong Time 
+                          .col-xs-2
+                            strong Level 
+                          .col-xs-5
+                            button.pull-right.btn.btn-default(ng-click='expandAll()') Expand All
+                            button.pull-right.btn.btn-default(ng-click='collapseAll()') Collapse All
+                          hr
+                      .col-sm-8.col-sm-offset-2
+                        div(ng-repeat='log in logs | orderBy: "timestamp"')
+                          //.panel(ng-class='log.level === "INFO" ? "panel-primary" : "panel-default"')
+                          .panel(ng-class='{INFO:"panel-info", SEVERE: "panel-danger", DDR: "panel-default", DEBUG: "panel-success", WARNING: "panel-warning" }[log.level]')
+                            .panel-heading
+                              a(data-toggle='collapse', href='#collapse{{$index}}')
+                                .row
+                                  .col-xs-5
+                                    | {{log.timeString}}
+                                  .col-xs-5
+                                    | {{log.level}}
+                                      
+                            .panel-body.panel-collapse.collapse(id='collapse{{$index}}')
+                              .container
+                                //- dl
+                                  dt Timestamp
+                                  dd {{log.timestamp}}
+                              div(ng-show='log.message')
+                                h5 Message
+                                .well
+                                  pre
+                                    | {{log.message}}
+                    .row(ng-hide="ddrDetails")
+                      .col-md-4.col-md-offset-2 Loading log details...
