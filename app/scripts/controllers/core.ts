@@ -150,7 +150,7 @@ var coreController = controllers.controller('core',
             }
             ddrLog.fromAddress = ddrLog.fromAddress || '-';
             ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString))[0] : '-';
-            ddrLog.ddrTypeString = ddrLog.ddrTypeId ? ddrTypes[ddrLog.ddrTypeId].categoryString : '-';
+            ddrLog.ddrTypeString = ddrLog.ddrTypeId ? getDdrTypeString(ddrLog.ddrTypeId, ddrTypes) : '-';
             // there's no way to get the index from ng-repeat, make an object out of it
             if(ddrLog.statusPerAddress){
               angular.forEach(ddrLog.statusPerAddress, function(item, index){
@@ -160,6 +160,15 @@ var coreController = controllers.controller('core',
             ddrLog.adapterTypeString = ddrLog.adapterId ? getAdapterTypeString(ddrLog.adapterId, adapterMap) : '-';
 
             return ddrLog;
+          }
+
+          function getDdrTypeString(ddrTypeId, ddrTypes){
+            if(typeof ddrTypes[ddrTypeId] !== 'undefined'){
+              return ddrTypes[ddrTypeId].categoryString;
+            }
+            else {
+              return 'Unknown';
+            }
           }
 
           function getAdapterTypeString(adapterId, adapterMap){
