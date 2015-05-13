@@ -24,6 +24,8 @@
         "./app/scripts/directives/directives.ts",
         "./app/scripts/directives/navbar.ts",
         "./app/scripts/directives/profile.ts",
+        "./app/scripts/modals/askfast.ts",
+        "./app/scripts/modals/modals.ts",
         "./app/scripts/typings/angularjs/angular-resource.d.ts",
         "./app/scripts/typings/angularjs/angular-route.d.ts",
         "./app/scripts/typings/angularjs/angular.d.ts",
