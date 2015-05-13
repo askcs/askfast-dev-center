@@ -1,20 +1,9 @@
-define(
-  ['directives/directives'],
-  function (directives)
-  {
+define(["require", "exports", 'directives/directives'], function (require, exports, directives) {
     'use strict';
-
-    directives.directive('appVersion',
-      [
-        'version',
-        function (version)
-        {
-          return function (scope, elm, attrs)
-          {
+    var appVersionDirective = directives.directive('appVersion', function (version) {
+        return function (scope, elm, attrs) {
             elm.text(version);
-          };
-        }
-      ]
-    );
-  }
-);
+        };
+    });
+    return appVersionDirective;
+});
