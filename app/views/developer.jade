@@ -354,11 +354,37 @@ navbar
                                 .row
                                   .col-xs-5
                                     | {{log.timeString}}
-                                  .col-xs-5
+                                  .col-xs-7
                                     | {{log.level}}
                                       
                             .panel-body.panel-collapse.collapse(id='collapse{{$index}}')
-                              .container
+                              .row
+                                .col-xs-7.col-xs-offset-5
+                                  h4 Request
+                                .col-xs-2.col-lg-1
+                                  h5 Headers
+                                .col-xs-10.col-lg-11
+                                  ul
+                                    li Example item
+                                .col-xs-2.col-lg-1
+                                  h5 Body
+                                .col-xs-10.col-lg-11
+                                  .well
+                                    pre
+                                      | {{log.message}}
+                                .col-xs-7.col-xs-offset-5
+                                  h4 Response
+                                .col-xs-2.col-lg-1
+                                  h5 Headers
+                                .col-xs-10.col-lg-11
+                                  ul
+                                    li Example item
+                                .col-xs-2.col-lg-1
+                                  h5 Body
+                                .col-xs-10.col-lg-11
+                                  .well
+                                    pre
+                                      | {{log.message}}
                                 //- dl
                                   dt Timestamp
                                   dd {{log.timestamp}}
