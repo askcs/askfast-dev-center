@@ -4,8 +4,7 @@ import controllers = require('controllers/controllers');
 
 'use strict';
 
-var dashboardController = controllers.controller('dashboard', [
-  '$scope', '$rootScope', '$timeout', 'AskFast', 'Session', 'Store', 'dashboardLogsFilter', '$q',
+var dashboardController = controllers.controller('dashboard',
   function($scope, $rootScope, $timeout, AskFast, Session, Store, dashboardLogsFilter,$q) {
     var keyRevealTimeoutPromise = null;
     var bearerToken = '';
@@ -193,6 +192,6 @@ var dashboardController = controllers.controller('dashboard', [
       });
 
   }
-]);
+);
 
 export = dashboardController;

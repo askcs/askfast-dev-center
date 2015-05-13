@@ -4,8 +4,7 @@ import controllers = require('controllers/controllers');
 
 'use strict';
 
-var creditsController = controllers.controller('credits', [
-  '$scope', '$rootScope','$routeParams','$timeout', '$location', '$filter', 'AskFast', 'Session', 'Store', 'DTOptionsBuilder', 'DTColumnDefBuilder',
+var creditsController = controllers.controller('credits',
   function($scope, $rootScope, $routeParams, $timeout, $location, $filter, AskFast, Session, Store, DTOptionsBuilder, DTColumnDefBuilder) {
 
       //Set all the proper hide and show for all the html elements
@@ -196,6 +195,6 @@ var creditsController = controllers.controller('credits', [
           }
       }
   }
-]);
+);
 
 export = creditsController;
