@@ -91,7 +91,7 @@ define(
                                 adapterMap[adapter.configId] =  adapter.adapterType;
                             });
                             Store('data').save(adapterMap, 'adapterMap');
-                            // Store('data').save(adapters, 'adapters');
+                            Store('adapters').save(adapters);
 
 
                           AskFast.caller('ddrTypes', {
