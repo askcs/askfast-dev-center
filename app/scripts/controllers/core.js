@@ -163,7 +163,7 @@ define(
           }
 
           function getDdrTypeString(ddrTypeId, ddrTypes){
-            if(typeof ddrTypes[ddrTypeId] !== 'undefined'){
+            if(typeof ddrTypes[ddrTypeId] !== 'undefined' && typeof ddrTypes[ddrTypeId].categoryString !== 'undefined'){
               return ddrTypes[ddrTypeId].categoryString;
             }
             else {
