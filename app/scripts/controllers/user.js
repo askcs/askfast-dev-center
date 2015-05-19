@@ -70,7 +70,8 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                                         "SERVICE_COST": "Service Cost",
                                         "SUBSCRIPTION_COST": "Subscription Cost",
                                         "START_UP_COST": "Start Up Cost",
-                                        "TTS_COST": "TTS Cost"
+                                        "TTS_COST": "TTS Cost",
+                                        "TTS_SERVICE_COST": "TTS Service Cost"
                                     };
                                     var ddrTypesObject = {};
                                     angular.forEach(ddrTypes, function (ddrType) {
