@@ -358,40 +358,42 @@ navbar
                                     | {{log.level}}
                                       
                             .panel-body.panel-collapse.collapse(id='collapse{{$index}}')
-                              .row
+                              .row(ng-show='log.requestLog')
                                 .col-xs-7.col-xs-offset-5
                                   h4 Request
-                                .col-xs-2.col-lg-1
-                                  h5 Headers
-                                .col-xs-10.col-lg-11
-                                  ul
-                                    li Example item
-                                .col-xs-2.col-lg-1
-                                  h5 Body
-                                .col-xs-10.col-lg-11
-                                  .well
-                                    pre
-                                      | {{log.message}}
+                                .col-xs-12.col-md-6
+                                  dl
+                                    dt Url
+                                    dd {{log.requestLog.url}}
+                                    dt Method   
+                                    dd {{log.requestLog.httpMethod}}
+                                .col-xs-12.col-md-6
+                                  h5 Parameters
+                                  dl.dl-horizontal
+                                    dt(ng-repeat-start='(paramKey, paramVal) in log.requestLog.parameters') {{paramKey}}
+                                    dd(ng-repeat-end) {{paramVal}}
+                              .row(ng-show='log.responseLog')
                                 .col-xs-7.col-xs-offset-5
                                   h4 Response
-                                .col-xs-2.col-lg-1
+                                .col-xs-12.col-md-6
+                                  dl
+                                    dt HTTP Response Code
+                                    dd {{log.responseLog.httpCode}}
+                                .col-xs-12.col-md-6
                                   h5 Headers
-                                .col-xs-10.col-lg-11
-                                  ul
-                                    li Example item
-                                .col-xs-2.col-lg-1
+                                  dl.dl-horizontal
+                                    dt(ng-repeat-start='(headerkey, headerVal) in log.responseLog.headers') {{headerkey}}
+                                    dd(ng-repeat-end) {{headerVal}}
+                                .col-xs-12
                                   h5 Body
-                                .col-xs-10.col-lg-11
                                   .well
-                                    pre
-                                      | {{log.message}}
+                                    pre {{log.responseLog.responseBody}}
                                 //- dl
                                   dt Timestamp
                                   dd {{log.timestamp}}
                               div(ng-show='log.message')
                                 h5 Message
                                 .well
-                                  pre
-                                    | {{log.message}}
+                                  pre {{log.message}}
                     .row(ng-hide="ddrDetails")
                       .col-md-4.col-md-offset-2 Loading log details...

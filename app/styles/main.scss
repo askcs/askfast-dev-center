@@ -447,12 +447,15 @@ hr {
 
 @media (min-width: 768px) {
 
-  .ddr-details {
-    dt {
-      width: 110px;
-    }
-    dd {
-      margin-left: 130px;
+  .ddr-detail {
+    .dl-horizontal{
+
+      dt {
+        width: 110px;
+      }
+      dd {
+        margin-left: 130px;
+      }
     }
   }
 }
