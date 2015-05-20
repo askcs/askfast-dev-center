@@ -1,9 +1,4 @@
-define(
-  ['angular'],
-  function (angular)
-  {
-    'use strict';
-
-    return angular.module('controllers', ['datatables']);
-  }
-);
+define(["require", "exports", 'angular'], function (require, exports, angular) {
+    var controllers = angular.module('controllers', ['datatables']);
+    return controllers;
+});
