@@ -358,36 +358,34 @@ navbar
                                     | {{log.level}}
                                       
                             .panel-body.panel-collapse.collapse(id='collapse{{$index}}')
-                              .row(ng-show='log.requestLog')
-                                .col-xs-7.col-xs-offset-5
-                                  h4 Request
-                                .col-xs-12.col-md-6
-                                  dl
-                                    dt Url
-                                    dd {{log.requestLog.url}}
-                                    dt Method   
-                                    dd {{log.requestLog.httpMethod}}
-                                .col-xs-12.col-md-6
-                                  h5 Parameters
-                                  dl.dl-horizontal
-                                    dt(ng-repeat-start='(paramKey, paramVal) in log.requestLog.parameters') {{paramKey}}
-                                    dd(ng-repeat-end) {{paramVal}}
-                              .row(ng-show='log.responseLog')
-                                .col-xs-7.col-xs-offset-5
-                                  h4 Response
-                                .col-xs-12.col-md-6
-                                  dl
-                                    dt HTTP Response Code
-                                    dd {{log.responseLog.httpCode}}
-                                .col-xs-12.col-md-6
-                                  h5 Headers
-                                  dl.dl-horizontal
-                                    dt(ng-repeat-start='(headerkey, headerVal) in log.responseLog.headers') {{headerkey}}
-                                    dd(ng-repeat-end) {{headerVal}}
-                                .col-xs-12
-                                  h5 Body
-                                  .well
-                                    pre {{log.responseLog.responseBody}}
+                              .row
+                                .row.col-xs-12.col-lg-6(ng-show='log.requestLog')
+                                  .col-xs-7.col-xs-offset-5
+                                    h4 Request
+                                  .col-xs-12
+                                    dl.dl-horizontal
+                                      dt Url
+                                      dd {{log.requestLog.url}}
+                                      dt Method   
+                                      dd {{log.requestLog.httpMethod}}
+                                    h5 Parameters
+                                    dl.dl-horizontal
+                                      dt(ng-repeat-start='(paramKey, paramVal) in log.requestLog.parameters') {{paramKey}}
+                                      dd(ng-repeat-end) {{paramVal}}
+                                .row.col-xs-12.col-lg-6(ng-show='log.responseLog')
+                                  .col-xs-7.col-xs-offset-5
+                                    h4 Response
+                                  .col-xs-12
+                                    dl.dl-horizontal
+                                      dt Response Code
+                                      dd {{log.responseLog.httpCode}}
+                                    h5 Headers
+                                    dl.dl-horizontal
+                                      dt(ng-repeat-start='(headerkey, headerVal) in log.responseLog.headers') {{headerkey}}
+                                      dd(ng-repeat-end) {{headerVal}}
+                                    h5 Body
+                                    .well
+                                      pre {{log.responseLog.responseBody}}
                                 //- dl
                                   dt Timestamp
                                   dd {{log.timestamp}}
