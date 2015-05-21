@@ -144,12 +144,9 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         }
         $scope.Log = {
             data: null,
-            list: function (period) {
+            list: function () {
                 var _period;
-                if (period) {
-                    _period = period;
-                }
-                else if ($scope.query.until) {
+                if ($scope.query.until) {
                     _period = moment($scope.query.until, 'DD/MM/YYYY').endOf('day').valueOf();
                 }
                 else {
@@ -209,9 +206,6 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                     });
                     $scope.logs = logs;
                 }
-            },
-            period: function () {
-                this.list(moment($scope.query.until, 'DD/MM/YYYY').endOf('day').valueOf());
             },
             detail: function (ddrId) {
                 var ddrTypes = Store.get('ddrTypes');
