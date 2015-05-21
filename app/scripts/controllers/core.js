@@ -145,7 +145,16 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         $scope.Log = {
             data: null,
             list: function (period) {
-                var _period = (period) ? period : moment().endOf('day').valueOf();
+                var _period;
+                if (period) {
+                    _period = period;
+                }
+                else if ($scope.query.until) {
+                    _period = moment($scope.query.until, 'DD/MM/YYYY').endOf('day').valueOf();
+                }
+                else {
+                    _period = moment().endOf('day').valueOf();
+                }
                 $scope.loading.logs = true;
                 AskFast.caller('ddr', {
                     limit: $scope.query.limit,
