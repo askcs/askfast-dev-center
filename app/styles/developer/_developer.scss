@@ -1,3 +1,22 @@
+.ddr-detail {
+  .collapse-list {
+    font-weight: bold;
+    font-size: 1.2em;
+
+    a {
+      color: inherit
+    }
+
+    a.collapsed::after {
+      content: '+';
+    }
+    a::after {
+      content: '-';
+    }
+
+  }
+}
+
 @media (min-width: 768px) {
 
   .ddr-detail {

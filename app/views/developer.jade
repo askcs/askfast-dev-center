@@ -372,10 +372,15 @@ navbar
                                       dd {{log.requestLog.url}}
                                       dt Method   
                                       dd {{log.requestLog.httpMethod}}
-                                    h5 Parameters
-                                    dl.dl-horizontal
+                                    .collapse-list
+                                      a.collapsed(data-toggle='collapse', href='#parameters{{$index}}')
+                                        | Parameters 
+                                    dl.dl-horizontal.collapse(id='parameters{{$index}}')
                                       dt(ng-repeat-start='(paramKey, paramVal) in log.requestLog.parameters') {{paramKey}}
                                       dd(ng-repeat-end) {{paramVal}}
+                                      div(ng-hide='log.requestLog.parameters')
+                                        dt -
+                                        dd -
                                 .row.col-xs-12.col-lg-6(ng-show='log.responseLog')
                                   .col-xs-7.col-xs-offset-5
                                     h4 Response
@@ -383,10 +388,15 @@ navbar
                                     dl.dl-horizontal
                                       dt Response Code
                                       dd {{log.responseLog.httpCode}}
-                                    h5 Headers
-                                    dl.dl-horizontal
+                                    .collapse-list
+                                      a.collapsed(data-toggle='collapse', href='#headers{{$index}}')
+                                        | Headers 
+                                    dl.dl-horizontal.collapse(id='headers{{$index}}')
                                       dt(ng-repeat-start='(headerkey, headerVal) in log.responseLog.headers') {{headerkey}}
                                       dd(ng-repeat-end) {{headerVal}}
+                                      div(ng-hide='log.responseLog.headers')
+                                        dt -
+                                        dd -
                                     h5 Body
                                     .well
                                       pre {{log.responseLog.responseBody}}
