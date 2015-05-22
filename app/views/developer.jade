@@ -277,6 +277,10 @@ navbar
                         label To 
                         input.form-control(type='text',
                         ng-model='queryLogs.toAddress')
+                      .form-group
+                        label Any 
+                        input.form-control(type='text',
+                        ng-model='queryLogs.$')
                     hr
                     p(ng-show='loading.logs')
                       | Loading logs..
