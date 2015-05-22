@@ -22,6 +22,8 @@
 @import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/close";
 @import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/wells";
 
+@import "developer/developer";
+
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700|Titillium+Web);
 
 @mixin border-radius($r) {
@@ -446,18 +448,6 @@ hr {
 }
 
 @media (min-width: 768px) {
-
-  .ddr-detail {
-    .dl-horizontal{
-
-      dt {
-        width: 110px;
-      }
-      dd {
-        margin-left: 130px;
-      }
-    }
-  }
 }
 
 @media (min-width: 480px) and (max-width: 979px) {
