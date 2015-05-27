@@ -5,55 +5,66 @@ import controllers = require('controllers/controllers')
 'use strict';
 
 var coreController = controllers.controller('core',
-  function ($rootScope, $scope, $q, $route, $location, $timeout, AskFast, Store, moment)
+  function (
+    $rootScope: ng.IRootScopeService,
+    $scope: ng.IScope,
+    $q: ng.IQService,
+    $route,
+    $location: ng.ILocationService,
+    $timeout: ng.ITimeoutService,
+    AskFast,
+    Store,
+    moment)
   {
     Store = Store('data');
 
-    $scope.ddrId = null;
-    $scope.currentSection = 'debugger';
+    var vm = this;
+
+    vm.ddrId = null;
+    vm.currentSection = 'debugger';
 
     if ($route.current.params.ddrId) {
-      $scope.currentSection = 'details';
-      $scope.ddrId = $route.current.params.ddrId;
+      vm.currentSection = 'details';
+      vm.ddrId = $route.current.params.ddrId;
     }
 
-    $scope.loading = {
+    vm.loading = {
       logs: true
     };
 
-    $scope.setSection = function (selection, clearDdrId)
+    vm.setSection = function (selection, clearDdrId)
     {
       if ($route.current.params.ddrId){
-        $scope.ddrId = null;
+        vm.ddrId = null;
         $location.url('/developer');
       }
 
       if(clearDdrId){
-        $scope.ddrId = null;
+        vm.ddrId = null;
       }
 
-      $scope.currentSection = selection;
+      vm.currentSection = selection;
 
       if(selection === 'debugger'){
-        $scope.logs = [];
-        $scope.Log.list();
+        vm.logs = [];
+        vm.Log.list();
       }
     };
 
     $scope.$on('$routeUpdate', function(){
-      if ($route.current.params.ddrId && $scope.ddrId === null){
-        $scope.ddrId = $route.current.params.ddrId;
-        $scope.currentSection = 'details';
-        $scope.Log.detail($scope.ddrId);
+      if ($route.current.params.ddrId && vm.ddrId === null){
+        vm.ddrId = $route.current.params.ddrId;
+        vm.currentSection = 'details';
+        vm.Log.detail(vm.ddrId);
       }
-      else if($scope.currentSection === 'details'){
+      else if(vm.currentSection === 'details'){
         // means the user went back
         // the only links to 'details' are from 'debugger'
-        $scope.setSection('debugger', true);
+        vm.setSection('debugger', true);
       }
     });
 
-    $scope.types = [
+    vm.types = [
       'Phone',
       'SMS',
       'Gtalk',
@@ -61,7 +72,7 @@ var coreController = controllers.controller('core',
       'Twitter'
     ];
 
-    $scope.adapterTypes = {
+    vm.adapterTypes = {
       call: {
         label: 'Phone',
         ids: []
@@ -84,26 +95,26 @@ var coreController = controllers.controller('core',
       }
     };
 
-    $scope.channel = {
+    vm.channel = {
       type: null,
       adapter: null
     };
 
-    $scope.forms = {};
+    vm.forms = {};
 
-    $scope.candidates = [];
+    vm.candidates = [];
 
-    $scope.channelTypeSelected = function ()
+    vm.channelTypeSelected = function ()
     {
       var candidates = [];
 
-      angular.forEach($scope.adapterTypes, function (type)
+      angular.forEach(vm.adapterTypes, function (type)
       {
-        if (type.label == $scope.channel.type)
+        if (type.label == vm.channel.type)
         {
           angular.forEach(type.ids, function (id)
           {
-            angular.forEach($scope.adapters, function (adapter)
+            angular.forEach(vm.adapters, function (adapter)
             {
               if (adapter.configId == id) candidates.push(adapter);
             });
@@ -111,22 +122,22 @@ var coreController = controllers.controller('core',
         }
       });
 
-      $scope.candidates = candidates;
+      vm.candidates = candidates;
     };
 
-    $scope.dialogAuth = {
+    vm.dialogAuth = {
       open: false,
       message: '',
       messageType: ''
     };
 
-    $scope.resetAdapterMenu = function ()
+    vm.resetAdapterMenu = function ()
     {
-      $scope.channel.type = null;
-      $scope.channel.adapter = null;
+      vm.channel.type = null;
+      vm.channel.adapter = null;
     };
 
-    $scope.query = {
+    vm.query = {
       category: 'all',
       limit: 100,
       until: moment().format('DD/MM/YYYY')
@@ -171,31 +182,31 @@ var coreController = controllers.controller('core',
 
     function getAdapterTypeString(adapterId, adapterMap){
       if(typeof adapterMap[adapterId] !== 'undefined'){
-        return $scope.adapterTypes[adapterMap[adapterId]].label;
+        return vm.adapterTypes[adapterMap[adapterId]].label;
       }
       else {
         return 'Unknown';
       }
     }
 
-    $scope.Log = {
+    vm.Log = {
       data: null,
 
       list: function ()
       {
         var _period;
 
-        if($scope.query.until){
-          _period = moment($scope.query.until, 'DD/MM/YYYY').endOf('day').valueOf();
+        if(vm.query.until){
+          _period = moment(vm.query.until, 'DD/MM/YYYY').endOf('day').valueOf();
         }
         else{
           _period = moment().endOf('day').valueOf();
         }
 
-        $scope.loading.logs = true;
+        vm.loading.logs = true;
 
         AskFast.caller('ddr', {
-          limit:  $scope.query.limit,
+          limit:  vm.query.limit,
           endTime:    _period
         })
           .then((function (ddr)
@@ -243,20 +254,20 @@ var coreController = controllers.controller('core',
             this.data = logs;
 
             this.categorize();
-            $scope.loading.logs = false;
+            vm.loading.logs = false;
 
           }).bind(this));
       },
 
       categorize: function ()
       {
-        var category = $scope.query.category;
+        var category = vm.query.category;
 
         if(category && category !== 'all'){
-          $scope.logs = this.data[category];
+          vm.logs = this.data[category];
         }
         else{
-          // $scope.query.category is ALL
+          // vm.query.category is ALL
           var logs = [],
             data = this.data;
 
@@ -268,12 +279,12 @@ var coreController = controllers.controller('core',
             });
           });
 
-          $scope.logs = logs;
+          vm.logs = logs;
         }
 
       },
 
-      detail: function(ddrId)
+      detail: function(ddrId: string)
       {
         var ddrTypes = Store.get('ddrTypes');
         var adapterMap = Store.get('adapterMap');
@@ -286,7 +297,7 @@ var coreController = controllers.controller('core',
         })])
         .then(function(resultArray){
 
-          $scope.ddrDetails = processDdr(resultArray[0], ddrTypes, adapterMap);
+          vm.ddrDetails = processDdr(resultArray[0], ddrTypes, adapterMap);
 
           var logs = resultArray[1];
 
@@ -294,9 +305,29 @@ var coreController = controllers.controller('core',
             if (item.timestamp){
               item.timeString = moment(item.timestamp).format('HH:mm:ss Z YYYY-MM-DD')
             }
+
+            item.requestLog = {
+              url: 'testUrl',
+              httpMethod: 'someHttpMethod',
+              parameters: {
+                'one': 'oneParameter',
+                'two': 'twoParameter'
+              },
+              timestamp: item.timestamp
+            }
+
+            item.responseLog = {
+              headers: {
+                'one': 'oneHeader',
+                'two': 'twoHeader'
+              },
+              responseBody: 'responseBody',
+              httpCode: 200,
+              httpResponseTime: 'some timestamp time'
+            }
           });
 
-          $scope.logs = logs;
+          vm.logs = logs;
 
           $timeout(function(){
             // makes sure that first call to collapse doesn't toggle.
@@ -310,33 +341,33 @@ var coreController = controllers.controller('core',
       }
     };
 
-    if(!$scope.ddrId){
-      $scope.Log.list();
+    if(!vm.ddrId){
+      vm.Log.list();
     }
     else{
-      $scope.Log.detail($scope.ddrId);
+      vm.Log.detail(vm.ddrId);
     }
 
-    $scope.Adapter = {
+    vm.Adapter = {
 
       list: function (callback)
       {
-        $scope.adapterType = '';
+        vm.adapterType = '';
 
         AskFast.caller('getAdapters')
           .then(function (adapters)
           {
 
             angular.forEach(adapters, function (adapter) {
-              if (adapter.adapterType in $scope.adapterTypes) {
-                var ids = $scope.adapterTypes[adapter.adapterType].ids;
+              if (adapter.adapterType in vm.adapterTypes) {
+                var ids = vm.adapterTypes[adapter.adapterType].ids;
                 if (ids.indexOf(adapter.configId) == -1)
                   ids.push(adapter.configId);
               }
             });
-            Store.save($scope.adapterTypes, 'adapterTypes');
+            Store.save(vm.adapterTypes, 'adapterTypes');
 
-            $scope.adapters = adapters;
+            vm.adapters = adapters;
 
             if (callback) callback.call(null, adapters);
           });
@@ -351,21 +382,21 @@ var coreController = controllers.controller('core',
           this.list();
 
           // reset adapter add form
-          $scope.adapterType= '';
+          vm.adapterType= '';
         }).bind(this));
       },
 
       // TODO: Add changing dialog info later on
 //            update: function (dialog)
 //            {
-//              AskFast.caller('updateAdapter', { second: $scope.channel.adapter },
+//              AskFast.caller('updateAdapter', { second: vm.channel.adapter },
 //                {
 //                  dialogId: dialog.id
 //                }).then((function ()
 //              {
 //                this.list();
 //
-//                $scope.Adapter.adapters();
+//                vm.Adapter.adapters();
 //              }).bind(this));
 //            },
 
@@ -376,7 +407,7 @@ var coreController = controllers.controller('core',
         })
           .then(function (result)
           {
-            $scope.freeAdapters = result;
+            vm.freeAdapters = result;
           }
         );
       },
@@ -392,17 +423,17 @@ var coreController = controllers.controller('core',
       }
     };
 
-    $scope.Adapter.list();
+    vm.Adapter.list();
 
-    $scope.Dialog = {
+    vm.Dialog = {
 
       list: function (callback)
       {
         AskFast.caller('getDialog')
           .then(function (dialogs)
           {
-            $scope.dialogs = dialogs;
-            $scope.loadingDialogs = true
+            vm.dialogs = dialogs;
+            vm.loadingDialogs = true
             if (callback) callback.call();
           });
       },
@@ -416,14 +447,14 @@ var coreController = controllers.controller('core',
           })
             .then((function (result)
             {
-              $scope.addingDialog = false;
+              vm.addingDialog = false;
 
               this.list(function ()
               {
-                $scope.setSection('dialogs');
+                vm.setSection('dialogs');
                 openDialog(result);
                 // close auth menu if it was open
-                $scope.dialogAuth = false;
+                vm.dialogAuth = false;
               });
             }).bind(this));
         }
@@ -436,16 +467,16 @@ var coreController = controllers.controller('core',
         })
           .then((function ()
           {
-            $scope.addingDialog = false;
+            vm.addingDialog = false;
 
             this.list(function ()
             {
-              $scope.dialog = null;
+              vm.dialog = null;
 
-              if ($scope.dialogs[0])
-                $scope.dialog = $scope.dialogs[0];
+              if (vm.dialogs[0])
+                vm.dialog = vm.dialogs[0];
 
-              $scope.setSection('dialogs');
+              vm.setSection('dialogs');
             });
           }).bind(this));
       },
@@ -489,7 +520,7 @@ var coreController = controllers.controller('core',
 
       updateDetails: function (dialog)
       {
-         var dialogArr = $scope.dialogs.filter(function(_dialog){
+         var dialogArr = vm.dialogs.filter(function(_dialog){
           if(_dialog.id === dialog.id){
             return true;
           } else { return false; }
@@ -507,7 +538,7 @@ var coreController = controllers.controller('core',
         {
           var adapters = [];
 
-          angular.forEach($scope.adapters, function (adapter)
+          angular.forEach(vm.adapters, function (adapter)
           {
             if (updated && updated.id == adapter.id)
             {
@@ -527,19 +558,19 @@ var coreController = controllers.controller('core',
           AskFast.caller('updateAdapter', { second: adapterId },{ dialogId: dialogId })
             .then((function (adapter)
             {
-              // $scope.dialogAdapters = this.list(dialogId, adapter);
+              // vm.dialogAdapters = this.list(dialogId, adapter);
 
-              $scope.Adapter.list();
+              vm.Adapter.list();
             }).bind(this));
         },
 
         add: function (dialog)
         {
-          this.update(dialog.id, $scope.channel.adapter);
+          this.update(dialog.id, vm.channel.adapter);
 
-          $scope.resetAdapterMenu();
+          vm.resetAdapterMenu();
 
-          $scope.candidates = [];
+          vm.candidates = [];
 
           openDialog(dialog);
         },
@@ -552,16 +583,16 @@ var coreController = controllers.controller('core',
 
       open: function (dialog)
       {
-        $scope.dialog = angular.copy(dialog);
+        vm.dialog = angular.copy(dialog);
 
         // cancel auth notification if any
-        $scope.Dialog.authentication.notify(null, null, true);
+        vm.Dialog.authentication.notify(null, null, true);
 
         // will be undefined on first load
-        if(angular.isDefined($scope.forms.details)){
-          $scope.forms.details.$setPristine();
+        if(angular.isDefined(vm.forms.details)){
+          vm.forms.details.$setPristine();
           if (this.adapters.list(dialog.id))
-            $scope.dialogAdapters = this.adapters.list(dialog.id);
+            vm.dialogAdapters = this.adapters.list(dialog.id);
         }
       },
       authentication:{
@@ -576,7 +607,7 @@ var coreController = controllers.controller('core',
             return;
           }
 
-          var dialogArr = $scope.dialogs.filter(function(_dialog){
+          var dialogArr = vm.dialogs.filter(function(_dialog){
             if(_dialog.id === dialog.id){
               return true;
             } else { return false; }
@@ -587,12 +618,12 @@ var coreController = controllers.controller('core',
           dialog.url = dialogArr[0].url;
 
           var deferred = $q.defer();
-          $scope.Dialog.update(dialog, deferred);
+          vm.Dialog.update(dialog, deferred);
 
           deferred.promise
           .then(function(result){
             //success
-            $scope.dialogAuth.open = false;
+            vm.dialogAuth.open = false;
             this.notify('Basic Authentication applied successfully', 'success');
           }.bind(this))
           .catch(function(result){
@@ -607,7 +638,7 @@ var coreController = controllers.controller('core',
 
           dialog.useBasicAuth = false;
 
-          var dialogArr = $scope.dialogs.filter(function(_dialog){
+          var dialogArr = vm.dialogs.filter(function(_dialog){
             if(_dialog.id === dialog.id){
               return true;
             } else { return false; }
@@ -623,81 +654,81 @@ var coreController = controllers.controller('core',
           dialogObj.password = null;
 
           var deferred = $q.defer();
-          $scope.Dialog.update(dialogObj, deferred);
+          vm.Dialog.update(dialogObj, deferred);
 
           deferred.promise
           .then(function(result){
             //success
-            $scope.dialogAuth.open = false;
+            vm.dialogAuth.open = false;
             this.notify('Basic Authentication successfully disabled', 'success');
-          }.bind($scope.Dialog.authentication))
+          }.bind(vm.Dialog.authentication))
           .catch(function(result){
             //something went wrong, handle it
             console.log('error -> ', result);
             this.notify('Something went wrong with the request', 'danger');
-          }.bind($scope.Dialog.authentication));
+          }.bind(vm.Dialog.authentication));
         },
         notify: function(message, type, cancel)
         {
           if(cancel){
-            $scope.dialogAuth.message = '';
+            vm.dialogAuth.message = '';
           }
 
-          $scope.dialogAuth.message = message;
-          $scope.dialogAuth.messageType = type;
+          vm.dialogAuth.message = message;
+          vm.dialogAuth.messageType = type;
 
-          if($scope.authNotifyTimeoutPromise){
-            $timeout.cancel($scope.authNotifyTimeoutPromise);
+          if(vm.authNotifyTimeoutPromise){
+            $timeout.cancel(vm.authNotifyTimeoutPromise);
           }
 
-          $scope.authNotifyTimeoutPromise = $timeout(function(){
-              $scope.dialogAuth.message = '';
+          vm.authNotifyTimeoutPromise = $timeout(function(){
+              vm.dialogAuth.message = '';
           }, 6000);
         },
         cancel: function(dialog)
         {
-          var dialogArr = $scope.dialogs.filter(function(_dialog){
+          var dialogArr = vm.dialogs.filter(function(_dialog){
             if(_dialog.id === dialog.id){
               return true;
             } else { return false; }
           });
           // Only reset userName and password
-          $scope.dialog.userName = dialogArr[0].userName;
-          $scope.dialog.password = dialogArr[0].password;
+          vm.dialog.userName = dialogArr[0].userName;
+          vm.dialog.password = dialogArr[0].password;
 
-          $scope.dialogAuth.open = false;
-          $scope.forms.auth.$setPristine();
+          vm.dialogAuth.open = false;
+          vm.forms.auth.$setPristine();
         }
       }
     };
 
     function openDialog (dialog)
     {
-      $scope.Dialog.open(dialog);
+      vm.Dialog.open(dialog);
     }
 
-    $scope.authenticateDialog = function(dialog){
-      $scope.Dialog.authentication.enable(dialog);
+    vm.authenticateDialog = function(dialog){
+      vm.Dialog.authentication.enable(dialog);
     }
-    $scope.disableDialogAuthentication = function(dialog){
-     $scope.Dialog.authentication.disable(dialog);
+    vm.disableDialogAuthentication = function(dialog){
+     vm.Dialog.authentication.disable(dialog);
     }
-    $scope.cancelAuthentication = function(dialog){
-      $scope.Dialog.authentication.cancel(dialog);
+    vm.cancelAuthentication = function(dialog){
+      vm.Dialog.authentication.cancel(dialog);
     }
 
-    $scope.expandAll = function(){
+    vm.expandAll = function(){
       $('.ddr-detail .panel-collapse').collapse('show');
     };
 
-    $scope.collapseAll = function(){
+    vm.collapseAll = function(){
       $('.ddr-detail .panel-collapse').collapse('hide');
     };
 
     // grab the list, then select the first if exists
-    $scope.Dialog.list(function(){
-      if ($scope.dialogs.length > 0)
-            $scope.Dialog.open($scope.dialogs[0]);
+    vm.Dialog.list(function(){
+      if (vm.dialogs.length > 0)
+            vm.Dialog.open(vm.dialogs[0]);
     });
   }
 );
