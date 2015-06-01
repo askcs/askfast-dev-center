@@ -6,9 +6,9 @@
         <div id="sub-header" class="row">
           <div class="col-md-12">
             <ul class="list-inline">
-              <li><a ng-click="setSection(&quot;adapters&quot;)">Adapters</a></li>
-              <li><a ng-click="setSection(&quot;dialogs&quot;)">Dialogs</a></li>
-              <li><a ng-click="setSection(&quot;debugger&quot;)">Debugger</a></li>
+              <li><a ng-click="vm.setSection(&quot;adapters&quot;)">Adapters</a></li>
+              <li><a ng-click="vm.setSection(&quot;dialogs&quot;)">Dialogs</a></li>
+              <li><a ng-click="vm.setSection(&quot;debugger&quot;)">Debugger</a></li>
             </ul>
           </div>
         </div>
@@ -16,14 +16,14 @@
           <div class="col-md-10"></div>
           <div class="col-md-2 text-right"></div>
         </div>
-        <section ng-switch="" on="currentSection">
+        <section ng-switch="" on="vm.currentSection">
           <div id="widgets" ng-switch-when="adapters" class="row">
             <div class="col-md-12">
               <div class="widget">
                 <div class="inner">
                   <header>
                     <h2>Adapters</h2>
-                    <select ng-model="$parent.adapterType" ng-change="Adapter.query($parent.adapterType)" class="form-control">
+                    <select ng-model="vm.adapterType" ng-change="vm.Adapter.query(vm.adapterType)" class="form-control">
                       <option value="" selected="selected">Add a new adapter</option>
                       <option value="email">Email</option>
                       <option value="call">Phone</option>
@@ -33,10 +33,10 @@
                     </select>
                   </header>
                   <section>
-                    <article ng-show="$parent.adapterType">
+                    <article ng-show="vm.adapterType">
                       <h3>Available adapters</h3>
-                      <p ng-hide="freeAdapters.length &gt; 0">There are not any available adapter for this type.</p>
-                      <table ng-show="freeAdapters.length &gt; 0" class="table table-bordered table-hover">
+                      <p ng-hide="vm.freeAdapters.length &gt; 0">There are not any available adapter for this type.</p>
+                      <table ng-show="vm.freeAdapters.length &gt; 0" class="table table-bordered table-hover">
                         <thead>
                           <tr>
                             <th>Adapter</th>
@@ -45,11 +45,11 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr ng-repeat="adapter in freeAdapters">
+                          <tr ng-repeat="adapter in vm.freeAdapters">
                             <td>{{adapter | translateAdapterAddress}}</td>
                             <td>{{adapter | translateAdapterType}}</td>
                             <td>
-                              <button ng-click="Adapter.add(adapter)" class="btn btn-default btn-sm">Add to your account</button>
+                              <button ng-click="vm.Adapter.add(adapter)" class="btn btn-default btn-sm">Add to your account</button>
                             </td>
                           </tr>
                         </tbody>
@@ -57,8 +57,8 @@
                       <hr>
                     </article>
                     <h3>Your adapters</h3>
-                    <p ng-hide="adapters.length &gt; 0">There are not any adapters for your account.</p>
-                    <table ng-show="adapters.length &gt; 0" class="table table-bordered table-hover">
+                    <p ng-hide="vm.adapters.length &gt; 0">There are not any adapters for your account.</p>
+                    <table ng-show="vm.adapters.length &gt; 0" class="table table-bordered table-hover">
                       <thead>
                         <tr>
                           <th>ID</th>
@@ -69,7 +69,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="adapter in adapters">
+                        <tr ng-repeat="adapter in vm.adapters">
                           <td>{{adapter.configId}}</td>
                           <td>{{adapter | translateAdapterAddress}}</td>
                           <td>{{adapter | translateAdapterType}}</td>
@@ -93,22 +93,22 @@
                     <h2>Add a new dialog</h2>
                   </header>
                   <section>
-                    <form role="form" name="forms.addDialog" ng-submit="Dialog.add(dialog)">
+                    <form role="form" name="forms.addDialog" ng-submit="vm.Dialog.add(dialog)">
                       <div class="row">
                         <div class="form-group col-lg-6 col-md-8 {{forms.addDialog.name.$invalid &amp;&amp; forms.addDialog.name.$dirty &amp;&amp; &quot;has-error&quot;}}">
-                          <input type="text" name="name" ng-model="dialog.form.name" placeholder="Dialog name" required="required" class="form-control">
+                          <input type="text" name="name" ng-model="vm.dialog.form.name" placeholder="Dialog name" required="required" class="form-control">
                           <p><span ng-show="forms.addDialog.name.$error.required &amp;&amp; forms.addDialog.name.$dirty" class="text-danger">A name is required to make a new dialog.</span></p>
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-lg-6 col-md-8 {{forms.addDialog.url.$invalid &amp;&amp; forms.addDialog.url.$dirty &amp;&amp; &quot;has-error&quot;}}">
-                          <input type="url" name="url" ng-model="dialog.form.url" placeholder="URL for dialog" required="required" class="form-control">
+                          <input type="url" name="url" ng-model="vm.dialog.form.url" placeholder="URL for dialog" required="required" class="form-control">
                           <p><span ng-show="forms.addDialog.url.$error.required &amp;&amp; forms.addDialog.url.$dirty" class="text-danger">A URL is required to make a new dialog.</span><span ng-show="forms.addDialog.url.$error.url" class="text-danger">The entered URL isn't valid.</span></p>
                         </div>
                       </div>
                       <div class="form-group">
                         <button type="submit" class="btn btn-default">Create dialog</button>
-                      </div><a ng-click="setSection(&quot;dialogs&quot;)">&nbsp; or go back to the list.</a>
+                      </div><a ng-click="vm.setSection(&quot;dialogs&quot;)">&nbsp; or go back to the list.</a>
                     </form>
                   </section>
                 </div>
@@ -121,19 +121,19 @@
                 <div class="inner">
                   <header>
                     <h2>Dialogs</h2>
-                    <button type="button" ng-click="setSection(&quot;addDialog&quot;)" class="btn btn-default">Add a dialog</button>
+                    <button type="button" ng-click="vm.setSection(&quot;addDialog&quot;)" class="btn btn-default">Add a dialog</button>
                   </header>
                   <section>
                     <div class="row">
                       <div class="col-md-3">
-                        <p ng-hide="loadingDialogs">Hold on dialogs are loading...</p>
-                        <p ng-show="dialogs.length &lt; 1">There are no dialogs yet. Please add one.</p>
-                        <ul ng-hide="dialogs.length &lt; 1" class="nav nav-pills nav-stacked">
-                          <li ng-repeat="_dialog in dialogs" class="{{(_dialog.id == dialog.id) &amp;&amp; &quot;active&quot;}}"><a ng-click="Dialog.open(_dialog)">{{_dialog.name}}</a></li>
+                        <p ng-hide="vm.loadingDialogs">Hold on dialogs are loading...</p>
+                        <p ng-show="vm.dialogs.length &lt; 1">There are no dialogs yet. Please add one.</p>
+                        <ul ng-hide="vm.dialogs.length &lt; 1" class="nav nav-pills nav-stacked">
+                          <li ng-repeat="_dialog in vm.dialogs" class="{{(_dialog.id == vm.dialog.id) &amp;&amp; &quot;active&quot;}}"><a ng-click="vm.Dialog.open(_dialog)">{{_dialog.name}}</a></li>
                         </ul>
                       </div>
-                      <div ng-show="dialogs.length &lt; 1" class="col-md-9"></div>
-                      <div ng-hide="dialogs.length &lt; 1" class="col-md-9">
+                      <div ng-show="vm.dialogs.length &lt; 1" class="col-md-9"></div>
+                      <div ng-hide="vm.dialogs.length &lt; 1" class="col-md-9">
                         <div class="row">
                           <div class="col-md-6">
                             <form name="forms.details">
@@ -143,7 +143,7 @@
                                   <label>Dialog Id</label>
                                   <div class="row">
                                     <div class="col-md-9">
-                                      <input ng-model="dialog.id" readonly="readonly" class="form-control">
+                                      <input ng-model="vm.dialog.id" readonly="readonly" class="form-control">
                                     </div>
                                   </div>
                                 </div>
@@ -151,16 +151,16 @@
                                   <label>Name</label>
                                   <div class="row">
                                     <div class="col-md-9">
-                                      <input ng-model="dialog.name" class="form-control">
+                                      <input ng-model="vm.dialog.name" class="form-control">
                                     </div>
                                   </div>
                                 </div>
                                 <div class="form-group">
                                   <label>URL</label>
-                                  <input ng-model="dialog.url" class="form-control">
+                                  <input ng-model="vm.dialog.url" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                  <button ng-click="Dialog.updateDetails(dialog)" class="btn btn-default">Update details</button>
+                                  <button ng-click="vm.Dialog.updateDetails(vm.dialog)" class="btn btn-default">Update details</button>
                                 </div>
                               </fieldset>
                             </form>
@@ -168,34 +168,34 @@
                           <div class="col-md-4">
                             <form name="forms.auth">
                               <fieldset>
-                                <legend>Authentication <span ng-show="dialog.useBasicAuth" class="small text-primary">&nbsp;enabled</span></legend>
+                                <legend>Authentication <span ng-show="vm.dialog.useBasicAuth" class="small text-primary">&nbsp;enabled</span></legend>
                                 <p>If desired, you can set Basic Authentication credentials for this dialog.</p>
-                                <p ng-show="dialogAuth.message" class="{{(dialogAuth.messageType) &amp;&amp; 'text-' + dialogAuth.messageType}}">{{dialogAuth.message}}</p>
-                                <div ng-hide="dialogAuth.open">
+                                <p ng-show="vm.dialogAuth.message" class="{{(vm.dialogAuth.messageType) &amp;&amp; 'text-' + vm.dialogAuth.messageType}}">{{vm.dialogAuth.message}}</p>
+                                <div ng-hide="vm.dialogAuth.open">
                                   <div class="form-group">
-                                    <button ng-click="dialogAuth.open = true" class="btn btn-default">Configure</button>
+                                    <button ng-click="vm.dialogAuth.open = true" class="btn btn-default">Configure</button>
                                   </div>
                                 </div>
-                                <div ng-show="dialogAuth.open">
+                                <div ng-show="vm.dialogAuth.open">
                                   <div class="form-group">
                                     <label>Username</label>
-                                    <input name="username" ng-model="dialog.userName" class="form-control">
+                                    <input name="username" ng-model="vm.dialog.userName" class="form-control">
                                   </div>
                                   <div class="form-group">
                                     <label>Password</label>
-                                    <input name="password" ng-model="dialog.password" type="password" class="form-control">
+                                    <input name="password" ng-model="vm.dialog.password" type="password" class="form-control">
                                   </div>
                                   <div class="form-groups">
-                                    <button ng-click="authenticateDialog(dialog)" class="btn btn-default">{{(dialog.useBasicAuth) && 'Update' || 'Enable'}}</button>
-                                    <button ng-click="cancelAuthentication(dialog)" class="btn btn-default">Cancel</button>
-                                    <button ng-click="disableDialogAuthentication(dialog)" ng-show="dialog.useBasicAuth" class="btn btn-danger pull-right">Disable</button>
+                                    <button ng-click="vm.authenticateDialog(dialog)" class="btn btn-default">{{(vm.dialog.useBasicAuth) && 'Update' || 'Enable'}}</button>
+                                    <button ng-click="vm.cancelAuthentication(dialog)" class="btn btn-default">Cancel</button>
+                                    <button ng-click="vm.disableDialogAuthentication(dialog)" ng-show="vm.dialog.useBasicAuth" class="btn btn-danger pull-right">Disable</button>
                                   </div>
                                 </div>
                               </fieldset>
                             </form>
                           </div>
                           <div class="col-md-2">
-                            <button ng-click="Dialog.remove(dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
+                            <button ng-click="vm.Dialog.remove(dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
                           </div>
                         </div>
                         <div class="row">
@@ -206,21 +206,21 @@
                                 <div class="row">
                                   <div class="form-group col-sm-5 col-lg-4">
                                     <label>Type</label>
-                                    <select ng-model="channel.type" ng-change="channelTypeSelected()" class="form-control">
-                                      <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
+                                    <select ng-model="vm.channel.type" ng-change="vm.channelTypeSelected()" class="form-control">
+                                      <option ng-repeat="type in vm.types" value="{{type}}">{{type}}</option>
                                     </select><span class="help-block">Please select a type first</span>
                                   </div>
-                                  <div ng-hide="(channel.type == null)" class="form-group col-sm-7">
+                                  <div ng-hide="(vm.channel.type == null)" class="form-group col-sm-7">
                                     <label>Adapter</label>
-                                    <p ng-hide="candidates.length &gt; 0">There are sadly no adapters for this one.</p>
-                                    <select ng-model="channel.adapter" ng-show="candidates.length &gt; 0" class="form-control">
-                                      <option ng-repeat="candidate in candidates" value="{{candidate.configId}}">{{candidate.myAddress}}</option>
+                                    <p ng-hide="vm.candidates.length &gt; 0">There are sadly no adapters for this one.</p>
+                                    <select ng-model="vm.channel.adapter" ng-show="vm.candidates.length &gt; 0" class="form-control">
+                                      <option ng-repeat="candidate in vm.candidates" value="{{candidate.configId}}">{{candidate.myAddress}}</option>
                                     </select><span class="help-block">Select the adapter</span>
                                   </div>
                                 </div>
                                 <div class="row">
                                   <div class="form-group col-md-12">
-                                    <button type="button" ng-click="Dialog.adapters.add(dialog)" class="btn btn-default">Link adapter to dialog</button>
+                                    <button type="button" ng-click="vm.Dialog.adapters.add(dialog)" class="btn btn-default">Link adapter to dialog</button>
                                   </div>
                                 </div>
                               </fieldset>
@@ -230,8 +230,8 @@
                         <hr>
                         <fieldset>
                           <legend>Linked Adapters</legend>
-                          <p ng-hide="(adapters | filterAdapters: dialog).length &gt; 0">There are no adapters linked to this dialog yet.</p>
-                          <table ng-show="(adapters | filterAdapters: dialog).length &gt; 0" class="table table-bordered table-hover">
+                          <p ng-hide="(vm.adapters | filterAdapters: vm.dialog).length &gt; 0">There are no adapters linked to this dialog yet.</p>
+                          <table ng-show="(vm.adapters | filterAdapters: vm.dialog).length &gt; 0" class="table table-bordered table-hover">
                             <thead>
                               <tr>
                                 <th>Adapter</th>
@@ -240,10 +240,10 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr ng-repeat="adapter in adapters | filterAdapters: dialog">
+                              <tr ng-repeat="adapter in vm.adapters | filterAdapters: vm.dialog">
                                 <th>{{adapter | translateAdapterAddress}}</th>
                                 <th>{{adapter | translateAdapterType}}</th>
-                                <th><a ng-click="Dialog.adapters.remove(adapter)">Remove link</a></th>
+                                <th><a ng-click="vm.Dialog.adapters.remove(adapter)">Remove link</a></th>
                               </tr>
                             </tbody>
                           </table>
@@ -266,7 +266,7 @@
                     <form role="form" class="form-inline">
                       <div class="form-group">
                         <label>Adapter Type:</label>
-                        <select ng-model="query.category" ng-change="Log.categorize()" class="form-control">
+                        <select ng-model="vm.query.category" ng-change="vm.Log.categorize()" class="form-control">
                           <option value="all">All</option>
                           <option value="call">Phone</option>
                           <option value="email">Email</option>
@@ -277,7 +277,7 @@
                       </div>
                       <div style="margin-left: 15px" class="form-group">
                         <label>Limit:</label>
-                        <select ng-model="query.limit" ng-change="Log.list()" class="form-control">
+                        <select ng-model="vm.query.limit" ng-change="vm.Log.list()" class="form-control">
                           <option value="100">100</option>
                           <option value="250">250</option>
                           <option value="500">500</option>
@@ -287,21 +287,25 @@
                       <div class="form-group">
                         <label>Logs until 
                         </label>
-                        <input ng-model="query.until" ng-change="Log.period()" data-date-type="string" data-date-format="dd/MM/yyyy" bs-datepicker="" class="form-control">
+                        <input ng-model="vm.query.until" ng-change="vm.Log.list()" data-date-type="string" data-date-format="dd/MM/yyyy" bs-datepicker="" class="form-control">
                       </div>
                       <div class="form-group">
                         <label>From </label>
-                        <input type="text" ng-model="queryLogs.fromAddress" class="form-control">
+                        <input type="text" ng-model="vm.queryLogs.fromAddress" class="form-control">
                       </div>
                       <div class="form-group">
                         <label>To </label>
-                        <input type="text" ng-model="queryLogs.toAddress" class="form-control">
+                        <input type="text" ng-model="vm.queryLogs.toAddress" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label>Any </label>
+                        <input type="text" ng-model="vm.queryLogs.$" class="form-control">
                       </div>
                     </form>
                     <hr>
-                    <p ng-show="loading.logs">Loading logs..</p>
-                    <p ng-hide="logs.length &gt; 0 || loading.logs">Your query has no logs..</p>
-                    <table ng-show="logs.length &gt; 0" class="table">
+                    <p ng-show="vm.loading.logs">Loading logs..</p>
+                    <p ng-hide="vm.logs.length &gt; 0 || vm.loading.logs">Your query has no logs..</p>
+                    <table ng-show="vm.logs.length &gt; 0" class="table">
                       <thead>
                         <tr>
                           <th>Date</th>
@@ -312,7 +316,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="log in logs | filter:queryLogs | orderBy: &quot;start&quot; : true">
+                        <tr ng-repeat="log in vm.logs | filter:vm.queryLogs | orderBy: &quot;start&quot; : true">
                           <td><a href="/#/developer?ddrId={{log._id}}">{{log.startString}}<a></a></a></td>
                           <td>{{log.ddrTypeString}}</td>
                           <td>{{log.adapterTypeString}}</td>
@@ -331,69 +335,133 @@
               <div class="widget">
                 <div class="inner">
                   <header>
-                    <h2>Details for {{ddrId}}</h2>
+                    <h2>Details for {{vm.ddrId}}</h2>
                   </header>
                   <section class="ddr-detail">
-                    <div ng-show="ddrDetails" class="row">
+                    <div ng-show="vm.ddrDetails" class="row">
                       <div class="col-md-4 col-md-offset-2 ddr-details">
                         <dl class="dl-horizontal">
                           <dt>Type</dt>
-                          <dd>{{ddrDetails.ddrTypeString}}</dd>
+                          <dd>{{vm.ddrDetails.ddrTypeString}}</dd>
                           <dt>Adapter Type</dt>
-                          <dd>{{ddrDetails.adapterTypeString}}</dd>
+                          <dd>{{vm.ddrDetails.adapterTypeString}}</dd>
                           <dt>Duration</dt>
-                          <dd ng-show="ddrDetails.duration !== null">{{ddrDetails.duration}} ms</dd>
-                          <dd ng-show="ddrDetails.duration === null">No duration</dd>
+                          <dd ng-show="vm.ddrDetails.duration !== null">{{vm.ddrDetails.duration}} ms</dd>
+                          <dd ng-show="vm.ddrDetails.duration === null">No duration</dd>
                           <dt>Start Time</dt>
-                          <dd>{{ddrDetails.startString}}</dd>
-                          <dt ng-show="ddrDetails.duration !== null">End Time</dt>
-                          <dd ng-show="ddrDetails.duration !== null">{{ddrDetails.endString}}</dd>
+                          <dd>{{vm.ddrDetails.startString}}</dd>
+                          <dt ng-show="vm.ddrDetails.duration !== null">End Time</dt>
+                          <dd ng-show="vm.ddrDetails.duration !== null">{{vm.ddrDetails.endString}}</dd>
                           <hr>
                           <dt>From</dt>
-                          <dd>{{ddrDetails.fromAddress}}</dd>
+                          <dd>{{vm.ddrDetails.fromAddress}}</dd>
                           <dt>To</dt>
-                          <dd>{{ddrDetails.toAddress}}</dd>
+                          <dd>{{vm.ddrDetails.toAddress}}</dd>
                         </dl>
                       </div>
                       <div class="col-md-4">
-                        <div ng-show="ddrDetails.statusPerAddress">
+                        <div ng-show="vm.ddrDetails.statusPerAddress">
                           <h5>Address Status</h5>
                           <dl class="dl-horizontal">
-                            <div ng-repeat="statusObj in ddrDetails.statusPerAddress">
+                            <div ng-repeat="statusObj in vm.ddrDetails.statusPerAddress">
                               <dt>{{statusObj.index}}</dt>
                               <dd>{{statusObj.status}}</dd>
                             </div>
                           </dl>
                         </div>
-                        <div ng-show="ddrDetails.additionalInfo.message">
+                        <div ng-show="vm.ddrDetails.additionalInfo.message">
                           <h5>Message</h5>
                           <div class="well">
-                            <pre>{{ddrDetails.additionalInfo.message}}</pre>
+                            <pre>{{vm.ddrDetails.additionalInfo.message}}</pre>
                           </div>
                         </div>
                       </div>
                       <div class="col-sm-8 col-sm-offset-2">
-                        <div ng-show="logs" class="row">
+                        <div ng-show="vm.logs" class="row">
                           <div class="col-xs-5"><strong>Time </strong></div>
                           <div class="col-xs-2"><strong>Level </strong></div>
                           <div class="col-xs-5">
-                            <button ng-click="expandAll()" class="pull-right btn btn-default">Expand All</button>
-                            <button ng-click="collapseAll()" class="pull-right btn btn-default">Collapse All</button>
+                            <button ng-click="vm.expandAll()" class="pull-right btn btn-default">Expand All</button>
+                            <button ng-click="vm.collapseAll()" class="pull-right btn btn-default">Collapse All</button>
                           </div>
                           <hr>
                         </div>
                       </div>
                       <div class="col-sm-8 col-sm-offset-2">
-                        <div ng-repeat="log in logs | orderBy: &quot;timestamp&quot;">
+                        <div ng-repeat="log in vm.logs | orderBy: &quot;timestamp&quot;">
                           <!--.panel(ng-class='log.level === "INFO" ? "panel-primary" : "panel-default"')-->
-                          <div ng-class="{INFO:&quot;panel-info&quot;, SEVERE: &quot;panel-danger&quot;, DDR: &quot;panel-default&quot;, DEBUG: &quot;panel-success&quot;, WARNING: &quot;panel-warning&quot; }[log.level]" class="panel">
-                            <div class="panel-heading"><a data-toggle="collapse" href="#collapse{{$index}}">
-                                <div class="row">
-                                  <div class="col-xs-5">{{log.timeString}}</div>
-                                  <div class="col-xs-5">{{log.level}}</div>
-                                </div></a></div>
+                          <!--.panel(ng-class='{INFO:"panel-info", SEVERE: "panel-danger", DDR: "panel-default", DEBUG: "panel-success", WARNING: "panel-warning" }[log.level]')-->
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h3 class="panel-title"><a data-toggle="collapse" href="#collapse{{$index}}">
+                                  <div class="row">
+                                    <div class="col-xs-5">{{log.timeString}}</div>
+                                    <div class="col-xs-7">{{(log.level) ? log.level : '-'}}</div>
+                                  </div></a></h3>
+                            </div>
                             <div id="collapse{{$index}}" class="panel-body panel-collapse collapse">
-                              <div class="container">
+                              <div class="row">
+                                <div ng-show="log.requestLog" class="row col-xs-12 col-lg-6">
+                                  <div class="col-xs-7 col-xs-offset-5">
+                                    <h4>Request</h4>
+                                  </div>
+                                  <div class="col-xs-12">
+                                    <dl>
+                                      <dt>Url</dt>
+                                      <dd> 
+                                        <div class="well">
+                                          <pre>{{log.requestLog.url}}</pre>
+                                        </div>
+                                      </dd>
+                                      <dt>Method   </dt>
+                                      <dd>{{log.requestLog.httpMethod}}</dd>
+                                    </dl>
+                                    <div ng-show="log.requestLog.headers" class="collapse-list"><a data-toggle="collapse" href="#req-headers-{{$index}}" class="collapsed">Headers </a></div>
+                                    <dl id="req-headers-{{$index}}" ng-show="log.requestLog.headers" class="dl-horizontal collapse">
+                                      <dt ng-repeat-start="(headerkey, headerVal) in log.requestLog.headers">{{headerkey}}</dt>
+                                      <dd ng-repeat-end="ng-repeat-end">{{headerVal}}</dd>
+                                    </dl>
+                                    <div class="collapse-list"><a data-toggle="collapse" href="#req-parameters-{{$index}}" class="collapsed">Parameters </a></div>
+                                    <dl id="req-parameters-{{$index}}" class="dl-horizontal collapse">
+                                      <dt ng-repeat-start="(paramKey, paramVal) in log.requestLog.parameters">{{paramKey}}</dt>
+                                      <dd ng-repeat-end="ng-repeat-end">{{paramVal}}</dd>
+                                      <div ng-hide="log.requestLog.parameters">
+                                        <dt>-</dt>
+                                        <dd>-</dd>
+                                      </div>
+                                    </dl>
+                                    <h5>Body</h5>
+                                    <div class="well">
+                                      <pre>{{log.requestLog.requestBody}}</pre>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div ng-show="log.responseLog" class="row col-xs-12 col-lg-6">
+                                  <div class="col-xs-7 col-xs-offset-5">
+                                    <h4>Response</h4>
+                                  </div>
+                                  <div class="col-xs-12">
+                                    <dl>
+                                      <dt>Response Code</dt>
+                                      <dd>{{log.responseLog.httpCode}}</dd>
+                                      <dt>Response Time</dt>
+                                      <dd>{{(log.responseLog.httpResponseTime) ? log.responseLog.httpResponseTime : '-' }} ms</dd>
+                                    </dl>
+                                    <div class="collapse-list"><a data-toggle="collapse" href="#res-headers-{{$index}}" class="collapsed">Headers </a></div>
+                                    <dl id="res-headers-{{$index}}" class="dl-horizontal collapse">
+                                      <dt ng-repeat-start="(headerkey, headerVal) in log.responseLog.headers">{{headerkey}}</dt>
+                                      <dd ng-repeat-end="ng-repeat-end">{{headerVal}}</dd>
+                                      <div ng-hide="log.responseLog.headers">
+                                        <dt>-</dt>
+                                        <dd>-</dd>
+                                      </div>
+                                    </dl>
+                                    <h5>Body</h5>
+                                    <div class="well">
+                                      <pre>{{log.responseLog.responseBody}}</pre>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                               <div ng-show="log.message">
                                 <h5>Message</h5>
@@ -406,7 +474,7 @@
                         </div>
                       </div>
                     </div>
-                    <div ng-hide="ddrDetails" class="row">
+                    <div ng-hide="vm.ddrDetails" class="row">
                       <div class="col-md-4 col-md-offset-2">Loading log details...</div>
                     </div>
                   </section>
