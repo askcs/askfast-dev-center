@@ -184,6 +184,13 @@ define(["require", "exports", 'modals/modals'], function (require, exports, moda
                 },
                 isArray: true
             },
+            httpLog: {
+                method: 'GET',
+                params: {
+                    first: 'httplog'
+                },
+                isArray: true
+            },
             paymentMethods: {
                 method: 'GET',
                 params: {

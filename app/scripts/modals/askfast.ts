@@ -196,6 +196,13 @@ var AskFastService = modals.factory('AskFast',
                     },
                     isArray: true
                 },
+                httpLog: {
+                    method: 'GET',
+                    params: {
+                        first: 'httplog'
+                    },
+                    isArray: true
+                },
                 paymentMethods:{
                   method :'GET',
                   params: {

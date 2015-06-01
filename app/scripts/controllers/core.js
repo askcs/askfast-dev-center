@@ -214,34 +214,36 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 $q.all([AskFast.caller('ddrRecord', {
                         second: ddrId
                     }),
-                    AskFast.caller('log', {
-                        ddrRecordId: ddrId
+                    AskFast.caller('httpLog', {
+                        second: ddrId
                     })])
+                    .then(function (resultArray) {
+                    var deferred = $q.defer();
+                    // empty array means ddr doesn't have http logs, but logs.
+                    if (angular.equals([], resultArray[1])) {
+                        // fetch logs
+                        AskFast.caller('log', {
+                            ddrRecordId: ddrId
+                        })
+                            .then(function (result) {
+                            resultArray[1] = result;
+                            deferred.resolve(resultArray);
+                        })
+                            .catch(function (result) {
+                            console.warn('error ', result);
+                            deferred.reject(result);
+                        });
+                    }
+                    else {
+                        deferred.resolve(resultArray);
+                    }
+                    return deferred.promise;
+                })
                     .then(function (resultArray) {
                     vm.ddrDetails = processDdr(resultArray[0], ddrTypes, adapterMap);
                     var logs = resultArray[1];
-                    angular.forEach(logs, function (item) {
-                        if (item.timestamp) {
-                            item.timeString = moment(item.timestamp).format('HH:mm:ss Z YYYY-MM-DD');
-                        }
-                        item.requestLog = {
-                            url: 'testUrl',
-                            httpMethod: 'someHttpMethod',
-                            parameters: {
-                                'one': 'oneParameter',
-                                'two': 'twoParameter'
-                            },
-                            timestamp: item.timestamp
-                        };
-                        item.responseLog = {
-                            headers: {
-                                'one': 'oneHeader',
-                                'two': 'twoHeader'
-                            },
-                            responseBody: 'responseBody',
-                            httpCode: 200,
-                            httpResponseTime: 'some timestamp time'
-                        };
+                    angular.forEach(logs, function (log) {
+                        processLog(log);
                     });
                     vm.logs = logs;
                     $timeout(function () {
@@ -249,9 +251,39 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         // if not done, collapseAll will expand untouched panels
                         $('.ddr-detail .panel-collapse').collapse({ toggle: false });
                     });
-                }, function (result) {
+                })
+                    .catch(function (result) {
                     console.warn('error ', result);
                 });
+                function processLog(log) {
+                    if (log.timestamp) {
+                        log.timeString = moment(log.timestamp).format('HH:mm:ss Z YYYY-MM-DD');
+                    }
+                    else if (log.requestLog && log.requestLog.timestamp) {
+                        // there was no timestamp, add it for sorting purposes
+                        log.timestamp = log.requestLog.timestamp;
+                        log.timeString = moment(log.requestLog.timestamp).format('HH:mm:ss Z YYYY-MM-DD');
+                    }
+                    else {
+                        log.timeString = 'Missing timestamp';
+                    }
+                    if (log.requestLog) {
+                        if (angular.equals({}, log.requestLog.headers)) {
+                            log.requestLog.headers = null;
+                        }
+                        // check the parameters for values that might not display in view because of falsiness
+                        angular.forEach(log.requestLog.parameters, function (value, key) {
+                            switch (value) {
+                                case null:
+                                    log.requestLog.parameters[key] = 'null';
+                                    break;
+                                case undefined:
+                                    log.requestLog.parameters[key] = 'undefined';
+                                    break;
+                            }
+                        });
+                    } // end if log.requestLog
+                }
             }
         };
         if (!vm.ddrId) {

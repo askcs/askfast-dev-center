@@ -351,14 +351,16 @@ navbar
                       .col-sm-8.col-sm-offset-2
                         div(ng-repeat='log in vm.logs | orderBy: "timestamp"')
                           //.panel(ng-class='log.level === "INFO" ? "panel-primary" : "panel-default"')
-                          .panel(ng-class='{INFO:"panel-info", SEVERE: "panel-danger", DDR: "panel-default", DEBUG: "panel-success", WARNING: "panel-warning" }[log.level]')
+                          //.panel(ng-class='{INFO:"panel-info", SEVERE: "panel-danger", DDR: "panel-default", DEBUG: "panel-success", WARNING: "panel-warning" }[log.level]')
+                          .panel.panel-default
                             .panel-heading
-                              a(data-toggle='collapse', href='#collapse{{$index}}')
-                                .row
-                                  .col-xs-5
-                                    | {{log.timeString}}
-                                  .col-xs-7
-                                    | {{log.level}}
+                              h3.panel-title
+                                a(data-toggle='collapse', href='#collapse{{$index}}')
+                                  .row
+                                    .col-xs-5
+                                      | {{log.timeString}}
+                                    .col-xs-7
+                                      | {{(log.level) ? log.level : '-'}}
                                       
                             .panel-body.panel-collapse.collapse(id='collapse{{$index}}')
                               .row
@@ -366,31 +368,44 @@ navbar
                                   .col-xs-7.col-xs-offset-5
                                     h4 Request
                                   .col-xs-12
-                                    dl.dl-horizontal
+                                    dl
                                       dt Url
-                                      dd {{log.requestLog.url}}
+                                      dd 
+                                        .well
+                                          pre {{log.requestLog.url}}
                                       dt Method   
                                       dd {{log.requestLog.httpMethod}}
+                                    .collapse-list(ng-show='log.requestLog.headers')
+                                      a.collapsed(data-toggle='collapse', href='#req-headers-{{$index}}')
+                                        | Headers 
+                                    dl.dl-horizontal.collapse(id='req-headers-{{$index}}', ng-show='log.requestLog.headers')
+                                      dt(ng-repeat-start='(headerkey, headerVal) in log.requestLog.headers') {{headerkey}}
+                                      dd(ng-repeat-end) {{headerVal}}
                                     .collapse-list
-                                      a.collapsed(data-toggle='collapse', href='#parameters{{$index}}')
+                                      a.collapsed(data-toggle='collapse', href='#req-parameters-{{$index}}')
                                         | Parameters 
-                                    dl.dl-horizontal.collapse(id='parameters{{$index}}')
+                                    dl.dl-horizontal.collapse(id='req-parameters-{{$index}}')
                                       dt(ng-repeat-start='(paramKey, paramVal) in log.requestLog.parameters') {{paramKey}}
                                       dd(ng-repeat-end) {{paramVal}}
                                       div(ng-hide='log.requestLog.parameters')
                                         dt -
                                         dd -
+                                    h5 Body
+                                    .well
+                                      pre {{log.requestLog.requestBody}}
                                 .row.col-xs-12.col-lg-6(ng-show='log.responseLog')
                                   .col-xs-7.col-xs-offset-5
                                     h4 Response
                                   .col-xs-12
-                                    dl.dl-horizontal
+                                    dl
                                       dt Response Code
                                       dd {{log.responseLog.httpCode}}
+                                      dt Response Time
+                                      dd {{(log.responseLog.httpResponseTime) ? log.responseLog.httpResponseTime : '-' }} ms
                                     .collapse-list
-                                      a.collapsed(data-toggle='collapse', href='#headers{{$index}}')
+                                      a.collapsed(data-toggle='collapse', href='#res-headers-{{$index}}')
                                         | Headers 
-                                    dl.dl-horizontal.collapse(id='headers{{$index}}')
+                                    dl.dl-horizontal.collapse(id='res-headers-{{$index}}')
                                       dt(ng-repeat-start='(headerkey, headerVal) in log.responseLog.headers') {{headerkey}}
                                       dd(ng-repeat-end) {{headerVal}}
                                       div(ng-hide='log.responseLog.headers')
