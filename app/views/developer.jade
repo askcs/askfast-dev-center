@@ -340,11 +340,7 @@ navbar
                           
                       .col-sm-8.col-sm-offset-2
                         .row(ng-show='vm.logs')
-                          .col-xs-5
-                            strong Time 
-                          .col-xs-2
-                            strong Level 
-                          .col-xs-5
+                          .col-xs-12
                             button.pull-right.btn.btn-default(ng-click='vm.expandAll()') Expand All
                             button.pull-right.btn.btn-default(ng-click='vm.collapseAll()') Collapse All
                           hr
@@ -359,8 +355,12 @@ navbar
                                   .row
                                     .col-xs-5
                                       | {{log.timeString}}
-                                    .col-xs-7
+                                    .col-xs-2
                                       | {{(log.level) ? log.level : '-'}}
+                                    .col-xs-2
+                                      | {{log.requestLog.httpMethod}}
+                                    .col-xs-2
+                                      | {{log.responseLog.httpCode}}
                                       
                             .panel-body.panel-collapse.collapse(id='collapse{{$index}}')
                               .row
