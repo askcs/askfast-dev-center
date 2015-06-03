@@ -93,7 +93,7 @@
                     <h2>Add a new dialog</h2>
                   </header>
                   <section>
-                    <form role="form" name="forms.addDialog" ng-submit="vm.Dialog.add(dialog)">
+                    <form role="form" name="forms.addDialog" ng-submit="vm.Dialog.add(vm.dialog)">
                       <div class="row">
                         <div class="form-group col-lg-6 col-md-8 {{forms.addDialog.name.$invalid &amp;&amp; forms.addDialog.name.$dirty &amp;&amp; &quot;has-error&quot;}}">
                           <input type="text" name="name" ng-model="vm.dialog.form.name" placeholder="Dialog name" required="required" class="form-control">
@@ -186,16 +186,16 @@
                                     <input name="password" ng-model="vm.dialog.password" type="password" class="form-control">
                                   </div>
                                   <div class="form-groups">
-                                    <button ng-click="vm.authenticateDialog(dialog)" class="btn btn-default">{{(vm.dialog.useBasicAuth) && 'Update' || 'Enable'}}</button>
-                                    <button ng-click="vm.cancelAuthentication(dialog)" class="btn btn-default">Cancel</button>
-                                    <button ng-click="vm.disableDialogAuthentication(dialog)" ng-show="vm.dialog.useBasicAuth" class="btn btn-danger pull-right">Disable</button>
+                                    <button ng-click="vm.authenticateDialog(vm.dialog)" class="btn btn-default">{{(vm.dialog.useBasicAuth) && 'Update' || 'Enable'}}</button>
+                                    <button ng-click="vm.cancelAuthentication(vm.dialog)" class="btn btn-default">Cancel</button>
+                                    <button ng-click="vm.disableDialogAuthentication(vm.dialog)" ng-show="vm.dialog.useBasicAuth" class="btn btn-danger pull-right">Disable</button>
                                   </div>
                                 </div>
                               </fieldset>
                             </form>
                           </div>
                           <div class="col-md-2">
-                            <button ng-click="vm.Dialog.remove(dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
+                            <button ng-click="vm.Dialog.remove(vm.dialog)" class="btn btn-default btn-danger pull-right">Delete dialog</button>
                           </div>
                         </div>
                         <div class="row">
@@ -220,7 +220,7 @@
                                 </div>
                                 <div class="row">
                                   <div class="form-group col-md-12">
-                                    <button type="button" ng-click="vm.Dialog.adapters.add(dialog)" class="btn btn-default">Link adapter to dialog</button>
+                                    <button type="button" ng-click="vm.Dialog.adapters.add(vm.dialog)" class="btn btn-default">Link adapter to dialog</button>
                                   </div>
                                 </div>
                               </fieldset>
