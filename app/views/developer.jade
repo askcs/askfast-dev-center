@@ -87,7 +87,7 @@ navbar
                   header: h2 Add a new dialog
                   section
                     form(role='form', name='forms.addDialog',
-                    ng-submit='vm.Dialog.add(dialog)')
+                    ng-submit='vm.Dialog.add(vm.dialog)')
                       .row
                         .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && forms.addDialog.name.$dirty && "has-error"}}')
                           input.form-control(type='text',
@@ -177,16 +177,16 @@ navbar
                                     label Password
                                     input.form-control(name='password', ng-model='vm.dialog.password', type='password')
                                   .form-groups
-                                    button.btn.btn-default(ng-click='vm.authenticateDialog(dialog)')
+                                    button.btn.btn-default(ng-click='vm.authenticateDialog(vm.dialog)')
                                       | {{(vm.dialog.useBasicAuth) && 'Update' || 'Enable'}}
-                                    button.btn.btn-default(ng-click='vm.cancelAuthentication(dialog)')
+                                    button.btn.btn-default(ng-click='vm.cancelAuthentication(vm.dialog)')
                                       | Cancel
-                                    button.btn.btn-danger.pull-right(ng-click='vm.disableDialogAuthentication(dialog)',
+                                    button.btn.btn-danger.pull-right(ng-click='vm.disableDialogAuthentication(vm.dialog)',
                                       ng-show='vm.dialog.useBasicAuth')
                                       | Disable
 
                           .col-md-2
-                            button.btn.btn-default.btn-danger.pull-right(ng-click='vm.Dialog.remove(dialog)')
+                            button.btn.btn-default.btn-danger.pull-right(ng-click='vm.Dialog.remove(vm.dialog)')
                               | Delete dialog
                         .row
                           .col-md-10
@@ -213,7 +213,7 @@ navbar
                                 .row
                                   .form-group.col-md-12
                                     button.btn.btn-default(type='button',
-                                    ng-click='vm.Dialog.adapters.add(dialog)') Link adapter to dialog
+                                    ng-click='vm.Dialog.adapters.add(vm.dialog)') Link adapter to dialog
                         hr
                         fieldset
                           legend Linked Adapters
