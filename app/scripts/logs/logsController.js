@@ -1,7 +1,6 @@
 define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
     'use strict';
-    var logsController = controllers.controller('logs', function ($rootScope, $scope, $q, $route, $location, $timeout, LogsService, AskFast, Store, moment) {
-        Store = Store('data');
+    var logsController = controllers.controller('logs', function ($scope, $route, $location, $timeout, LogsService, moment) {
         var vm = this;
         vm.ddrId = null;
         vm.currentSection = 'debugger';
@@ -38,64 +37,6 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 vm.setSection('debugger', true);
             }
         });
-        vm.types = [
-            'Phone',
-            'SMS',
-            'Gtalk',
-            'Email',
-            'Twitter'
-        ];
-        vm.adapterTypes = {
-            call: {
-                label: 'Phone',
-                ids: []
-            },
-            xmpp: {
-                label: 'Gtalk',
-                ids: []
-            },
-            email: {
-                label: 'Email',
-                ids: []
-            },
-            twitter: {
-                label: 'Twitter',
-                ids: []
-            },
-            sms: {
-                label: 'SMS',
-                ids: []
-            }
-        };
-        vm.channel = {
-            type: null,
-            adapter: null
-        };
-        vm.forms = {};
-        vm.candidates = [];
-        vm.channelTypeSelected = function () {
-            var candidates = [];
-            angular.forEach(vm.adapterTypes, function (type) {
-                if (type.label == vm.channel.type) {
-                    angular.forEach(type.ids, function (id) {
-                        angular.forEach(vm.adapters, function (adapter) {
-                            if (adapter.configId == id)
-                                candidates.push(adapter);
-                        });
-                    });
-                }
-            });
-            vm.candidates = candidates;
-        };
-        vm.dialogAuth = {
-            open: false,
-            message: '',
-            messageType: ''
-        };
-        vm.resetAdapterMenu = function () {
-            vm.channel.type = null;
-            vm.channel.adapter = null;
-        };
         vm.query = {
             category: 'all',
             limit: 100,
@@ -147,63 +88,6 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         else {
             vm.Log.detail(vm.ddrId);
         }
-        vm.Adapter = {
-            list: function (callback) {
-                vm.adapterType = '';
-                AskFast.caller('getAdapters')
-                    .then(function (adapters) {
-                    angular.forEach(adapters, function (adapter) {
-                        if (adapter.adapterType in vm.adapterTypes) {
-                            var ids = vm.adapterTypes[adapter.adapterType].ids;
-                            if (ids.indexOf(adapter.configId) == -1)
-                                ids.push(adapter.configId);
-                        }
-                    });
-                    Store.save(vm.adapterTypes, 'adapterTypes');
-                    vm.adapters = adapters;
-                    if (callback)
-                        callback.call(null, adapters);
-                });
-            },
-            add: function (adapter) {
-                AskFast.caller('createAdapter', {
-                    second: adapter.configId
-                }).then((function () {
-                    this.list();
-                    // reset adapter add form
-                    vm.adapterType = '';
-                }).bind(this));
-            },
-            // TODO: Add changing dialog info later on
-            //            update: function (dialog)
-            //            {
-            //              AskFast.caller('updateAdapter', { second: vm.channel.adapter },
-            //                {
-            //                  dialogId: dialog.id
-            //                }).then((function ()
-            //              {
-            //                this.list();
-            //
-            //                vm.Adapter.adapters();
-            //              }).bind(this));
-            //            },
-            query: function (type) {
-                AskFast.caller('freeAdapters', {
-                    adapterType: type
-                })
-                    .then(function (result) {
-                    vm.freeAdapters = result;
-                });
-            },
-            remove: function (adapter) {
-                AskFast.caller('removeAdapter', {
-                    second: adapter.configId
-                }).then((function () {
-                    this.list();
-                }).bind(this));
-            }
-        };
-        vm.Adapter.list();
         vm.expandAll = function () {
             $('.ddr-detail .panel-collapse').collapse('show');
         };
