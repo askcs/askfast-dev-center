@@ -1,9 +1,4 @@
-define(
-  ['angular'],
-  function (angular)
-  {
-    'use strict';
-
-    return angular.module('services', []);
-  }
-);
+define(["require", "exports", 'angular'], function (require, exports, angular) {
+    var services = angular.module('services', []);
+    return services;
+});

@@ -48,6 +48,14 @@ define(
               resolve:        { redirect: redirect },
               reloadOnSearch: false
             })
+            .when('/logs',
+            {
+              templateUrl:    'views/logs.html',
+              controller:     'logs',
+              controllerAs:   'vm',
+              resolve:        { redirect: redirect },
+              reloadOnSearch: false
+            })
             .when('/profile',
             {
               templateUrl:    'views/profile.html',
