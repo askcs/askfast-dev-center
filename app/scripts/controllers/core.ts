@@ -7,9 +7,7 @@ import controllers = require('controllers/controllers')
 var coreController = controllers.controller('core',
   function (
     $rootScope: ng.IRootScopeService,
-    $scope: ng.IScope,
     $q: ng.IQService,
-    $route,
     $location: ng.ILocationService,
     $timeout: ng.ITimeoutService,
     AskFast,
@@ -20,49 +18,12 @@ var coreController = controllers.controller('core',
 
     var vm = this;
 
-    vm.ddrId = null;
-    vm.currentSection = 'debugger';
+    vm.currentSection = 'dialogs';
 
-    if ($route.current.params.ddrId) {
-      vm.currentSection = 'details';
-      vm.ddrId = $route.current.params.ddrId;
-    }
-
-    vm.loading = {
-      logs: true
-    };
-
-    vm.setSection = function (selection, clearDdrId)
+    vm.setSection = function (selection)
     {
-      if ($route.current.params.ddrId){
-        vm.ddrId = null;
-        $location.url('/developer');
-      }
-
-      if(clearDdrId){
-        vm.ddrId = null;
-      }
-
       vm.currentSection = selection;
-
-      if(selection === 'debugger'){
-        vm.logs = [];
-        vm.Log.list();
-      }
     };
-
-    $scope.$on('$routeUpdate', function(){
-      if ($route.current.params.ddrId && vm.ddrId === null){
-        vm.ddrId = $route.current.params.ddrId;
-        vm.currentSection = 'details';
-        vm.Log.detail(vm.ddrId);
-      }
-      else if(vm.currentSection === 'details'){
-        // means the user went back
-        // the only links to 'details' are from 'debugger'
-        vm.setSection('debugger', true);
-      }
-    });
 
     vm.types = [
       'Phone',
@@ -143,249 +104,6 @@ var coreController = controllers.controller('core',
       until: moment().format('DD/MM/YYYY')
     };
 
-    function processDdr(ddrLog, ddrTypes, adapterMap){
-      if(ddrLog.start){
-        ddrLog.startString = moment(ddrLog.start).format('HH:mm:ss Z YYYY-MM-DD');
-        if(ddrLog.duration !== null){
-          ddrLog.endString = moment(ddrLog.start + ddrLog.duration).format('HH:mm:ss Z YYYY-MM-DD');
-        }
-        else{
-          ddrLog.endString = '-';
-        }
-      }
-      else{
-        ddrLog.startString = '-';
-        ddrLog.endString = '-';
-      }
-      ddrLog.fromAddress = ddrLog.fromAddress || '-';
-      ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString))[0] : '-';
-      ddrLog.ddrTypeString = ddrLog.ddrTypeId ? getDdrTypeString(ddrLog.ddrTypeId, ddrTypes) : '-';
-      // there's no way to get the index from ng-repeat, make an object out of it
-      if(ddrLog.statusPerAddress){
-        angular.forEach(ddrLog.statusPerAddress, function(item, index){
-          ddrLog.statusPerAddress[index] =  {index: index, status: item};
-        });
-      }
-      ddrLog.adapterTypeString = ddrLog.adapterId ? getAdapterTypeString(ddrLog.adapterId, adapterMap) : '-';
-
-      return ddrLog;
-    }
-
-    function getDdrTypeString(ddrTypeId, ddrTypes){
-      if(typeof ddrTypes[ddrTypeId] !== 'undefined' && typeof ddrTypes[ddrTypeId].categoryString !== 'undefined'){
-        return ddrTypes[ddrTypeId].categoryString;
-      }
-      else {
-        return 'Unknown';
-      }
-    }
-
-    function getAdapterTypeString(adapterId, adapterMap){
-      if(typeof adapterMap[adapterId] !== 'undefined'){
-        return vm.adapterTypes[adapterMap[adapterId]].label;
-      }
-      else {
-        return 'Unknown';
-      }
-    }
-
-    vm.Log = {
-      data: null,
-
-      list: function ()
-      {
-        var _period;
-
-        if(vm.query.until){
-          _period = moment(vm.query.until, 'DD/MM/YYYY').endOf('day').valueOf();
-        }
-        else{
-          _period = moment().endOf('day').valueOf();
-        }
-
-        vm.loading.logs = true;
-
-        AskFast.caller('ddr', {
-          limit:  vm.query.limit,
-          endTime:    _period
-        })
-          .then((function (ddr)
-          {
-            var ddrTypes = Store.get('ddrTypes');
-
-            var adapterMap = Store.get('adapterMap');
-
-            var logs = {
-              call: [],
-              email: [],
-              sms: [],
-              xmpp: [],
-              twitter: [],
-              other: []
-            };
-
-            var allLogs = [];
-
-            angular.forEach(ddr, function(ddrLog){
-              allLogs.push(processDdr(ddrLog, ddrTypes, adapterMap));
-            });
-
-            angular.forEach(allLogs, function (ddrLog)
-            {
-              var gotPushed = false;
-              angular.forEach(adapterMap, function (adapterType, adapterId)
-              {
-
-                if (ddrLog.adapterId == adapterId){
-                  if (logs[adapterMap[ddrLog.adapterId]]){
-                    logs[adapterMap[ddrLog.adapterId]].push(ddrLog);
-                    gotPushed = true;
-                  }
-                }
-
-              });
-
-              if(!gotPushed){
-                logs.other.push(ddrLog);
-              }
-
-            });
-
-            this.data = logs;
-
-            this.categorize();
-            vm.loading.logs = false;
-
-          }).bind(this));
-      },
-
-      categorize: function ()
-      {
-        var category = vm.query.category;
-
-        if(category && category !== 'all'){
-          vm.logs = this.data[category];
-        }
-        else{
-          // vm.query.category is ALL
-          var logs = [],
-            data = this.data;
-
-          angular.forEach(data, function (segment)
-          {
-            angular.forEach(segment, function (log)
-            {
-              logs.push(log);
-            });
-          });
-
-          vm.logs = logs;
-        }
-
-      },
-
-      detail: function(ddrId: string)
-      {
-        var ddrTypes = Store.get('ddrTypes');
-        var adapterMap = Store.get('adapterMap');
-
-        $q.all([AskFast.caller('ddrRecord', {
-          second: ddrId
-        }),
-        AskFast.caller('httpLog', {
-          second: ddrId
-        })])
-        .then(function(resultArray){
-
-          var deferred = $q.defer();
-
-          // empty array means ddr doesn't have http logs, but logs.
-          if (angular.equals([], resultArray[1])){
-            // fetch logs
-            AskFast.caller('log', {
-              ddrRecordId: ddrId
-            })
-            .then(function(result){
-              resultArray[1] = result;
-              deferred.resolve(resultArray);
-            })
-            .catch(function(result){
-              console.warn('error ',result);
-              deferred.reject(result);
-            });
-          }
-          else {
-            deferred.resolve(resultArray);
-          }
-
-          return deferred.promise;
-        })
-        .then(function(resultArray){
-          
-          vm.ddrDetails = processDdr(resultArray[0], ddrTypes, adapterMap);
-
-          var logs = resultArray[1];
-
-          angular.forEach(logs, function(log){
-            processLog(log);
-          });
-
-          vm.logs = logs;
-
-          $timeout(function(){
-            // makes sure that first call to collapse doesn't toggle.
-            // if not done, collapseAll will expand untouched panels
-            $('.ddr-detail .panel-collapse').collapse({toggle:false});
-          });
-        })
-        .catch(function(result){
-          console.warn('error ',result);
-        });
-
-        function processLog(log){
-          if (log.timestamp){
-            log.timeString = moment(log.timestamp).format('HH:mm:ss Z YYYY-MM-DD')
-          }
-          else if (log.requestLog && log.requestLog.timestamp){
-            // there was no timestamp, add it for sorting purposes
-            log.timestamp = log.requestLog.timestamp;
-            log.timeString = moment(log.requestLog.timestamp).format('HH:mm:ss Z YYYY-MM-DD')
-          }
-          else {
-            log.timeString = 'Missing timestamp';
-          }
-
-          if (log.requestLog){
-
-            if (angular.equals({}, log.requestLog.headers)){
-              log.requestLog.headers = null;
-            }
-
-            // check the parameters for values that might not display in view because of falsiness
-            angular.forEach(log.requestLog.parameters, function(value, key){
-              switch (value){
-                case null:
-                  log.requestLog.parameters[key] = 'null';
-                  break;
-                case undefined:
-                  log.requestLog.parameters[key] = 'undefined';
-                  break;
-              }
-            })
-
-          } // end if log.requestLog
-
-        }
-      }
-    };
-
-    if(!vm.ddrId){
-      vm.Log.list();
-    }
-    else{
-      vm.Log.detail(vm.ddrId);
-    }
-
     vm.Adapter = {
 
       list: function (callback)
@@ -415,13 +133,13 @@ var coreController = controllers.controller('core',
       {
         AskFast.caller('createAdapter', {
           second: adapter.configId
-        }).then((function ()
+        }).then( () =>
         {
           this.list();
 
           // reset adapter add form
           vm.adapterType= '';
-        }).bind(this));
+        });
       },
 
       // TODO: Add changing dialog info later on
@@ -454,10 +172,10 @@ var coreController = controllers.controller('core',
       {
         AskFast.caller('removeAdapter', {
           second: adapter.configId
-        }).then((function ()
+        }).then( () =>
         {
           this.list();
-        }).bind(this));
+        });
       }
     };
 
@@ -483,7 +201,7 @@ var coreController = controllers.controller('core',
             name: dialog.form.name,
             url: dialog.form.url
           })
-            .then((function (result)
+            .then( (result) =>
             {
               vm.addingDialog = false;
 
@@ -494,7 +212,7 @@ var coreController = controllers.controller('core',
                 // close auth menu if it was open
                 vm.dialogAuth = false;
               });
-            }).bind(this));
+            });
         }
       },
 
@@ -503,7 +221,7 @@ var coreController = controllers.controller('core',
         AskFast.caller('deleteDialog', {
           third: dialog.id
         })
-          .then((function ()
+          .then( () =>
           {
             vm.addingDialog = false;
 
@@ -516,7 +234,7 @@ var coreController = controllers.controller('core',
 
               vm.setSection('dialogs');
             });
-          }).bind(this));
+          });
       },
 
       update: function (dialog, deferred)
@@ -539,7 +257,7 @@ var coreController = controllers.controller('core',
         AskFast.caller('updateDialog', {
           third: dialog.id
         },dialogObject)
-        .then((function (result)
+        .then( (result) =>
         {
 
           if(deferred){
@@ -553,7 +271,7 @@ var coreController = controllers.controller('core',
 
           this.list();
 
-        }).bind(this));
+        });
       },
 
       updateDetails: function (dialog)
@@ -594,12 +312,12 @@ var coreController = controllers.controller('core',
         update: function (dialogId, adapterId)
         {
           AskFast.caller('updateAdapter', { second: adapterId },{ dialogId: dialogId })
-            .then((function (adapter)
+            .then( (adapter) =>
             {
               // vm.dialogAdapters = this.list(dialogId, adapter);
 
               vm.Adapter.list();
-            }).bind(this));
+            });
         },
 
         add: function (dialog)
@@ -659,16 +377,16 @@ var coreController = controllers.controller('core',
           vm.Dialog.update(dialog, deferred);
 
           deferred.promise
-          .then(function(result){
+          .then( (result) => {
             //success
             vm.dialogAuth.open = false;
             this.notify('Basic Authentication applied successfully', 'success');
-          }.bind(this))
-          .catch(function(result){
+          })
+          .catch( (result) => {
             //something went wrong, handle it
             console.log('error -> ', result);
             this.notify('Something went wrong with the request', 'danger');
-          }.bind(this));
+          });
         },
         disable: function(dialog)
         {
@@ -695,16 +413,16 @@ var coreController = controllers.controller('core',
           vm.Dialog.update(dialogObj, deferred);
 
           deferred.promise
-          .then(function(result){
+          .then( (result) => {
             //success
             vm.dialogAuth.open = false;
             this.notify('Basic Authentication successfully disabled', 'success');
-          }.bind(vm.Dialog.authentication))
-          .catch(function(result){
+          })
+          .catch( (result) => {
             //something went wrong, handle it
             console.log('error -> ', result);
             this.notify('Something went wrong with the request', 'danger');
-          }.bind(vm.Dialog.authentication));
+          });
         },
         notify: function(message, type, cancel)
         {
@@ -754,14 +472,6 @@ var coreController = controllers.controller('core',
     vm.cancelAuthentication = function(dialog){
       vm.Dialog.authentication.cancel(dialog);
     }
-
-    vm.expandAll = function(){
-      $('.ddr-detail .panel-collapse').collapse('show');
-    };
-
-    vm.collapseAll = function(){
-      $('.ddr-detail .panel-collapse').collapse('hide');
-    };
 
     // grab the list, then select the first if exists
     vm.Dialog.list(function(){
