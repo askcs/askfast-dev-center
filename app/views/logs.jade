@@ -4,15 +4,6 @@ navbar
   .container-fluid
     section#developer
       .container-fluid
-        //- #sub-header.row
-        //-   .col-md-12
-        //-     ul.list-inline
-        //-       li: a(ng-click='vm.setSection("adapters")') Adapters
-        //-       li: a(ng-click='vm.setSection("dialogs")') Dialogs
-        //-       li: a(ng-click='vm.setSection("debugger")') Debugger
-        //- #toolbar.row
-        //-   .col-md-10
-        //-   .col-md-2.text-right
 
         section(ng-switch='', on='vm.currentSection')
           
@@ -20,7 +11,7 @@ navbar
             .col-md-12
               .widget
                 .inner
-                  header: h2 Debugger
+                  header: h2 Communication Logs
                   section
                     form.form-inline(role='form')
                       .form-group
