@@ -1,43 +1,12 @@
 define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
     'use strict';
-    var coreController = controllers.controller('core', function ($rootScope, $scope, $q, $route, $location, $timeout, AskFast, Store, moment) {
+    var coreController = controllers.controller('core', function ($rootScope, $q, $location, $timeout, AskFast, Store, moment) {
         Store = Store('data');
         var vm = this;
-        vm.ddrId = null;
-        vm.currentSection = 'debugger';
-        if ($route.current.params.ddrId) {
-            vm.currentSection = 'details';
-            vm.ddrId = $route.current.params.ddrId;
-        }
-        vm.loading = {
-            logs: true
-        };
-        vm.setSection = function (selection, clearDdrId) {
-            if ($route.current.params.ddrId) {
-                vm.ddrId = null;
-                $location.url('/developer');
-            }
-            if (clearDdrId) {
-                vm.ddrId = null;
-            }
+        vm.currentSection = 'dialogs';
+        vm.setSection = function (selection) {
             vm.currentSection = selection;
-            if (selection === 'debugger') {
-                vm.logs = [];
-                vm.Log.list();
-            }
         };
-        $scope.$on('$routeUpdate', function () {
-            if ($route.current.params.ddrId && vm.ddrId === null) {
-                vm.ddrId = $route.current.params.ddrId;
-                vm.currentSection = 'details';
-                vm.Log.detail(vm.ddrId);
-            }
-            else if (vm.currentSection === 'details') {
-                // means the user went back
-                // the only links to 'details' are from 'debugger'
-                vm.setSection('debugger', true);
-            }
-        });
         vm.types = [
             'Phone',
             'SMS',
@@ -101,197 +70,6 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
             limit: 100,
             until: moment().format('DD/MM/YYYY')
         };
-        function processDdr(ddrLog, ddrTypes, adapterMap) {
-            if (ddrLog.start) {
-                ddrLog.startString = moment(ddrLog.start).format('HH:mm:ss Z YYYY-MM-DD');
-                if (ddrLog.duration !== null) {
-                    ddrLog.endString = moment(ddrLog.start + ddrLog.duration).format('HH:mm:ss Z YYYY-MM-DD');
-                }
-                else {
-                    ddrLog.endString = '-';
-                }
-            }
-            else {
-                ddrLog.startString = '-';
-                ddrLog.endString = '-';
-            }
-            ddrLog.fromAddress = ddrLog.fromAddress || '-';
-            ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString))[0] : '-';
-            ddrLog.ddrTypeString = ddrLog.ddrTypeId ? getDdrTypeString(ddrLog.ddrTypeId, ddrTypes) : '-';
-            // there's no way to get the index from ng-repeat, make an object out of it
-            if (ddrLog.statusPerAddress) {
-                angular.forEach(ddrLog.statusPerAddress, function (item, index) {
-                    ddrLog.statusPerAddress[index] = { index: index, status: item };
-                });
-            }
-            ddrLog.adapterTypeString = ddrLog.adapterId ? getAdapterTypeString(ddrLog.adapterId, adapterMap) : '-';
-            return ddrLog;
-        }
-        function getDdrTypeString(ddrTypeId, ddrTypes) {
-            if (typeof ddrTypes[ddrTypeId] !== 'undefined' && typeof ddrTypes[ddrTypeId].categoryString !== 'undefined') {
-                return ddrTypes[ddrTypeId].categoryString;
-            }
-            else {
-                return 'Unknown';
-            }
-        }
-        function getAdapterTypeString(adapterId, adapterMap) {
-            if (typeof adapterMap[adapterId] !== 'undefined') {
-                return vm.adapterTypes[adapterMap[adapterId]].label;
-            }
-            else {
-                return 'Unknown';
-            }
-        }
-        vm.Log = {
-            data: null,
-            list: function () {
-                var _period;
-                if (vm.query.until) {
-                    _period = moment(vm.query.until, 'DD/MM/YYYY').endOf('day').valueOf();
-                }
-                else {
-                    _period = moment().endOf('day').valueOf();
-                }
-                vm.loading.logs = true;
-                AskFast.caller('ddr', {
-                    limit: vm.query.limit,
-                    endTime: _period
-                })
-                    .then((function (ddr) {
-                    var ddrTypes = Store.get('ddrTypes');
-                    var adapterMap = Store.get('adapterMap');
-                    var logs = {
-                        call: [],
-                        email: [],
-                        sms: [],
-                        xmpp: [],
-                        twitter: [],
-                        other: []
-                    };
-                    var allLogs = [];
-                    angular.forEach(ddr, function (ddrLog) {
-                        allLogs.push(processDdr(ddrLog, ddrTypes, adapterMap));
-                    });
-                    angular.forEach(allLogs, function (ddrLog) {
-                        var gotPushed = false;
-                        angular.forEach(adapterMap, function (adapterType, adapterId) {
-                            if (ddrLog.adapterId == adapterId) {
-                                if (logs[adapterMap[ddrLog.adapterId]]) {
-                                    logs[adapterMap[ddrLog.adapterId]].push(ddrLog);
-                                    gotPushed = true;
-                                }
-                            }
-                        });
-                        if (!gotPushed) {
-                            logs.other.push(ddrLog);
-                        }
-                    });
-                    this.data = logs;
-                    this.categorize();
-                    vm.loading.logs = false;
-                }).bind(this));
-            },
-            categorize: function () {
-                var category = vm.query.category;
-                if (category && category !== 'all') {
-                    vm.logs = this.data[category];
-                }
-                else {
-                    // vm.query.category is ALL
-                    var logs = [], data = this.data;
-                    angular.forEach(data, function (segment) {
-                        angular.forEach(segment, function (log) {
-                            logs.push(log);
-                        });
-                    });
-                    vm.logs = logs;
-                }
-            },
-            detail: function (ddrId) {
-                var ddrTypes = Store.get('ddrTypes');
-                var adapterMap = Store.get('adapterMap');
-                $q.all([AskFast.caller('ddrRecord', {
-                        second: ddrId
-                    }),
-                    AskFast.caller('httpLog', {
-                        second: ddrId
-                    })])
-                    .then(function (resultArray) {
-                    var deferred = $q.defer();
-                    // empty array means ddr doesn't have http logs, but logs.
-                    if (angular.equals([], resultArray[1])) {
-                        // fetch logs
-                        AskFast.caller('log', {
-                            ddrRecordId: ddrId
-                        })
-                            .then(function (result) {
-                            resultArray[1] = result;
-                            deferred.resolve(resultArray);
-                        })
-                            .catch(function (result) {
-                            console.warn('error ', result);
-                            deferred.reject(result);
-                        });
-                    }
-                    else {
-                        deferred.resolve(resultArray);
-                    }
-                    return deferred.promise;
-                })
-                    .then(function (resultArray) {
-                    vm.ddrDetails = processDdr(resultArray[0], ddrTypes, adapterMap);
-                    var logs = resultArray[1];
-                    angular.forEach(logs, function (log) {
-                        processLog(log);
-                    });
-                    vm.logs = logs;
-                    $timeout(function () {
-                        // makes sure that first call to collapse doesn't toggle.
-                        // if not done, collapseAll will expand untouched panels
-                        $('.ddr-detail .panel-collapse').collapse({ toggle: false });
-                    });
-                })
-                    .catch(function (result) {
-                    console.warn('error ', result);
-                });
-                function processLog(log) {
-                    if (log.timestamp) {
-                        log.timeString = moment(log.timestamp).format('HH:mm:ss Z YYYY-MM-DD');
-                    }
-                    else if (log.requestLog && log.requestLog.timestamp) {
-                        // there was no timestamp, add it for sorting purposes
-                        log.timestamp = log.requestLog.timestamp;
-                        log.timeString = moment(log.requestLog.timestamp).format('HH:mm:ss Z YYYY-MM-DD');
-                    }
-                    else {
-                        log.timeString = 'Missing timestamp';
-                    }
-                    if (log.requestLog) {
-                        if (angular.equals({}, log.requestLog.headers)) {
-                            log.requestLog.headers = null;
-                        }
-                        // check the parameters for values that might not display in view because of falsiness
-                        angular.forEach(log.requestLog.parameters, function (value, key) {
-                            switch (value) {
-                                case null:
-                                    log.requestLog.parameters[key] = 'null';
-                                    break;
-                                case undefined:
-                                    log.requestLog.parameters[key] = 'undefined';
-                                    break;
-                            }
-                        });
-                    } // end if log.requestLog
-                }
-            }
-        };
-        if (!vm.ddrId) {
-            vm.Log.list();
-        }
-        else {
-            vm.Log.detail(vm.ddrId);
-        }
         vm.Adapter = {
             list: function (callback) {
                 vm.adapterType = '';
@@ -311,13 +89,14 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 });
             },
             add: function (adapter) {
+                var _this = this;
                 AskFast.caller('createAdapter', {
                     second: adapter.configId
-                }).then((function () {
-                    this.list();
+                }).then(function () {
+                    _this.list();
                     // reset adapter add form
                     vm.adapterType = '';
-                }).bind(this));
+                });
             },
             // TODO: Add changing dialog info later on
             //            update: function (dialog)
@@ -341,11 +120,12 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 });
             },
             remove: function (adapter) {
+                var _this = this;
                 AskFast.caller('removeAdapter', {
                     second: adapter.configId
-                }).then((function () {
-                    this.list();
-                }).bind(this));
+                }).then(function () {
+                    _this.list();
+                });
             }
         };
         vm.Adapter.list();
@@ -360,37 +140,40 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 });
             },
             add: function (dialog) {
+                var _this = this;
                 if (dialog.form.name && dialog.form.url) {
                     AskFast.caller('createDialog', null, {
                         name: dialog.form.name,
                         url: dialog.form.url
                     })
-                        .then((function (result) {
+                        .then(function (result) {
                         vm.addingDialog = false;
-                        this.list(function () {
+                        _this.list(function () {
                             vm.setSection('dialogs');
                             openDialog(result);
                             // close auth menu if it was open
                             vm.dialogAuth = false;
                         });
-                    }).bind(this));
+                    });
                 }
             },
             remove: function (dialog) {
+                var _this = this;
                 AskFast.caller('deleteDialog', {
                     third: dialog.id
                 })
-                    .then((function () {
+                    .then(function () {
                     vm.addingDialog = false;
-                    this.list(function () {
+                    _this.list(function () {
                         vm.dialog = null;
                         if (vm.dialogs[0])
                             vm.dialog = vm.dialogs[0];
                         vm.setSection('dialogs');
                     });
-                }).bind(this));
+                });
             },
             update: function (dialog, deferred) {
+                var _this = this;
                 var dialogObject = {
                     id: dialog.id,
                     name: dialog.name,
@@ -407,7 +190,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 AskFast.caller('updateDialog', {
                     third: dialog.id
                 }, dialogObject)
-                    .then((function (result) {
+                    .then(function (result) {
                     if (deferred) {
                         if (result.error) {
                             deferred.reject(result);
@@ -416,8 +199,8 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                             deferred.resolve(result);
                         }
                     }
-                    this.list();
-                }).bind(this));
+                    _this.list();
+                });
             },
             updateDetails: function (dialog) {
                 var dialogArr = vm.dialogs.filter(function (_dialog) {
@@ -449,10 +232,10 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 },
                 update: function (dialogId, adapterId) {
                     AskFast.caller('updateAdapter', { second: adapterId }, { dialogId: dialogId })
-                        .then((function (adapter) {
+                        .then(function (adapter) {
                         // vm.dialogAdapters = this.list(dialogId, adapter);
                         vm.Adapter.list();
-                    }).bind(this));
+                    });
                 },
                 add: function (dialog) {
                     this.update(dialog.id, vm.channel.adapter);
@@ -477,6 +260,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
             },
             authentication: {
                 enable: function (dialog) {
+                    var _this = this;
                     //check with falsiness, could be null, undefined or empty string
                     if (!!dialog.userName && !!dialog.password) {
                         dialog.useBasicAuth = true;
@@ -502,15 +286,16 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         .then(function (result) {
                         //success
                         vm.dialogAuth.open = false;
-                        this.notify('Basic Authentication applied successfully', 'success');
-                    }.bind(this))
+                        _this.notify('Basic Authentication applied successfully', 'success');
+                    })
                         .catch(function (result) {
                         //something went wrong, handle it
                         console.log('error -> ', result);
-                        this.notify('Something went wrong with the request', 'danger');
-                    }.bind(this));
+                        _this.notify('Something went wrong with the request', 'danger');
+                    });
                 },
                 disable: function (dialog) {
+                    var _this = this;
                     var dialogObj;
                     dialog.useBasicAuth = false;
                     var dialogArr = vm.dialogs.filter(function (_dialog) {
@@ -533,13 +318,13 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                         .then(function (result) {
                         //success
                         vm.dialogAuth.open = false;
-                        this.notify('Basic Authentication successfully disabled', 'success');
-                    }.bind(vm.Dialog.authentication))
+                        _this.notify('Basic Authentication successfully disabled', 'success');
+                    })
                         .catch(function (result) {
                         //something went wrong, handle it
                         console.log('error -> ', result);
-                        this.notify('Something went wrong with the request', 'danger');
-                    }.bind(vm.Dialog.authentication));
+                        _this.notify('Something went wrong with the request', 'danger');
+                    });
                 },
                 notify: function (message, type, cancel) {
                     if (cancel) {
@@ -582,12 +367,6 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         };
         vm.cancelAuthentication = function (dialog) {
             vm.Dialog.authentication.cancel(dialog);
-        };
-        vm.expandAll = function () {
-            $('.ddr-detail .panel-collapse').collapse('show');
-        };
-        vm.collapseAll = function () {
-            $('.ddr-detail .panel-collapse').collapse('hide');
         };
         // grab the list, then select the first if exists
         vm.Dialog.list(function () {
