@@ -139,22 +139,67 @@ define(["require", "exports", 'services/services'], function (require, exports, 
                     else {
                         log.timeString = 'Missing timestamp';
                     }
+                    if (log.message && canParseAsJSON(log.message)) {
+                        log.jsonMessage = formatJSON(log.message);
+                    }
                     if (log.requestLog) {
+                        // Process request body for view
+                        if (canParseAsJSON(log.requestLog.requestBody) &&
+                            log.requestLog.requestBody === nullOrUndefinedToString(log.requestLog.requestBody)) {
+                            log.requestLog.jsonBody = formatJSON(log.requestLog.requestBody);
+                        }
+                        else {
+                            log.requestLog.requestBody = nullOrUndefinedToString(log.requestLog.requestBody);
+                        }
+                        if (log.responseLog) {
+                            // Process response body for view
+                            if (canParseAsJSON(log.responseLog.responseBody) &&
+                                log.responseLog.responseBody === nullOrUndefinedToString(log.responseLog.responseBody)) {
+                                log.responseLog.jsonBody = formatJSON(log.responseLog.responseBody);
+                            }
+                            else {
+                                log.responseLog.responseBody = nullOrUndefinedToString(log.responseLog.responseBody);
+                            }
+                        }
                         if (angular.equals({}, log.requestLog.headers)) {
                             log.requestLog.headers = null;
                         }
                         // check the parameters for values that might not display in view because of falsiness
                         angular.forEach(log.requestLog.parameters, function (value, key) {
-                            switch (value) {
-                                case null:
-                                    log.requestLog.parameters[key] = 'null';
-                                    break;
-                                case undefined:
-                                    log.requestLog.parameters[key] = 'undefined';
-                                    break;
-                            }
+                            log.requestLog.parameters[key] = nullOrUndefinedToString(value);
                         });
                     } // end if log.requestLog
+                    function nullOrUndefinedToString(value) {
+                        switch (value) {
+                            case null:
+                                return 'null';
+                                break;
+                            case undefined:
+                                return 'undefined';
+                                break;
+                            default:
+                                return value;
+                        }
+                    }
+                    function formatJSON(content) {
+                        var parsed;
+                        try {
+                            parsed = JSON.parse(content);
+                            content = JSON.stringify(parsed, null, 2);
+                        }
+                        catch (err) {
+                        }
+                        return content;
+                    }
+                    function canParseAsJSON(content) {
+                        try {
+                            JSON.parse(content);
+                        }
+                        catch (err) {
+                            return false;
+                        }
+                        return true;
+                    }
                 }
             })
                 .catch(function (err) {

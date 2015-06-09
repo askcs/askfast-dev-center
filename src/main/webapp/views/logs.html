@@ -180,8 +180,12 @@
                                           <dd>-</dd>
                                         </div>
                                       </dl>
-                                      <h5>Body</h5>
-                                      <div class="well">
+                                      <div ng-show="log.requestLog.jsonBody" class="collapse-list"><a data-toggle="collapse" href="#req-body-{{$index}}" class="collapsed">Body</a></div>
+                                      <h5 ng-hide="log.requestLog.jsonBody">Body</h5>
+                                      <div ng-show="log.requestLog.jsonBody" id="req-body-{{$index}}" class="well collapse">
+                                        <pre>{{log.requestLog.jsonBody}}</pre>
+                                      </div>
+                                      <div ng-hide="log.requestLog.jsonBody" class="well">
                                         <pre>{{log.requestLog.requestBody}}</pre>
                                       </div>
                                     </div>
@@ -208,8 +212,12 @@
                                           <dd>-</dd>
                                         </div>
                                       </dl>
-                                      <h5>Body</h5>
-                                      <div class="well">
+                                      <div ng-show="log.responseLog.jsonBody" class="collapse-list"><a data-toggle="collapse" href="#res-body-{{$index}}" class="collapsed">Body</a></div>
+                                      <h5 ng-hide="log.responseLog.jsonBody">Body</h5>
+                                      <div ng-show="log.responseLog.jsonBody" id="res-body-{{$index}}" class="well collapse">
+                                        <pre>{{log.responseLog.jsonBody}}</pre>
+                                      </div>
+                                      <div ng-hide="log.responseLog.jsonBody" class="well">
                                         <pre>{{log.responseLog.responseBody}}</pre>
                                       </div>
                                     </div>
@@ -217,8 +225,12 @@
                                 </div>
                               </div>
                               <div ng-show="log.message">
-                                <h5>Message</h5>
-                                <div class="well">
+                                <div ng-show="log.jsonMessage" class="collapse-list"><a data-toggle="collapse" href="#log-message-{{$index}}" class="collapsed">Message</a></div>
+                                <h5 ng-hide="log.jsonMessage">Message</h5>
+                                <div ng-show="log.jsonMessage" id="log-message-{{$index}}" class="well collapse">
+                                  <pre>{{log.jsonMessage}}</pre>
+                                </div>
+                                <div ng-hide="log.jsonMessage" class="well">
                                   <pre>{{log.message}}</pre>
                                 </div>
                               </div>
