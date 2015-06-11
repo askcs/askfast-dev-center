@@ -98,12 +98,6 @@ var coreController = controllers.controller('core',
       vm.channel.adapter = null;
     };
 
-    vm.query = {
-      category: 'all',
-      limit: 100,
-      until: moment().format('DD/MM/YYYY')
-    };
-
     vm.Adapter = {
 
       list: function (callback)
@@ -142,19 +136,21 @@ var coreController = controllers.controller('core',
         });
       },
 
-      // TODO: Add changing dialog info later on
-//            update: function (dialog)
-//            {
-//              AskFast.caller('updateAdapter', { second: vm.channel.adapter },
-//                {
-//                  dialogId: dialog.id
-//                }).then((function ()
-//              {
-//                this.list();
-//
-//                vm.Adapter.adapters();
-//              }).bind(this));
-//            },
+      updateDialog: function(adapter)
+      {
+        if (adapter.dialogId === null){
+          adapter.dialogId = '';
+        }
+
+        AskFast.caller('updateAdapter', { second: adapter.configId },{ dialogId: adapter.dialogId })
+        .then( () => {
+          this.list();
+        })
+        .catch( (e) => {
+          console.warn('Error with updating adapter',e);
+          this.list();
+        });
+      },
 
       query: function (type)
       {

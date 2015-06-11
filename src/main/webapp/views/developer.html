@@ -59,6 +59,7 @@
                           <th>ID</th>
                           <th>Adapter</th>
                           <th>Type</th>
+                          <th>Dialog</th>
                           <!--th Usage-->
                           <th>Actions</th>
                         </tr>
@@ -68,9 +69,15 @@
                           <td>{{adapter.configId}}</td>
                           <td>{{adapter | translateAdapterAddress}}</td>
                           <td>{{adapter | translateAdapterType}}</td>
+                          <td class="form-inline">
+                            <select ng-model="adapter.dialogId" ng-options="dialog.id as dialog.name for dialog in vm.dialogs" class="form-control input-sm">
+                              <option value="">-- no dialog attached --</option>
+                            </select>
+                            <button ng-click="vm.Adapter.updateDialog(adapter)" class="btn btn-default btn-sm">Update</button>
+                          </td>
                           <!--td --->
                           <td>
-                            <button ng-click="Adapter.remove(adapter)" class="btn btn-default btn-sm">Remove adapter</button>
+                            <button ng-click="vm.Adapter.remove(adapter)" class="btn btn-default btn-sm">Remove adapter</button>
                           </td>
                         </tr>
                       </tbody>
