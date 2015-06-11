@@ -58,6 +58,7 @@ navbar
                           th ID
                           th Adapter
                           th Type
+                          th Dialog
                           //th Usage
                           th Actions
                       tbody
@@ -65,9 +66,15 @@ navbar
                           td {{adapter.configId}}
                           td {{adapter | translateAdapterAddress}}
                           td {{adapter | translateAdapterType}}
+                          td.form-inline
+                            select.form-control.input-sm(ng-model='adapter.dialogId',ng-options='dialog.id as dialog.name for dialog in vm.dialogs')
+                              option(value='')
+                                | -- no dialog attached --
+                            button.btn.btn-default.btn-sm(ng-click='vm.Adapter.updateDialog(adapter)')
+                              | Update
                           //td -
                           td
-                            button.btn.btn-default.btn-sm(ng-click='Adapter.remove(adapter)')
+                            button.btn.btn-default.btn-sm(ng-click='vm.Adapter.remove(adapter)')
                               | Remove adapter
 
 
