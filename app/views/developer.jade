@@ -22,6 +22,11 @@ navbar
                 .inner
                   header
                     h2 Adapters
+                    .notification-container
+                      .alert.alert-danger.alert-dismissible(ng-show='vm.Adapter.errorNotification')
+                        button.close(ng-click='vm.Adapter.errorNotification = ""')
+                          span &times;
+                        | {{vm.Adapter.errorNotification}}
                     select.form-control(ng-model='vm.adapterType',
                     ng-change='vm.Adapter.query(vm.adapterType)')
                       option(value='', selected) Add a new adapter
@@ -72,6 +77,7 @@ navbar
                                 | -- no dialog attached --
                             button.btn.btn-default.btn-sm(ng-click='vm.Adapter.updateDialog(adapter)')
                               | Update
+                            span.action-feedback-icon(ng-class="adapter.updateFeedback")
                           //td -
                           td
                             button.btn.btn-default.btn-sm(ng-click='vm.Adapter.remove(adapter)')

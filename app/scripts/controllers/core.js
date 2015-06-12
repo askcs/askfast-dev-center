@@ -98,15 +98,26 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 if (adapter.dialogId === null) {
                     adapter.dialogId = '';
                 }
+                if (adapter.updateFeedback) {
+                    adapter.updateFeedback = '';
+                }
+                adapter.updateFeedback = 'glyphicon glyphicon-refresh';
                 AskFast.caller('updateAdapter', { second: adapter.configId }, { dialogId: adapter.dialogId })
-                    .then(function () {
-                    _this.list();
-                })
-                    .catch(function (e) {
-                    console.warn('Error with updating adapter', e);
-                    _this.list();
+                    .then(function (updatedAdapter) {
+                    if (updatedAdapter.error) {
+                        adapter.updateFeedback = 'glyphicon glyphicon-exclamation-sign';
+                        _this.errorNotification = 'Something went wrong, try again.' +
+                            'If it keeps happening, please contact info@ask-fast.com </br> Response status: ' +
+                            updatedAdapter.error.status;
+                        ;
+                    }
+                    else {
+                        adapter.dialogId = updatedAdapter.dialogId;
+                        adapter.updateFeedback = 'glyphicon glyphicon-ok-circle';
+                    }
                 });
             },
+            errorNotification: '',
             query: function (type) {
                 AskFast.caller('freeAdapters', {
                     adapterType: type
