@@ -107,7 +107,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                     if (updatedAdapter.error) {
                         adapter.updateFeedback = 'glyphicon glyphicon-exclamation-sign';
                         _this.errorNotification = 'Something went wrong, try again.' +
-                            'If it keeps happening, please contact info@ask-fast.com </br> Response status: ' +
+                            'If it keeps happening, please contact info@ask-fast.com. Response status: ' +
                             updatedAdapter.error.status;
                         ;
                     }
