@@ -142,15 +142,30 @@ var coreController = controllers.controller('core',
           adapter.dialogId = '';
         }
 
+        if (adapter.updateFeedback){
+          adapter.updateFeedback = '';
+        }
+
+        adapter.updateFeedback = 'glyphicon glyphicon-refresh';
+
         AskFast.caller('updateAdapter', { second: adapter.configId },{ dialogId: adapter.dialogId })
-        .then( () => {
-          this.list();
-        })
-        .catch( (e) => {
-          console.warn('Error with updating adapter',e);
-          this.list();
+        .then( (updatedAdapter) => {
+          if (updatedAdapter.error){
+            adapter.updateFeedback='glyphicon glyphicon-exclamation-sign'
+
+            this.errorNotification = 'Something went wrong, try again.' +
+              'If it keeps happening, please contact info@ask-fast.com </br> Response status: '+
+              updatedAdapter.error.status;
+            ;
+          }
+          else {
+            adapter.dialogId = updatedAdapter.dialogId;
+            adapter.updateFeedback='glyphicon glyphicon-ok-circle'
+          }
         });
       },
+
+      errorNotification: '',
 
       query: function (type)
       {

@@ -18,6 +18,11 @@
                 <div class="inner">
                   <header>
                     <h2>Adapters</h2>
+                    <div class="notification-container">
+                      <div ng-show="vm.Adapter.errorNotification" class="alert alert-danger alert-dismissible">
+                        <button ng-click="vm.Adapter.errorNotification = &quot;&quot;" class="close"><span>&times;</span></button>{{vm.Adapter.errorNotification}}
+                      </div>
+                    </div>
                     <select ng-model="vm.adapterType" ng-change="vm.Adapter.query(vm.adapterType)" class="form-control">
                       <option value="" selected="selected">Add a new adapter</option>
                       <option value="email">Email</option>
@@ -73,7 +78,7 @@
                             <select ng-model="adapter.dialogId" ng-options="dialog.id as dialog.name for dialog in vm.dialogs" class="form-control input-sm">
                               <option value="">-- no dialog attached --</option>
                             </select>
-                            <button ng-click="vm.Adapter.updateDialog(adapter)" class="btn btn-default btn-sm">Update</button>
+                            <button ng-click="vm.Adapter.updateDialog(adapter)" class="btn btn-default btn-sm">Update</button><span ng-class="adapter.updateFeedback" class="action-feedback-icon"></span>
                           </td>
                           <!--td --->
                           <td>
