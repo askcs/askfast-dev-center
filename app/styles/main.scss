@@ -22,7 +22,7 @@
 @import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/close";
 @import "../vendors/bootstrap-sass/assets/stylesheets/bootstrap/wells";
 
-@import "developer/developer";
+@import "sections/logs";
 
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700|Titillium+Web);
 
@@ -403,23 +403,6 @@ body {
 
   .widget-right {
     margin-left: 0 !important;
-  }
-}
-
-.ddr-detail {
-  pre {
-    background-color: inherit;
-    color: inherit;
-    padding: 0;
-    margin: 0;
-  }
-
-  .panel-heading a{
-    color: inherit;
-  }
-
-  .panel-body dl{
-    margin-bottom: 15px;
   }
 }
 

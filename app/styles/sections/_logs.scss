@@ -24,6 +24,21 @@
       padding: 10px 15px;
     }
   }
+
+  pre {
+    background-color: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+  }
+
+  .panel-heading a{
+    color: inherit;
+  }
+
+  .panel-body dl{
+    margin-bottom: 15px;
+  }
 }
 
 @media (min-width: 768px) {
