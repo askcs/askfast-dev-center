@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         tasks: ['jade']
       },
       sass: {
-        files: ['<%= paths.app %>/styles/{,*/}*.{scss,sass}'],
+        files: ['<%= paths.app %>/styles/{,**/}*.{scss,sass}'],
         tasks: ['sass']
       },
       livereload: {
