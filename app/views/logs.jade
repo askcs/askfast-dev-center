@@ -193,10 +193,10 @@ navbar
                                           dd -
                                       //- show collapsable body if there's JSON
                                       .collapse-list(ng-show='log.responseLog.jsonBody')
-                                        a.collapsed(data-toggle='collapse', href='#res-body-{{$index}}')
+                                        a(data-toggle='collapse', href='#res-body-{{$index}}')
                                           | Body
                                       h5(ng-hide='log.responseLog.jsonBody') Body
-                                      .well.collapse(ng-show='log.responseLog.jsonBody', id='res-body-{{$index}}')
+                                      .well.collapse.in(ng-show='log.responseLog.jsonBody', id='res-body-{{$index}}')
                                         pre {{log.responseLog.jsonBody}}
                                       .well(ng-hide='log.responseLog.jsonBody')
                                         pre {{log.responseLog.responseBody}}
