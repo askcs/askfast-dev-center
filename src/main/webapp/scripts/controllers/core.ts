@@ -154,7 +154,7 @@ var coreController = controllers.controller('core',
             adapter.updateFeedback='glyphicon glyphicon-exclamation-sign'
 
             this.errorNotification = 'Something went wrong, try again.' +
-              'If it keeps happening, please contact info@ask-fast.com </br> Response status: '+
+              'If it keeps happening, please contact info@ask-fast.com. Response status: '+
               updatedAdapter.error.status;
             ;
           }

@@ -148,90 +148,104 @@
                                     <div class="col-xs-2">{{log.responseLog.httpCode}}</div>
                                   </div></a></h3>
                             </div>
-                            <div id="collapse{{$index}}" class="panel-body panel-collapse collapse">
-                              <div class="row">
-                                <div ng-show="log.requestLog" class="col-xs-12 col-lg-6">
-                                  <div class="row">
-                                    <div class="col-xs-7 col-xs-offset-5">
-                                      <h4>Request</h4>
-                                    </div>
-                                    <div class="col-xs-12">
-                                      <dl>
-                                        <dt>Url</dt>
-                                        <dd> 
+                            <div id="collapse{{$index}}" class="panel-collapse collapse">
+                              <div class="panel-body">
+                                <div class="row">
+                                  <div ng-show="log.requestLog" class="col-xs-12 col-lg-6">
+                                    <div class="row">
+                                      <div class="col-xs-7 col-xs-offset-5">
+                                        <h4>Request</h4>
+                                      </div>
+                                      <div class="col-xs-12">
+                                        <dl>
+                                          <dt>Url</dt>
+                                          <dd> 
+                                            <div class="well">
+                                              <pre>{{log.requestLog.url}}</pre>
+                                            </div>
+                                          </dd>
+                                          <dt>Method   </dt>
+                                          <dd>{{log.requestLog.httpMethod}}</dd>
+                                        </dl>
+                                        <div ng-show="log.requestLog.headers" class="collapse-list"><a data-toggle="collapse" href="#req-headers-{{$index}}" class="collapsed">Headers </a></div>
+                                        <div id="req-headers-{{$index}}" ng-show="log.requestLog.headers" class="collapse">
+                                          <dl class="dl-horizontal">
+                                            <dt ng-repeat-start="(headerkey, headerVal) in log.requestLog.headers">{{headerkey}}</dt>
+                                            <dd ng-repeat-end="ng-repeat-end">{{headerVal}}</dd>
+                                          </dl>
+                                        </div>
+                                        <div class="collapse-list"><a data-toggle="collapse" href="#req-parameters-{{$index}}" class="collapsed">Parameters </a></div>
+                                        <div id="req-parameters-{{$index}}" class="collapse">
+                                          <dl class="dl-horizontal">
+                                            <dt ng-repeat-start="(paramKey, paramVal) in log.requestLog.parameters">{{paramKey}}</dt>
+                                            <dd ng-repeat-end="ng-repeat-end">{{paramVal}}</dd>
+                                            <div ng-hide="log.requestLog.parameters">
+                                              <dt>-</dt>
+                                              <dd>-</dd>
+                                            </div>
+                                          </dl>
+                                        </div>
+                                        <div ng-show="log.requestLog.jsonBody" class="collapse-list"><a data-toggle="collapse" href="#req-body-{{$index}}" class="collapsed">Body</a></div>
+                                        <h5 ng-hide="log.requestLog.jsonBody">Body</h5>
+                                        <div ng-show="log.requestLog.jsonBody" id="req-body-{{$index}}" class="collapse">
                                           <div class="well">
-                                            <pre>{{log.requestLog.url}}</pre>
+                                            <pre>{{log.requestLog.jsonBody}}</pre>
                                           </div>
-                                        </dd>
-                                        <dt>Method   </dt>
-                                        <dd>{{log.requestLog.httpMethod}}</dd>
-                                      </dl>
-                                      <div ng-show="log.requestLog.headers" class="collapse-list"><a data-toggle="collapse" href="#req-headers-{{$index}}" class="collapsed">Headers </a></div>
-                                      <dl id="req-headers-{{$index}}" ng-show="log.requestLog.headers" class="dl-horizontal collapse">
-                                        <dt ng-repeat-start="(headerkey, headerVal) in log.requestLog.headers">{{headerkey}}</dt>
-                                        <dd ng-repeat-end="ng-repeat-end">{{headerVal}}</dd>
-                                      </dl>
-                                      <div class="collapse-list"><a data-toggle="collapse" href="#req-parameters-{{$index}}" class="collapsed">Parameters </a></div>
-                                      <dl id="req-parameters-{{$index}}" class="dl-horizontal collapse">
-                                        <dt ng-repeat-start="(paramKey, paramVal) in log.requestLog.parameters">{{paramKey}}</dt>
-                                        <dd ng-repeat-end="ng-repeat-end">{{paramVal}}</dd>
-                                        <div ng-hide="log.requestLog.parameters">
-                                          <dt>-</dt>
-                                          <dd>-</dd>
                                         </div>
-                                      </dl>
-                                      <div ng-show="log.requestLog.jsonBody" class="collapse-list"><a data-toggle="collapse" href="#req-body-{{$index}}" class="collapsed">Body</a></div>
-                                      <h5 ng-hide="log.requestLog.jsonBody">Body</h5>
-                                      <div ng-show="log.requestLog.jsonBody" id="req-body-{{$index}}" class="well collapse">
-                                        <pre>{{log.requestLog.jsonBody}}</pre>
+                                        <div ng-hide="log.requestLog.jsonBody" class="well">
+                                          <pre>{{log.requestLog.requestBody}}</pre>
+                                        </div>
                                       </div>
-                                      <div ng-hide="log.requestLog.jsonBody" class="well">
-                                        <pre>{{log.requestLog.requestBody}}</pre>
+                                    </div>
+                                  </div>
+                                  <div ng-show="log.responseLog" class="col-xs-12 col-lg-6">
+                                    <div class="row">
+                                      <div class="col-xs-7 col-xs-offset-5">
+                                        <h4>Response</h4>
+                                      </div>
+                                      <div class="col-xs-12">
+                                        <dl>
+                                          <dt>Response Code</dt>
+                                          <dd>{{log.responseLog.httpCode}}</dd>
+                                          <dt>Response Time</dt>
+                                          <dd>{{(log.responseLog.httpResponseTime) ? log.responseLog.httpResponseTime : '-' }} ms</dd>
+                                        </dl>
+                                        <div class="collapse-list"><a data-toggle="collapse" href="#res-headers-{{$index}}" class="collapsed">Headers </a></div>
+                                        <div id="res-headers-{{$index}}" class="collapse">
+                                          <dl class="dl-horizontal">
+                                            <dt ng-repeat-start="(headerkey, headerVal) in log.responseLog.headers">{{headerkey}}</dt>
+                                            <dd ng-repeat-end="ng-repeat-end">{{headerVal}}</dd>
+                                            <div ng-hide="log.responseLog.headers">
+                                              <dt>-</dt>
+                                              <dd>-</dd>
+                                            </div>
+                                          </dl>
+                                        </div>
+                                        <div ng-show="log.responseLog.jsonBody" class="collapse-list"><a data-toggle="collapse" href="#res-body-{{$index}}">Body</a></div>
+                                        <h5 ng-hide="log.responseLog.jsonBody">Body</h5>
+                                        <div ng-show="log.responseLog.jsonBody" id="res-body-{{$index}}" class="collapse in">
+                                          <div class="well">
+                                            <pre>{{log.responseLog.jsonBody}}</pre>
+                                          </div>
+                                        </div>
+                                        <div ng-hide="log.responseLog.jsonBody" class="well">
+                                          <pre>{{log.responseLog.responseBody}}</pre>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                                <div ng-show="log.responseLog" class="col-xs-12 col-lg-6">
-                                  <div class="row">
-                                    <div class="col-xs-7 col-xs-offset-5">
-                                      <h4>Response</h4>
-                                    </div>
-                                    <div class="col-xs-12">
-                                      <dl>
-                                        <dt>Response Code</dt>
-                                        <dd>{{log.responseLog.httpCode}}</dd>
-                                        <dt>Response Time</dt>
-                                        <dd>{{(log.responseLog.httpResponseTime) ? log.responseLog.httpResponseTime : '-' }} ms</dd>
-                                      </dl>
-                                      <div class="collapse-list"><a data-toggle="collapse" href="#res-headers-{{$index}}" class="collapsed">Headers </a></div>
-                                      <dl id="res-headers-{{$index}}" class="dl-horizontal collapse">
-                                        <dt ng-repeat-start="(headerkey, headerVal) in log.responseLog.headers">{{headerkey}}</dt>
-                                        <dd ng-repeat-end="ng-repeat-end">{{headerVal}}</dd>
-                                        <div ng-hide="log.responseLog.headers">
-                                          <dt>-</dt>
-                                          <dd>-</dd>
-                                        </div>
-                                      </dl>
-                                      <div ng-show="log.responseLog.jsonBody" class="collapse-list"><a data-toggle="collapse" href="#res-body-{{$index}}" class="collapsed">Body</a></div>
-                                      <h5 ng-hide="log.responseLog.jsonBody">Body</h5>
-                                      <div ng-show="log.responseLog.jsonBody" id="res-body-{{$index}}" class="well collapse">
-                                        <pre>{{log.responseLog.jsonBody}}</pre>
-                                      </div>
-                                      <div ng-hide="log.responseLog.jsonBody" class="well">
-                                        <pre>{{log.responseLog.responseBody}}</pre>
-                                      </div>
+                                <div ng-show="log.message">
+                                  <div ng-show="log.jsonMessage" class="collapse-list"><a data-toggle="collapse" href="#log-message-{{$index}}" class="collapsed">Message</a></div>
+                                  <h5 ng-hide="log.jsonMessage">Message</h5>
+                                  <div ng-show="log.jsonMessage" id="log-message-{{$index}}" class="collapse">
+                                    <div class="well">
+                                      <pre>{{log.jsonMessage}}</pre>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
-                              <div ng-show="log.message">
-                                <div ng-show="log.jsonMessage" class="collapse-list"><a data-toggle="collapse" href="#log-message-{{$index}}" class="collapsed">Message</a></div>
-                                <h5 ng-hide="log.jsonMessage">Message</h5>
-                                <div ng-show="log.jsonMessage" id="log-message-{{$index}}" class="well collapse">
-                                  <pre>{{log.jsonMessage}}</pre>
-                                </div>
-                                <div ng-hide="log.jsonMessage" class="well">
-                                  <pre>{{log.message}}</pre>
+                                  <div ng-hide="log.jsonMessage" class="well">
+                                    <pre>{{log.message}}</pre>
+                                  </div>
                                 </div>
                               </div>
                             </div>
