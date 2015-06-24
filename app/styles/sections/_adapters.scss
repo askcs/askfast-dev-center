@@ -24,7 +24,7 @@
   padding: 5px;
 
   &.glyphicon-refresh{
-    transform-origin: 51% 52%;
+    transform-origin: 51% 52%; // aligns the axis of the spin
     animation: feedback-spin 1s linear infinite
   }
 
