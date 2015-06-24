@@ -7,20 +7,13 @@ navbar
         #sub-header.row
           .col-md-12
             ul.list-inline
-              li: a(ng-click='setSection("adapters")') Adapters
-              li: a(ng-click='setSection("dialogs")') Dialogs
-              li: a(ng-click='setSection("debugger")') Debugger
-        #toolbar.row
+              li: a(ng-click='vm.setSection("adapters")') Adapters
+              li: a(ng-click='vm.setSection("dialogs")') Dialogs
+        //- #toolbar.row
           .col-md-10
           .col-md-2.text-right
 
-
-
-
-
-        section(ng-switch='', on='currentSection')
-
-
+        section(ng-switch='', on='vm.currentSection')
 
 
           #widgets.row(ng-switch-when='adapters')
@@ -29,9 +22,13 @@ navbar
                 .inner
                   header
                     h2 Adapters
-                    //- access parent's scope, since ng-switch creates own scope
-                    select.form-control(ng-model='$parent.adapterType',
-                    ng-change='Adapter.query($parent.adapterType)')
+                    .notification-container
+                      .alert.alert-danger.alert-dismissible(ng-show='vm.Adapter.errorNotification')
+                        button.close(ng-click='vm.Adapter.errorNotification = ""')
+                          span &times;
+                        | {{vm.Adapter.errorNotification}}
+                    select.form-control(ng-model='vm.adapterType',
+                    ng-change='vm.Adapter.query(vm.adapterType)')
                       option(value='', selected) Add a new adapter
                       option(value='email') Email
                       option(value='call') Phone
@@ -39,46 +36,52 @@ navbar
                       option(value='xmpp') Gtalk
                       option(value='twitter') Twitter
                   section
-                    article(ng-show='$parent.adapterType')
+                    article(ng-show='vm.adapterType')
                       h3 Available adapters
-                      p(ng-hide='freeAdapters.length > 0')
+                      p(ng-hide='vm.freeAdapters.length > 0')
                         | There are not any available adapter for this type.
-                      table.table.table-bordered.table-hover(ng-show='freeAdapters.length > 0')
+                      table.table.table-bordered.table-hover(ng-show='vm.freeAdapters.length > 0')
                         thead
                           tr
                             th Adapter
                             th Type
                             th Actions
                         tbody
-                          tr(ng-repeat='adapter in freeAdapters')
+                          tr(ng-repeat='adapter in vm.freeAdapters')
                             td {{adapter | translateAdapterAddress}}
                             td {{adapter | translateAdapterType}}
                             td
-                              button.btn.btn-default.btn-sm(ng-click='Adapter.add(adapter)')
+                              button.btn.btn-default.btn-sm(ng-click='vm.Adapter.add(adapter)')
                                 | Add to your account
                       hr
                     h3 Your adapters
-                    p(ng-hide='adapters.length > 0')
+                    p(ng-hide='vm.adapters.length > 0')
                       | There are not any adapters for your account.
-                    table.table.table-bordered.table-hover(ng-show='adapters.length > 0')
+                    table.table.table-bordered.table-hover(ng-show='vm.adapters.length > 0')
                       thead
                         tr
                           th ID
                           th Adapter
                           th Type
+                          th Dialog
                           //th Usage
                           th Actions
                       tbody
-                        tr(ng-repeat='adapter in adapters')
+                        tr(ng-repeat='adapter in vm.adapters')
                           td {{adapter.configId}}
                           td {{adapter | translateAdapterAddress}}
                           td {{adapter | translateAdapterType}}
+                          td.form-inline
+                            select.form-control.input-sm(ng-model='adapter.dialogId',ng-options='dialog.id as dialog.name for dialog in vm.dialogs')
+                              option(value='')
+                                | -- no dialog attached --
+                            button.btn.btn-default.btn-sm(ng-click='vm.Adapter.updateDialog(adapter)')
+                              | Update
+                            span.action-feedback-icon(ng-class="adapter.updateFeedback")
                           //td -
                           td
-                            button.btn.btn-default.btn-sm(ng-click='Adapter.remove(adapter)')
+                            button.btn.btn-default.btn-sm(ng-click='vm.Adapter.remove(adapter)')
                               | Remove adapter
-
-
 
 
           #widgets.row(ng-switch-when='addDialog')
@@ -88,12 +91,12 @@ navbar
                   header: h2 Add a new dialog
                   section
                     form(role='form', name='forms.addDialog',
-                    ng-submit='Dialog.add(dialog)')
+                    ng-submit='vm.Dialog.add(vm.dialog)')
                       .row
                         .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.name.$invalid && forms.addDialog.name.$dirty && "has-error"}}')
                           input.form-control(type='text',
                           name='name',
-                          ng-model='dialog.form.name',
+                          ng-model='vm.dialog.form.name',
                           placeholder='Dialog name'
                           required)
                           p
@@ -103,7 +106,7 @@ navbar
                         .form-group.col-lg-6.col-md-8(class='{{forms.addDialog.url.$invalid && forms.addDialog.url.$dirty && "has-error"}}')
                           input.form-control(type='url',
                           name='url',
-                          ng-model='dialog.form.url',
+                          ng-model='vm.dialog.form.url',
                           placeholder='URL for dialog',
                           required)
                           p
@@ -113,9 +116,7 @@ navbar
                               | The entered URL isn't valid.
                       .form-group
                         button.btn.btn-default(type='submit') Create dialog
-                      a(ng-click='setSection("dialogs")') &nbsp; or go back to the list.
-
-
+                      a(ng-click='vm.setSection("dialogs")') &nbsp; or go back to the list.
 
 
           #widgets.row(ng-switch-when='dialogs')
@@ -125,20 +126,20 @@ navbar
                   header
                     h2 Dialogs
                     button.btn.btn-default(type='button',
-                    ng-click='setSection("addDialog")') Add a dialog
+                    ng-click='vm.setSection("addDialog")') Add a dialog
                   section
                     
                     .row
                       .col-md-3
-                        p(ng-hide='loadingDialogs') Hold on dialogs are loading...
-                        p(ng-show='dialogs.length < 1')
+                        p(ng-hide='vm.loadingDialogs') Hold on dialogs are loading...
+                        p(ng-show='vm.dialogs.length < 1')
                           | There are no dialogs yet. Please add one.
-                        ul.nav.nav-pills.nav-stacked(ng-hide='dialogs.length < 1')
-                          li(ng-repeat='_dialog in dialogs',
-                          class='{{(_dialog.id == dialog.id) && "active"}}')
-                            a(ng-click='Dialog.open(_dialog)') {{_dialog.name}}
-                      .col-md-9(ng-show='dialogs.length < 1')
-                      .col-md-9(ng-hide='dialogs.length < 1')
+                        ul.nav.nav-pills.nav-stacked(ng-hide='vm.dialogs.length < 1')
+                          li(ng-repeat='_dialog in vm.dialogs',
+                          class='{{(_dialog.id == vm.dialog.id) && "active"}}')
+                            a(ng-click='vm.Dialog.open(_dialog)') {{_dialog.name}}
+                      .col-md-9(ng-show='vm.dialogs.length < 1')
+                      .col-md-9(ng-hide='vm.dialogs.length < 1')
                         .row
                           .col-md-6
                             form(name='forms.details')
@@ -148,46 +149,46 @@ navbar
                                   label Dialog Id
                                   .row
                                     .col-md-9
-                                      input.form-control(ng-model='dialog.id', readonly='')
+                                      input.form-control(ng-model='vm.dialog.id', readonly='')
                                 .form-group
                                   label Name
                                   .row
                                     .col-md-9
-                                      input.form-control(ng-model='dialog.name')
+                                      input.form-control(ng-model='vm.dialog.name')
                                 .form-group
                                   label URL
-                                  input.form-control(ng-model='dialog.url')
+                                  input.form-control(ng-model='vm.dialog.url')
                                 .form-group
-                                  button.btn.btn-default(ng-click='Dialog.updateDetails(dialog)') Update details
+                                  button.btn.btn-default(ng-click='vm.Dialog.updateDetails(vm.dialog)') Update details
                           .col-md-4
                             form(name='forms.auth')
                               fieldset
                                 legend Authentication 
-                                  span.small.text-primary(ng-show='dialog.useBasicAuth') &nbsp;enabled
+                                  span.small.text-primary(ng-show='vm.dialog.useBasicAuth') &nbsp;enabled
                                 p If desired, you can set Basic Authentication credentials for this dialog.
-                                p(ng-show='dialogAuth.message', class="{{(dialogAuth.messageType) && 'text-' + dialogAuth.messageType}}")
-                                  | {{dialogAuth.message}}
-                                div(ng-hide='dialogAuth.open')
+                                p(ng-show='vm.dialogAuth.message', class="{{(vm.dialogAuth.messageType) && 'text-' + vm.dialogAuth.messageType}}")
+                                  | {{vm.dialogAuth.message}}
+                                div(ng-hide='vm.dialogAuth.open')
                                   .form-group
-                                    button.btn.btn-default(ng-click='dialogAuth.open = true') Configure
-                                div(ng-show='dialogAuth.open')
+                                    button.btn.btn-default(ng-click='vm.dialogAuth.open = true') Configure
+                                div(ng-show='vm.dialogAuth.open')
                                   .form-group
                                     label Username
-                                    input.form-control(name='username', ng-model='dialog.userName')
+                                    input.form-control(name='username', ng-model='vm.dialog.userName')
                                   .form-group
                                     label Password
-                                    input.form-control(name='password', ng-model='dialog.password', type='password')
+                                    input.form-control(name='password', ng-model='vm.dialog.password', type='password')
                                   .form-groups
-                                    button.btn.btn-default(ng-click='authenticateDialog(dialog)')
-                                      | {{(dialog.useBasicAuth) && 'Update' || 'Enable'}}
-                                    button.btn.btn-default(ng-click='cancelAuthentication(dialog)')
+                                    button.btn.btn-default(ng-click='vm.authenticateDialog(vm.dialog)')
+                                      | {{(vm.dialog.useBasicAuth) && 'Update' || 'Enable'}}
+                                    button.btn.btn-default(ng-click='vm.cancelAuthentication(vm.dialog)')
                                       | Cancel
-                                    button.btn.btn-danger.pull-right(ng-click='disableDialogAuthentication(dialog)',
-                                      ng-show='dialog.useBasicAuth')
+                                    button.btn.btn-danger.pull-right(ng-click='vm.disableDialogAuthentication(vm.dialog)',
+                                      ng-show='vm.dialog.useBasicAuth')
                                       | Disable
 
                           .col-md-2
-                            button.btn.btn-default.btn-danger.pull-right(ng-click='Dialog.remove(dialog)')
+                            button.btn.btn-default.btn-danger.pull-right(ng-click='vm.Dialog.remove(vm.dialog)')
                               | Delete dialog
                         .row
                           .col-md-10
@@ -197,175 +198,38 @@ navbar
                                 .row
                                   .form-group.col-sm-5.col-lg-4
                                     label Type
-                                    select.form-control(ng-model='channel.type',
-                                    ng-change='channelTypeSelected()')
-                                      option(ng-repeat='type in types',
+                                    select.form-control(ng-model='vm.channel.type',
+                                    ng-change='vm.channelTypeSelected()')
+                                      option(ng-repeat='type in vm.types',
                                       value='{{type}}') {{type}}
                                     span.help-block Please select a type first
-                                  .form-group.col-sm-7(ng-hide='(channel.type == null)')
+                                  .form-group.col-sm-7(ng-hide='(vm.channel.type == null)')
                                         label Adapter
-                                        p(ng-hide='candidates.length > 0')
+                                        p(ng-hide='vm.candidates.length > 0')
                                           | There are sadly no adapters for this one.
-                                        select.form-control(ng-model='channel.adapter',
-                                        ng-show='candidates.length > 0')
-                                          option(ng-repeat='candidate in candidates',
+                                        select.form-control(ng-model='vm.channel.adapter',
+                                        ng-show='vm.candidates.length > 0')
+                                          option(ng-repeat='candidate in vm.candidates',
                                           value='{{candidate.configId}}') {{candidate.myAddress}}
                                         span.help-block Select the adapter
                                 .row
                                   .form-group.col-md-12
                                     button.btn.btn-default(type='button',
-                                    ng-click='Dialog.adapters.add(dialog)') Link adapter to dialog
+                                    ng-click='vm.Dialog.adapters.add(vm.dialog)') Link adapter to dialog
                         hr
                         fieldset
                           legend Linked Adapters
-                          p(ng-hide='(adapters | filterAdapters: dialog).length > 0')
+                          p(ng-hide='(vm.adapters | filterAdapters: vm.dialog).length > 0')
                             | There are no adapters linked to this dialog yet.
                           table.table.table-bordered.table-hover(
-                          ng-show='(adapters | filterAdapters: dialog).length > 0')
+                          ng-show='(vm.adapters | filterAdapters: vm.dialog).length > 0')
                             thead
                               tr
                                 th Adapter
                                 th Type
                                 th Actions
                             tbody
-                              tr(ng-repeat='adapter in adapters | filterAdapters: dialog')
+                              tr(ng-repeat='adapter in vm.adapters | filterAdapters: vm.dialog')
                                 th {{adapter | translateAdapterAddress}}
                                 th {{adapter | translateAdapterType}}
-                                th: a(ng-click='Dialog.adapters.remove(adapter)') Remove link
-
-
-
-
-          #widgets.row(ng-switch-when='debugger')
-            .col-md-12
-              .widget
-                .inner
-                  header: h2 Debugger
-                  section
-                    form.form-inline(role='form')
-                      .form-group
-                        label Adapter Type:
-                        select.form-control(ng-model='query.category',
-                        ng-change='Log.categorize()')
-                          option(value='all') All
-                          option(value='call') Phone
-                          option(value='email') Email
-                          option(value='sms') SMS
-                          option(value='xmpp') Gtalk
-                          option(value='twitter') Twitter
-                      .form-group(style='margin-left: 15px;')
-                        label Limit:
-                        select.form-control(ng-model='query.limit',
-                        ng-change='Log.list()')
-                          option(value='100') 100
-                          option(value='250') 250
-                          option(value='500') 500
-                          option(value='1000') 1000
-                      .form-group
-                        label Logs until 
-                          //- span.small.text-muted dd/mm/yyyy
-                        input.form-control(ng-model='query.until',
-                        ng-change='Log.period()',
-                        data-date-type='string',
-                        data-date-format='dd/MM/yyyy',
-                        bs-datepicker='')
-                      .form-group
-                        label From 
-                        input.form-control(type='text',
-                        ng-model='queryLogs.fromAddress')
-                      .form-group
-                        label To 
-                        input.form-control(type='text',
-                        ng-model='queryLogs.toAddress')
-                    hr
-                    p(ng-show='loading.logs')
-                      | Loading logs..
-                    p(ng-hide='logs.length > 0 || loading.logs')
-                      | Your query has no logs..
-                    table.table(ng-show='logs.length > 0')
-                      thead
-                        tr
-                          th Date
-                          th Type
-                          th Adapter Type
-                          th From
-                          th To
-                      tbody
-                        tr(ng-repeat='log in logs | filter:queryLogs | orderBy: "start" : true')
-                          td <a href="/#/developer?ddrId={{log._id}}">{{log.startString}}<a>
-                          td {{log.ddrTypeString}}
-                          td {{log.adapterTypeString}}
-                          td {{log.fromAddress}}
-                          td {{log.toAddress}}
-          #widgets.row(ng-switch-when='details')
-            .col-md-12
-              .widget
-                .inner
-                  header: h2 Details for {{ddrId}}
-                  section.ddr-detail
-                    .row(ng-show="ddrDetails")
-                      .col-md-4.col-md-offset-2.ddr-details
-                        dl.dl-horizontal
-                          dt Type
-                          dd {{ddrDetails.ddrTypeString}}
-                          dt Adapter Type
-                          dd {{ddrDetails.adapterTypeString}}
-                          dt Duration
-                          dd(ng-show='ddrDetails.duration !== null') {{ddrDetails.duration}} ms
-                          dd(ng-show='ddrDetails.duration === null') No duration
-                          dt Start Time
-                          dd {{ddrDetails.startString}}
-                          dt(ng-show='ddrDetails.duration !== null') End Time
-                          dd(ng-show='ddrDetails.duration !== null') {{ddrDetails.endString}}
-                          hr
-                          dt From
-                          dd {{ddrDetails.fromAddress}}
-                          dt To
-                          dd {{ddrDetails.toAddress}}
-                      .col-md-4
-                        div(ng-show='ddrDetails.statusPerAddress')
-                          h5 Address Status
-                          dl.dl-horizontal
-                            div(ng-repeat='statusObj in ddrDetails.statusPerAddress')
-                              dt {{statusObj.index}}
-                              dd {{statusObj.status}}
-                        div(ng-show='ddrDetails.additionalInfo.message')
-                          h5 Message
-                          .well
-                            pre
-                              | {{ddrDetails.additionalInfo.message}}
-                          
-                      .col-sm-8.col-sm-offset-2
-                        .row(ng-show='logs')
-                          .col-xs-5
-                            strong Time 
-                          .col-xs-2
-                            strong Level 
-                          .col-xs-5
-                            button.pull-right.btn.btn-default(ng-click='expandAll()') Expand All
-                            button.pull-right.btn.btn-default(ng-click='collapseAll()') Collapse All
-                          hr
-                      .col-sm-8.col-sm-offset-2
-                        div(ng-repeat='log in logs | orderBy: "timestamp"')
-                          //.panel(ng-class='log.level === "INFO" ? "panel-primary" : "panel-default"')
-                          .panel(ng-class='{INFO:"panel-info", SEVERE: "panel-danger", DDR: "panel-default", DEBUG: "panel-success", WARNING: "panel-warning" }[log.level]')
-                            .panel-heading
-                              a(data-toggle='collapse', href='#collapse{{$index}}')
-                                .row
-                                  .col-xs-5
-                                    | {{log.timeString}}
-                                  .col-xs-5
-                                    | {{log.level}}
-                                      
-                            .panel-body.panel-collapse.collapse(id='collapse{{$index}}')
-                              .container
-                                //- dl
-                                  dt Timestamp
-                                  dd {{log.timestamp}}
-                              div(ng-show='log.message')
-                                h5 Message
-                                .well
-                                  pre
-                                    | {{log.message}}
-                    .row(ng-hide="ddrDetails")
-                      .col-md-4.col-md-offset-2 Loading log details...
+                                th: a(ng-click='vm.Dialog.adapters.remove(adapter)') Remove link

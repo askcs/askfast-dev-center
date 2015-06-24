@@ -1,0 +1,55 @@
+@keyframes feedback-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes feedback-spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+.action-feedback-icon {
+  vertical-align: middle;
+  font-size: 1.5em;
+  display: inline-block;
+  padding: 5px;
+
+  &.glyphicon-refresh{
+    transform-origin: 51% 52%; // aligns the axis of the spin
+    animation: feedback-spin 1s linear infinite
+  }
+
+  &.glyphicon-ok-circle{
+    color: green;
+    animation: feedback-fade-out 2s ease-in 1 forwards;
+  }
+
+  &.glyphicon-exclamation-sign {
+    color: red;
+    animation: feedback-fade-out 3s ease-in 1 forwards;
+  }
+}
+
+.notification-container {
+  position:absolute;
+  left: 50%;
+
+  .alert {
+    position: relative;
+    left: -50%;
+    top: 15px;
+  }
+
+  button {
+    margin: 0!important;
+  }
+}

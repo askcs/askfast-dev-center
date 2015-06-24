@@ -1,1 +1,1 @@
-define(["directives/directives"],function(e){"use strict";e.directive("appVersion",["version",function(e){return function(t,n,r){n.text(e)}}])});
+define(["require","exports","directives/directives"],function(e,t,n){"use strict";var r=n.directive("appVersion",["version",function(e){return function(t,n,r){n.text(e)}}]);return r});

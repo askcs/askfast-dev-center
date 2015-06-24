@@ -44,6 +44,15 @@ define(
             {
               templateUrl:    'views/developer.html',
               controller:     'core',
+              controllerAs:   'vm',
+              resolve:        { redirect: redirect },
+              reloadOnSearch: false
+            })
+            .when('/logs',
+            {
+              templateUrl:    'views/logs.html',
+              controller:     'logs',
+              controllerAs:   'vm',
               resolve:        { redirect: redirect },
               reloadOnSearch: false
             })

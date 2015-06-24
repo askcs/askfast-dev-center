@@ -1,9 +1,4 @@
-define(
-  ['angular'],
-  function (angular)
-  {
-    'use strict';
-
-    return angular.module('directives', []);
-  }
-);
+define(["require", "exports", 'angular'], function (require, exports, angular) {
+    var directives = angular.module('directives', []);
+    return directives;
+});

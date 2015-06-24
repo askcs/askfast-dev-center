@@ -1,0 +1,39 @@
+{
+    "version": "1.5.0-beta",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": false,
+        "noLib": false
+    },
+    "filesGlob": [
+        "./app/scripts/**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./app/scripts/controllers/controllers.ts",
+        "./app/scripts/controllers/core.ts",
+        "./app/scripts/controllers/credits.ts",
+        "./app/scripts/controllers/dashboard.ts",
+        "./app/scripts/controllers/profile.ts",
+        "./app/scripts/controllers/uselogs.ts",
+        "./app/scripts/controllers/user.ts",
+        "./app/scripts/directives/appVersion.ts",
+        "./app/scripts/directives/directives.ts",
+        "./app/scripts/directives/navbar.ts",
+        "./app/scripts/directives/profile.ts",
+        "./app/scripts/logs/logsController.ts",
+        "./app/scripts/logs/logsService.ts",
+        "./app/scripts/modals/askfast.ts",
+        "./app/scripts/modals/modals.ts",
+        "./app/scripts/services/services.ts",
+        "./app/scripts/typings/angularjs/angular-resource.d.ts",
+        "./app/scripts/typings/angularjs/angular-route.d.ts",
+        "./app/scripts/typings/angularjs/angular.d.ts",
+        "./app/scripts/typings/bootstrap/bootstrap.d.ts",
+        "./app/scripts/typings/jquery/jquery.d.ts",
+        "./app/scripts/typings/tsd.d.ts"
+    ]
+}

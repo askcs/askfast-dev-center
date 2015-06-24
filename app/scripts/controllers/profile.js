@@ -1,23 +1,12 @@
-define(
-  ['controllers/controllers', 'modals/askfast'],
-  function (controllers, AskFast)
-  {
+define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
     'use strict';
-
-    controllers.controller ('profile',
-      [
-        '$scope', '$rootScope', 'AskFast', 'Session', 'Store',  
-        function ($scope, $rootScope, AskFast, Session, Store )
-        {
-            AskFast.caller('info')
-              .then(function (info)
-				{
-					Store('app').save({
-                        user: info
-                    });
-				});
-        }
-      ]
-    );
-  }
-);
+    var profile = controllers.controller('profile', function ($scope, $rootScope, AskFast, Session, Store) {
+        AskFast.caller('info')
+            .then(function (info) {
+            Store('app').save({
+                user: info
+            });
+        });
+    });
+    return profile;
+});

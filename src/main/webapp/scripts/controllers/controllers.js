@@ -1,1 +1,1 @@
-define(["angular"],function(e){"use strict";return e.module("controllers",["datatables"])});
+define(["require","exports","angular"],function(e,t,n){var r=n.module("controllers",["datatables"]);return r});

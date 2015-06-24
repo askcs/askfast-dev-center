@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         tasks: ['jade']
       },
       sass: {
-        files: ['<%= paths.app %>/styles/{,*/}*.{scss,sass}'],
+        files: ['<%= paths.app %>/styles/{,**/}*.{scss,sass}'],
         tasks: ['sass']
       },
       livereload: {
@@ -76,6 +76,22 @@ module.exports = function(grunt) {
           '{.tmp,<%= paths.app %>}/scripts/{,*/}*.js',
           '<%= paths.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
+      }
+    },
+
+    ts: {
+      options: {
+        target: 'es5',
+        module: 'amd',
+        declaration: false,
+        noImplicitAny: false,
+        removeComments: false,
+        noLib: false,
+        sourceMap: false,
+        fast: 'never'
+      },
+      dist: {
+        src: ['<%= paths.app %>/scripts/{,**/}*.ts']
       }
     },
 
@@ -276,7 +292,7 @@ module.exports = function(grunt) {
     },
 
     concurrent: {
-      server: ['sass', 'jade', 'copy:styles'],
+      server: ['sass', 'jade', 'copy:styles', 'ts'],
       dist: [
         'sass',
         'copy:styles',
@@ -484,6 +500,7 @@ module.exports = function(grunt) {
     'svgmin',
     'htmlmin',
     'concat',
+    'ts',
     'copy',
     'ngAnnotate',
     'cssmin',

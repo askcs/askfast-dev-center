@@ -1,1 +1,1 @@
-define(["angular"],function(e){"use strict";return e.module("modals",[])});
+define(["require","exports","angular"],function(e,t,n){"use strict";var r=n.module("modals",[]);return r});

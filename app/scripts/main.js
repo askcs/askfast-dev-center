@@ -80,6 +80,9 @@ require (
 	  'controllers/credits',
     'controllers/uselogs',
 
+    'logs/logsController',
+    'logs/logsService',
+
     'bootstrap',
     'lawnchair',
     'dom',
