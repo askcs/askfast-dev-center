@@ -78,6 +78,8 @@ navbar
                 .inner
                   header: h2 Details for {{vm.ddrId}}
                   section.ddr-detail
+                    .row(ng-hide="vm.ddrDetails")
+                      .col-md-4.col-md-offset-2 Loading log details...
                     .row(ng-show="vm.ddrDetails")
                       .col-md-4.col-md-offset-2.ddr-details
                         dl.dl-horizontal
@@ -219,5 +221,3 @@ navbar
                                       pre {{log.jsonMessage}}
                                   .well(ng-hide='log.jsonMessage')
                                     pre {{log.message}}
-                    .row(ng-hide="vm.ddrDetails")
-                      .col-md-4.col-md-offset-2 Loading log details...
