@@ -114,12 +114,12 @@ navbar
                                 | {{vm.ddrDetails.additionalInfo.message}}
                             
                         .col-sm-12
-                          .ddr-detail--logs
-                            .row(ng-show='vm.logs')
+                          div(ng-show='vm.logs')
+                            .row
                               .col-xs-12
                                 button.pull-right.btn.btn-default(ng-click='vm.expandAll()') Expand All
                                 button.pull-right.btn.btn-default(ng-click='vm.collapseAll()') Collapse All
-                              hr
+                            hr
                             div(ng-repeat='log in vm.logs | orderBy: "timestamp"')
                               //.panel(ng-class='log.level === "INFO" ? "panel-primary" : "panel-default"')
                               //.panel(ng-class='{INFO:"panel-info", SEVERE: "panel-danger", DDR: "panel-default", DEBUG: "panel-success", WARNING: "panel-warning" }[log.level]')
@@ -128,14 +128,16 @@ navbar
                                   h4.panel-title
                                     a(data-toggle='collapse', href='#collapse{{$index}}')
                                       .row
-                                        .col-xs-5
+                                        .col-xs-3
                                           | {{log.timeString}}
-                                        .col-xs-2
-                                          | {{(log.level) ? log.level : '-'}}
-                                        .col-xs-2
+                                        .col-xs-6(ng-show="log.url")
+                                          | {{log.url}}
+                                        .col-xs-2(ng-show="log.level")
+                                          | {{log.level}}
+                                        .col-xs-1
                                           | {{log.requestLog.httpMethod}}
-                                        .col-xs-2
                                           | {{log.responseLog.httpCode}}
+                                        .col-xs-1
                                           
                                 .panel-collapse.collapse(id='collapse{{$index}}')
                                   .panel-body

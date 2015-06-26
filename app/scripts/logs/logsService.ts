@@ -143,7 +143,7 @@ class LogsService implements ILogsService{
     .then( (resultArray) => {
       var deferred = this.q.defer();
 
-      // empty array means ddr doesn't have http logs, but logs.
+      // empty array could mean ddr doesn't have http logs, but logs.
       if (angular.equals([], resultArray[1])){
         // fetch logs
         this.AskFast.caller('log', {
@@ -194,6 +194,12 @@ class LogsService implements ILogsService{
         }
 
         if (log.requestLog){
+
+          // Process url for view
+          if (log.requestLog.url){
+            //
+            log.url = log.requestLog.url.split("?")[0];
+          }
 
           // Process request body for view
           if (canParseAsJSON(log.requestLog.requestBody) &&
