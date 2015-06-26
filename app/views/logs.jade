@@ -170,11 +170,11 @@ navbar
                                         .collapse-list(ng-show='log.requestLog.jsonBody')
                                           a.collapsed(data-toggle='collapse', href='#req-body-{{$index}}')
                                             | Body
-                                        h5(ng-hide='log.requestLog.jsonBody') Body
+                                        h5(ng-hide='log.requestLog.jsonBody || (log.requestLog.requestBody === "null")') Body
                                         .collapse(ng-show='log.requestLog.jsonBody', id='req-body-{{$index}}')
                                           .well
                                             pre {{log.requestLog.jsonBody}}
-                                        .well(ng-hide='log.requestLog.jsonBody')
+                                        .well(ng-hide='log.requestLog.jsonBody || (log.requestLog.requestBody === "null")')
                                           pre {{log.requestLog.requestBody}}
                                   .col-xs-12.col-lg-6(ng-show='log.responseLog')
                                     .row
