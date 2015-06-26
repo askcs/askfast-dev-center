@@ -274,17 +274,18 @@ module.exports = function(grunt) {
         dest: ".tmp/styles/",
         src: "{,*/}*.css"
       },
+      vendors: {
+        expand: true,
+        cwd: "<%= paths.app %>/vendors",
+        dest: ".tmp/vendors/",
+        src: "{,**/}*"
+      },
       js: {
         files: [
           {
             expand: true,
             cwd: "<%= paths.app %>/scripts",
             dest: ".tmp/scripts/",
-            src: "{,**/}*"
-          }, {
-            expand: true,
-            cwd: "<%= paths.app %>/scripts",
-            dest: "<%= paths.dist %>/scripts/",
             src: "{,**/}*"
           }
         ]
@@ -364,11 +365,16 @@ module.exports = function(grunt) {
           baseUrl: '.',
           dir: '<%= paths.dist %>/scripts/',
           optimize: 'uglify',
+          skipDirOptimize: true,
+          paths: {
+            config: 'empty:'
+          },
           mainConfigFile: './.tmp/scripts/main.js',
           logLevel: 0,
-          findNestedDependencies: true,
           fileExclusionRegExp: /^\./,
-          inlineText: true
+          modules: [
+            {name: 'main'}
+          ]
         }
       }
     },
