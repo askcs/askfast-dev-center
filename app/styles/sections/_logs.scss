@@ -16,10 +16,13 @@
 
   }
 
-  // increase hit target while maintaining style
   .panel-heading {
-    padding: 0 0;
+    .panel-title {
+      font-size: 14px;
+    }
 
+    // increase hit target while maintaining style
+    padding: 0 0;
     .row {
       padding: 10px 15px;
     }
