@@ -1,1 +1,37 @@
-define(["services/services"],function(e){"use strict";e.factory("Log",["Store",function(e){return{error:function(t){var n,r,i;return e=e("error"),i=Date.now(),r={},n={},t.hasOwnProperty("message")?n={stack:t.stack,message:t.message}:n={trace:t},r[i]=n,console.warn("Error: ",t),e.save(r)}}}])});
+define(['services/services'], function(services) {
+  'use strict';
+  
+  services.factory('Log', [
+    'Store',
+    function(Store) {
+      return {
+        // Log any given errors
+        error: function(trace) {
+          var body, err, stamp;
+          
+          Store = Store('error');
+          stamp = Date.now();
+          err = {};
+          body = {};
+          
+          if (trace.hasOwnProperty('message')) {
+            body = {
+              stack: trace.stack,
+              message: trace.message
+            };
+          } else {
+            body = {
+              trace: trace
+            };
+          }
+          
+          err[stamp] = body;
+          
+          console.warn('Error: ', trace);
+          
+          return Store.save(err);
+        }
+      };
+    }
+  ]);
+});

@@ -1,1 +1,37 @@
-define(["services/services"],function(e){"use strict";e.factory("Interceptor",["$q","$location","Log",function(e,t,n){return{request:function(t){return t||e.when(t)},requestError:function(t){return console.warn("request error ->",t),e.reject(t)},response:function(t){return t||e.when(t)},responseError:function(n){return n.status===403&&t.path("#/login"),e.reject(n)}}}])});
+define(['services/services'], function(services) {
+  'use strict';
+  
+  services.factory('Interceptor', [
+    '$q',
+    '$location',
+    'Log',
+    function($q, $location, Log) {
+      
+      return {
+        // Log request
+        request: function(config) {
+          return config || $q.when(config);
+        },
+        
+        // On request error
+        requestError: function(rejection) {
+          console.warn('request error ->', rejection);
+          return $q.reject(rejection);
+        },
+        
+        // Log response
+        response: function(response) {
+          return response || $q.when(response);
+        },
+        
+        // On response error
+        responseError: function(rejection) {
+          if (rejection.status === 403) {
+            $location.path('#/login');
+          }
+          return $q.reject(rejection);
+        }
+      };
+    }
+  ]);
+});

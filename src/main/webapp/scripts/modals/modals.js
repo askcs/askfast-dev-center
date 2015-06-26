@@ -1,1 +1,5 @@
-define(["require","exports","angular"],function(e,t,n){"use strict";var r=n.module("modals",[]);return r});
+define(["require", "exports", 'angular'], function (require, exports, angular) {
+    'use strict';
+    var modals = angular.module('modals', []);
+    return modals;
+});

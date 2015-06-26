@@ -1,1 +1,219 @@
-angular.module("WebPaige.Modals.Logs",["ngResource"]).factory("Logs",["$resource","$config","$q","$filter",function(e,t,n,r){var i=e(t.host+"/ddr",{},{get:{method:"GET",params:{},isArray:!0}}),s=function(e){var t=[],n=function(e){return/@/.test(e)?e.split("@")[0]:e},i=function(e){if(e&&e!=0){var t=moment.duration(e),n=function(e){return String(e).length==1?"0"+String(e):e};return{presentation:(t.hours()==0?"00":n(t.hours()))+":"+(t.minutes()==0?"00":n(t.minutes()))+":"+n(t.seconds()),stamp:e}}return{presentation:"00:00:00",stamp:0}},s=null;angular.forEach(e,function(e){var o=angular.fromJson(e.additionalInfo),u=o?o.hasOwnProperty("trackingToken")?o.trackingToken:e.start:e.start,a=u==s?o?o.hasOwnProperty("trackingToken")?!0:!1:!1:!1;s=u;var f={trackingToken:u,tracked:a,from:n(e.fromAddress),started:{date:r("date")(e.start,"medium"),stamp:e.start}};angular.forEach(e.statusPerAddress,function(e){f.status=e}),angular.forEach(angular.fromJson(e.toAddressString),function(e,t){f.to=n(t)}),f.duration=i(e.duration),t.push(f)});var o=_.groupBy(t,"trackingToken");_.each(t,function(e){typeof e.trackingToken!="number"&&(e.records=[],_.each(o[e.trackingToken],function(t){e.records.push({from:t.from,started:{date:t.started.date,stamp:t.started.stamp},status:t.status,to:t.to,duration:{presentation:t.duration.presentation,stamp:t.duration.stamp}})}))}),_.each(t,function(e){e.records&&e.records.reverse(),e.records&&(e.from=e.records[0].from,e.started.date=e.records[0].started.date,e.started.stamp=e.records[0].started.stamp,e.status=e.records[0].status,e.to=e.records[0].to,e.duration.presentation=e.records[0].duration.presentation,e.duration.stamp=e.records[0].duration.stamp,e.records.shift())});var u=_.indexBy(t,"trackingToken"),a=[];return _.each(u,function(e){a.push(e)}),r("orderBy")(a,"started.stamp"),a};return i.prototype.fetch=function(e){var t=n.defer();return e||(e={end:(new Date.now).getTime(),start:(new Date.today).addDays(-7).getTime()}),i.get({startTime:e.start,endTime:e.end},function(n){var r={logs:s(n),synced:Date.now().getTime(),periods:e};t.resolve(r)},function(e){t.resolve({error:e})}),t.promise},new i}]);
+'use strict';
+
+
+angular.module('WebPaige.Modals.Logs', ['ngResource'])
+
+/**
+ * Groups modal
+ */
+  .factory(
+  'Logs',
+  [
+    '$resource', '$config', '$q', '$filter',
+    function ($resource, $config, $q, $filter)
+    {
+      // /ddr?adapterId= &fromAddress= &typeId= &status= &startTime= &endTime= &offset= &limit= &shouldGenerateCosts= &shouldIncludeServiceCosts=
+      var Logs = $resource(
+          $config.host + '/ddr',
+          {},
+          {
+            get: {
+              method: 'GET',
+              params: {},
+              isArray: true
+            }
+          }
+      );
+
+      var normalize = function (logs)
+      {
+        var refined = [];
+
+        var strip = function (number)
+        {
+          return (/@/.test(number)) ? number.split('@')[0] : number;
+        };
+
+        var howLong = function (period)
+        {
+          if (period && period != 0)
+          {
+            var duration = moment.duration(period);
+
+            var doubler = function (num)
+            {
+              return (String(num).length == 1) ? '0' + String(num) : num;
+            };
+
+            return {
+              presentation: ((duration.hours() == 0) ? '00' : doubler(duration.hours())) + ':' +
+                            ((duration.minutes() == 0) ? '00' : doubler(duration.minutes())) + ':' +
+                            doubler(duration.seconds()),
+              stamp: period
+            }
+          }
+          else
+          {
+            return {
+              presentation: '00:00:00',
+              stamp: 0
+            }
+          }
+        };
+
+        var trackingID = null;
+
+        angular.forEach(
+          logs,
+          function (log)
+          {
+            var additionalInfo = angular.fromJson(log.additionalInfo);
+
+            var trackingToken = additionalInfo ?
+                                ((additionalInfo.hasOwnProperty('trackingToken')) ?
+                                 additionalInfo.trackingToken :
+                                 log.start) :
+                                log.start;
+
+            var tracked = (trackingToken == trackingID) ?
+                          (additionalInfo ?
+                           ((additionalInfo.hasOwnProperty('trackingToken')) ? true : false) :
+                           false) : false;
+
+            trackingID = trackingToken;
+
+            var record = {
+              trackingToken: trackingToken,
+              tracked: tracked,
+              from: strip(log.fromAddress),
+              started: {
+                date: $filter('date')(log.start, 'medium'),
+                stamp: log.start
+              }
+            };
+
+            angular.forEach(
+              log.statusPerAddress,
+              function (status) { record.status = status }
+            );
+
+            angular.forEach(
+              angular.fromJson(log.toAddressString),
+              function (message, number) { record.to = strip(number) }
+            );
+
+            record.duration = howLong(log.duration);
+
+            refined.push(record);
+          }
+        );
+
+        var groups = _.groupBy(refined, 'trackingToken');
+
+        _.each(
+          refined,
+          function (log)
+          {
+            if (typeof log.trackingToken != 'number')
+            {
+              log.records = [];
+
+              _.each(
+                groups[log.trackingToken],
+                function (token)
+                {
+                  log.records.push(
+                    {
+                      from: token.from,
+                      started: {
+                        date: token.started.date,
+                        stamp: token.started.stamp
+                      },
+                      status: token.status,
+                      to: token.to,
+                      duration: {
+                        presentation: token.duration.presentation,
+                        stamp: token.duration.stamp
+                      }
+                    }
+                  );
+                }
+              );
+            }
+          }
+        );
+
+        _.each(
+          refined,
+          function (log)
+          {
+            log.records && log.records.reverse();
+
+            if (log.records)
+            {
+              log.from = log.records[0].from;
+              log.started.date = log.records[0].started.date;
+              log.started.stamp = log.records[0].started.stamp;
+              log.status = log.records[0].status;
+              log.to = log.records[0].to;
+              log.duration.presentation = log.records[0].duration.presentation;
+              log.duration.stamp = log.records[0].duration.stamp;
+
+              log.records.shift();
+            }
+          }
+        );
+
+        var indexed = _.indexBy(refined, 'trackingToken');
+
+        var uniques = [];
+
+        _.each(
+          indexed,
+          function (token) { uniques.push(token) }
+        );
+
+        $filter('orderBy')(uniques, 'started.stamp');
+
+        return uniques;
+      };
+
+      Logs.prototype.fetch = function (periods)
+      {
+        var deferred = $q.defer();
+
+        if (! periods)
+        {
+          periods = {
+            end: new Date.now().getTime(),
+            start: new Date.today().addDays(- 7).getTime()
+          }
+        }
+
+        Logs.get(
+          {
+            startTime: periods.start,
+            endTime: periods.end
+          },
+          function (result)
+          {
+            var returned = {
+              logs: normalize(result),
+              synced: Date.now().getTime(),
+              periods: periods
+            };
+
+            deferred.resolve(returned);
+          },
+          function (error)
+          {
+            deferred.resolve({ error: error });
+          }
+        );
+
+        return deferred.promise;
+      };
+
+      return new Logs;
+    }
+  ]);

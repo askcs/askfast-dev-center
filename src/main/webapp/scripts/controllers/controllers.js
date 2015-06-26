@@ -1,1 +1,4 @@
-define(["require","exports","angular"],function(e,t,n){var r=n.module("controllers",["datatables"]);return r});
+define(["require", "exports", 'angular'], function (require, exports, angular) {
+    var controllers = angular.module('controllers', ['datatables']);
+    return controllers;
+});

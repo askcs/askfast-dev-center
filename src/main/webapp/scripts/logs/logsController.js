@@ -1,1 +1,104 @@
-define(["require","exports","controllers/controllers"],function(e,t,n){"use strict";var r=n.controller("logs",["$scope","$route","$location","$timeout","LogsService","moment",function(e,t,n,r,i,s){var o=this;o.ddrId=null,o.currentSection="debugger",t.current.params.ddrId&&(o.currentSection="details",o.ddrId=t.current.params.ddrId),o.loading={logs:!0},o.setSection=function(e,r){t.current.params.ddrId&&(o.ddrId=null,n.url("/logs")),r&&(o.ddrId=null),o.currentSection=e,e==="debugger"&&(o.logs=[],o.Log.list())},e.$on("$routeUpdate",function(){t.current.params.ddrId&&o.ddrId===null?(o.ddrId=t.current.params.ddrId,o.currentSection="details",o.Log.detail(o.ddrId)):o.currentSection==="details"&&o.setSection("debugger",!0)}),o.query={category:"all",limit:100,until:s().format("DD/MM/YYYY")},o.Log={data:null,list:function(){var e;o.query.until?e=s(o.query.until,"DD/MM/YYYY").endOf("day").valueOf():e=s().endOf("day").valueOf(),o.loading.logs=!0,i.list(o.query.limit,e).then(function(e){o.logs=e,o.loading.logs=!1}).catch(function(e){console.log(e)})},categorize:function(){var e=o.query.category;o.logs=i.categorize(e)},detail:function(e){i.detail(e).then(function(e){o.ddrDetails=e[0],o.logs=e[1],r(function(){$(".ddr-detail .panel-collapse").collapse({toggle:!1})})}).catch(function(e){console.warn(e)})}},o.ddrId?o.Log.detail(o.ddrId):o.Log.list(),o.expandAll=function(){$(".ddr-detail .panel-collapse").collapse("show")},o.collapseAll=function(){$(".ddr-detail .panel-collapse").collapse("hide")}}]);return r});
+define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+    'use strict';
+    var logsController = controllers.controller('logs', ["$scope", "$route", "$location", "$timeout", "LogsService", "moment", function ($scope, $route, $location, $timeout, LogsService, moment) {
+        var vm = this;
+        vm.ddrId = null;
+        vm.currentSection = 'debugger';
+        if ($route.current.params.ddrId) {
+            vm.currentSection = 'details';
+            vm.ddrId = $route.current.params.ddrId;
+        }
+        vm.loading = {
+            logs: true
+        };
+        vm.setSection = function (selection, clearDdrId) {
+            if ($route.current.params.ddrId) {
+                vm.ddrId = null;
+                $location.url('/logs');
+            }
+            if (clearDdrId) {
+                vm.ddrId = null;
+            }
+            vm.currentSection = selection;
+            if (selection === 'debugger') {
+                vm.logs = [];
+                vm.Log.list();
+            }
+        };
+        $scope.$on('$routeUpdate', function () {
+            if ($route.current.params.ddrId && vm.ddrId === null) {
+                vm.ddrId = $route.current.params.ddrId;
+                vm.currentSection = 'details';
+                vm.Log.detail(vm.ddrId);
+            }
+            else if (vm.currentSection === 'details') {
+                // means the user went back
+                // the only links to 'details' are from 'debugger'
+                vm.setSection('debugger', true);
+            }
+        });
+        vm.query = {
+            category: 'all',
+            limit: 100,
+            until: moment().format('DD/MM/YYYY')
+        };
+        vm.Log = {
+            data: null,
+            list: function () {
+                var _period;
+                if (vm.query.until) {
+                    _period = moment(vm.query.until, 'DD/MM/YYYY').endOf('day').valueOf();
+                }
+                else {
+                    _period = moment().endOf('day').valueOf();
+                }
+                vm.loading.logs = true;
+                LogsService.list(vm.query.limit, _period)
+                    .then(function (logs) {
+                    vm.logs = logs;
+                    vm.loading.logs = false;
+                })
+                    .catch(function (err) {
+                    console.log(err);
+                });
+            },
+            categorize: function () {
+                var category = vm.query.category;
+                vm.logs = LogsService.categorize(category);
+            },
+            detail: function (ddrId) {
+                LogsService.detail(ddrId)
+                    .then(function (results) {
+                    vm.ddrDetails = results[0];
+                    if (angular.equals([], results[1])) {
+                        vm.logs = null;
+                    }
+                    else {
+                        vm.logs = results[1];
+                    }
+                    $timeout(function () {
+                        // makes sure that first call to collapse doesn't toggle.
+                        // if not done, collapseAll will expand untouched panels
+                        $('.ddr-detail .panel-collapse').collapse({ toggle: false });
+                    });
+                })
+                    .catch(function (err) {
+                    console.warn(err);
+                });
+            }
+        };
+        if (!vm.ddrId) {
+            vm.Log.list();
+        }
+        else {
+            vm.Log.detail(vm.ddrId);
+        }
+        vm.expandAll = function () {
+            $('.ddr-detail .panel-collapse').collapse('show');
+        };
+        vm.collapseAll = function () {
+            $('.ddr-detail .panel-collapse').collapse('hide');
+        };
+    }]);
+    return logsController;
+});

@@ -1,1 +1,45 @@
-define(["services/services"],function(e){"use strict";e.factory("Session",["$http","Store",function(e,t){return t=t("session"),{get:function(){var e;return e=t.get("info"),e.id},set:function(n){var r;return r={id:n},r.inited=(new Date).getTime(),t.save({info:r}),e.defaults.headers.common["X-SESSION_ID"]=r.id,r},auth:function(t){return e.defaults.headers.common.Authorization=t},setHeader:function(t){return e.defaults.headers.post["Content-Type"]=t},clear:function(){t.remove("info"),e.defaults.headers.common["X-SESSION_ID"]=null}}}])});
+define(['services/services'], function(services) {
+  'use strict';
+  
+  services.factory('Session', [
+    '$http', 'Store',
+    function($http, Store) {
+      Store = Store('session');
+
+      return {
+        // Check the session
+        get: function() {
+          var session;
+          session = Store.get('info');
+          return session.id;
+        },
+        // Set the session
+        set: function(id) {
+          var session;
+          session = {
+            id: id
+          };
+          session.inited = new Date().getTime();
+          Store.save({
+            info: session
+          });
+          $http.defaults.headers.common['X-SESSION_ID'] = session.id;
+          return session;
+        },
+        //set auth header
+        auth: function(bearer) {
+          return $http.defaults.headers.common['Authorization'] = bearer;
+        },
+        //set content type
+        setHeader: function(type) {
+          return $http.defaults.headers.post['Content-Type'] = type;
+        },
+        // Clear the session
+        clear: function() {
+          Store.remove('info');
+          $http.defaults.headers.common['X-SESSION_ID'] = null;
+        }
+      };
+    }
+  ]);
+});

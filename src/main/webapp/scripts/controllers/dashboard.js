@@ -1,1 +1,168 @@
-define(["require","exports","controllers/controllers"],function(e,t,n){"use strict";var r=n.controller("dashboard",["$scope","$rootScope","$timeout","AskFast","Session","Store","dashboardLogsFilter","$q",function(e,t,n,r,i,s,o,u){function h(n){var s=u.defer(),o={method:"outboundCall",params:{adapterID:n.from.configId,address:n.to,url:n.url,bearerToken:f}};return i.auth("Bearer "+f),r.caller("startDialog",null,o).then(function(n){n.error?(s.reject(n),e.alert="Something went wrong, please try again later. Check the logs and request below"):(s.resolve(n),e.alert="Successful request, see your request below");var r={host:t.config.host,path:"startDialog/outbound",header:{Authrorization:"Bearer "+f},payload:o};e.request=JSON.stringify(r,null,2)}),s.promise}function p(e){var t=u.defer();return f!=""?h(e).then(function(e){t.resolve(e)}):d().then(function(t){h(e)}),t.promise}function d(){console.log("fetch bearerToken"),i.setHeader("application/x-www-form-urlencoded");var t=u.defer();return r.caller("getAccessToken",null,$.param({client_id:e.user.id,grant_type:"refresh_token",refresh_token:e.user.refreshToken,client_secret:"none"})).then(function(e){e.error?(console.log("bear rejected"),console.log(e),t.reject(e)):(i.setHeader("application/json"),f=e.access_token,t.resolve())}),t.promise}var a=null,f="";e.keyRevealTypeString="password",e.keyButtonString="Show",e.loading={logs:!0};var l=[],c=[];angular.forEach(s("adapters").all(),function(e,t){e.adapterType==="sms"&&l.push(e),e.adapterType==="call"&&c.push(e)}),e.smsAdapters=l,e.phoneAdapters=c,e.sendSMS=function(){var t={type:"sms",to:e.sms.to,url:e.sms.url,from:e.sms.from};p(t).then(function(e){console.log(e)})},e.startCall=function(){var t={type:"call",from:e.call.from,url:e.call.url,to:e.call.to};p(t).then(function(e){console.log(e)})},e.toggleKeyReveal=function(){e.keyRevealTypeString=="password"?(e.keyRevealTypeString="text",e.keyButtonString="Hide",a=n(function(){e.toggleKeyReveal()},5e3)):(a&&(n.cancel(a),a=null),e.keyRevealTypeString="password",e.keyButtonString="Show")},r.caller("log",{limit:100,level:"SEVERE"}).then(function(t){e.logs=o(t),e.loading.logs=!1}),r.caller("info").then(function(e){r.caller("key").then(function(n){e.refreshToken=n.refreshToken,s("app").save({user:e}),t.user=s("app").get("user")})})}]);return r});
+define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+    'use strict';
+    var dashboardController = controllers.controller('dashboard', ["$scope", "$rootScope", "$timeout", "AskFast", "Session", "Store", "dashboardLogsFilter", "$q", function ($scope, $rootScope, $timeout, AskFast, Session, Store, dashboardLogsFilter, $q) {
+        var keyRevealTimeoutPromise = null;
+        var bearerToken = '';
+        $scope.keyRevealTypeString = 'password';
+        $scope.keyButtonString = 'Show';
+        $scope.loading = {
+            logs: true
+        };
+        //sms widget
+        //Save all the posible adapters in the scope
+        var smsAdapters = [];
+        var phoneAdapters = [];
+        angular.forEach(Store('adapters').all(), function (value, key) {
+            if (value.adapterType === 'sms') {
+                smsAdapters.push(value);
+            }
+            if (value.adapterType === 'call') {
+                phoneAdapters.push(value);
+            }
+        });
+        $scope.smsAdapters = smsAdapters;
+        $scope.phoneAdapters = phoneAdapters;
+        $scope.sendSMS = function () {
+            var message = {
+                type: 'sms',
+                to: $scope.sms.to,
+                url: $scope.sms.url,
+                from: $scope.sms.from
+            };
+            //check if there is a bearer token present before sending
+            checkToken(message)
+                .then(function (result) {
+                console.log(result);
+            });
+        };
+        //Phone widget
+        $scope.startCall = function () {
+            var message = {
+                type: 'call',
+                from: $scope.call.from,
+                url: $scope.call.url,
+                to: $scope.call.to
+            };
+            //check if there is a bearer token present before sending
+            checkToken(message).then(function (result) {
+                console.log(result);
+            });
+        };
+        /**
+         * Send message
+         * @param  {JSON} message {type: xxxx, to: xxx, url: xxxx}
+         * @return {Promise}
+         */
+        function sendMessage(message) {
+            var deferd = $q.defer();
+            var dialog = {
+                "method": "outboundCall",
+                "params": {
+                    "adapterID": message.from.configId,
+                    "address": message.to,
+                    "url": message.url,
+                    "bearerToken": bearerToken
+                }
+            };
+            // Set auth header
+            Session.auth('Bearer ' + bearerToken);
+            AskFast.caller('startDialog', null, dialog)
+                .then(function (response) {
+                if (response.error) {
+                    deferd.reject(response);
+                    $scope.alert = "Something went wrong, please try again later. Check the logs and request below";
+                }
+                else {
+                    deferd.resolve(response);
+                    $scope.alert = "Successful request, see your request below";
+                }
+                var request = {
+                    host: $rootScope.config.host,
+                    path: 'startDialog/outbound',
+                    header: {
+                        Authrorization: 'Bearer ' + bearerToken
+                    },
+                    payload: dialog
+                };
+                $scope.request = JSON.stringify(request, null, 2);
+            });
+            return deferd.promise;
+        }
+        // check if there is a bear token, if there is: send message. If there is no bearer, fetch bearer and send message
+        function checkToken(message) {
+            var deferred = $q.defer();
+            if (bearerToken != '') {
+                sendMessage(message).then(function (response) {
+                    deferred.resolve(response);
+                });
+            }
+            else {
+                getBearer().then(function (result) {
+                    sendMessage(message);
+                });
+            }
+            return deferred.promise;
+        }
+        function getBearer() {
+            console.log('fetch bearerToken');
+            //set proper header
+            Session.setHeader('application/x-www-form-urlencoded');
+            var deferd = $q.defer();
+            AskFast.caller('getAccessToken', null, $.param({
+                client_id: $scope.user.id,
+                grant_type: 'refresh_token',
+                refresh_token: $scope.user.refreshToken,
+                client_secret: 'none'
+            })).then(function (result) {
+                if (!result.error) {
+                    Session.setHeader('application/json');
+                    bearerToken = result.access_token;
+                    deferd.resolve();
+                }
+                else {
+                    console.log('bear rejected');
+                    console.log(result);
+                    deferd.reject(result);
+                }
+            });
+            return deferd.promise;
+        }
+        $scope.toggleKeyReveal = function () {
+            if ($scope.keyRevealTypeString == 'password') {
+                $scope.keyRevealTypeString = 'text';
+                $scope.keyButtonString = 'Hide';
+                keyRevealTimeoutPromise = $timeout(function () {
+                    $scope.toggleKeyReveal();
+                }, 5000);
+            }
+            else {
+                if (keyRevealTimeoutPromise) {
+                    $timeout.cancel(keyRevealTimeoutPromise);
+                    keyRevealTimeoutPromise = null;
+                }
+                $scope.keyRevealTypeString = 'password';
+                $scope.keyButtonString = 'Show';
+            }
+        };
+        AskFast.caller('log', {
+            limit: 100,
+            level: 'SEVERE' // TODO: Should work, doesn't, but doesn't break.
+        })
+            .then(function (result) {
+            $scope.logs = dashboardLogsFilter(result);
+            $scope.loading.logs = false;
+        });
+        AskFast.caller('info')
+            .then(function (info) {
+            AskFast.caller('key')
+                .then(function (keys) {
+                info.refreshToken = keys.refreshToken;
+                Store('app').save({
+                    user: info
+                });
+                $rootScope.user = Store('app').get('user');
+            });
+        });
+    }]);
+    return dashboardController;
+});
