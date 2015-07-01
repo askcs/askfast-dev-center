@@ -175,16 +175,19 @@ module.exports = function(grunt) {
       }
     },
 
-    rev: {
+    filerev: {
       dist: {
-        files: {
-          src: [
-            '<%= paths.dist %>/scripts/main.js',
-            '<%= paths.dist %>/styles/{,*/}*.css',
-            '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= paths.dist %>/styles/fonts/*'
-          ]
-        }
+        src: [
+          '<%= paths.dist %>/scripts/main.js',
+          '<%= paths.dist %>/styles/{,*/}*.css',
+          '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= paths.dist %>/styles/fonts/*'
+        ]
+      },
+      js: {
+        src: [
+          '<%= paths.dist %>/scripts/configAskFast.js'
+        ]
       }
     },
 
@@ -198,8 +201,14 @@ module.exports = function(grunt) {
     usemin: {
       html: ['<%= paths.dist %>/{,*/}*.html'],
       css: ['<%= paths.dist %>/styles/{,*/}*.css'],
+      js: ['<%= paths.dist %>/scripts/*.js'],
       options: {
-        dirs: ['<%= paths.dist %>']
+        assetsDirs: ['<%= paths.dist %>','<%= paths.dist %>/scripts'],
+        patterns:{
+          js: [
+            [ /(configAskFast)/, 'Replacing config', function(path){ return path + '.js' }, function(path){ return path.slice(0, -3) }]
+          ]
+        }
       }
     },
 
@@ -511,8 +520,11 @@ module.exports = function(grunt) {
     'ngAnnotate',
     'cssmin',
     'requirejs',
-    'rev',
-    'usemin',
+    'filerev:js',
+    'usemin:js',
+    'filerev:dist',
+    'usemin:html',
+    'usemin:css',
     'replace'
   ]);
 
