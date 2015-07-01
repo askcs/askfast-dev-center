@@ -1,7 +1,7 @@
 define({
   app: {
-    version: '1.6.0',
-    released: 'Friday, June 26th, 2015, 4:02:35 PM',
+    version: '@@version',
+    released: '@@released',
     title: 'DevCen',
     feature: {
       payments: false,
