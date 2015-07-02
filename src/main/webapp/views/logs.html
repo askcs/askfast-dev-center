@@ -149,9 +149,7 @@
                                         <div ng-show="log.url" class="col-xs-6">{{log.url}}</div>
                                         <div ng-show="log.level" class="col-xs-2">{{log.level}}</div>
                                         <div class="col-xs-1">{{log.requestLog.httpMethod}}</div>
-                                        <div class="col-xs-1">
-                                          <!-- TODO: perhaps use a function or directive for this--><span ng-class="{&quot;-1&quot;: &quot;label-danger&quot;, &quot;200&quot;: &quot;label-success&quot;}[log.responseLog.httpCode]" class="label">{{log.responseLog.httpCode}}</span>
-                                        </div>
+                                        <div class="col-xs-1"><span label-response-code="{{log.responseLog.httpCode}}" class="label">{{log.responseLog.httpCode}}</span></div>
                                       </div></a></h4>
                                 </div>
                                 <div id="collapse{{$index}}" class="panel-collapse collapse">

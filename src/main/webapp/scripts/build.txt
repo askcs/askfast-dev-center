@@ -43,6 +43,7 @@ run.js
 modals/askfast.js
 directives/navbar.js
 directives/profile.js
+directives/labelResponseCode.js
 filters/all.js
 services/session.js
 services/md5.js
