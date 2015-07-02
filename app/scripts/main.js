@@ -63,6 +63,7 @@ require (
 
     'directives/navbar',
     'directives/profile',
+    'directives/labelResponseCode',
 
     'filters/all',
 

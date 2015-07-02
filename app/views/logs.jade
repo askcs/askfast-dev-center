@@ -137,8 +137,7 @@ navbar
                                         .col-xs-1
                                           | {{log.requestLog.httpMethod}}
                                         .col-xs-1
-                                          // TODO: perhaps use a function or directive for this
-                                          span.label(ng-class='{"-1": "label-danger", "200": "label-success"}[log.responseLog.httpCode]')
+                                          span.label(label-response-code="{{log.responseLog.httpCode}}")
                                             | {{log.responseLog.httpCode}}
                                           
                                 .panel-collapse.collapse(id='collapse{{$index}}')
