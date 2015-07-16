@@ -296,7 +296,7 @@ class LogsService implements ILogsService{
       ddrLog.endString = '-';
     }
     ddrLog.fromAddress = ddrLog.fromAddress || '-';
-    ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString))[0] : '-';
+    ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString)).join(', ') : '-';
     ddrLog.ddrTypeString = ddrLog.ddrTypeId ? this.getDdrTypeString(ddrLog.ddrTypeId, ddrTypes) : '-';
     // there's no way to get the index from ng-repeat, make an object out of it
     if(ddrLog.statusPerAddress){
