@@ -112,6 +112,24 @@ navbar
                             .well
                               pre
                                 | {{vm.ddrDetails.additionalInfo.message}}
+                          div(ng-if='vm.ddrDetails.parentId')
+                            dl.dl-horizontal
+                              dt Parent log
+                              dd 
+                                a(href="/#/logs?ddrId={{vm.ddrDetails.parentId}}") {{vm.ddrDetails.parentId}}
+                          div(ng-if='vm.ddrDetails.childIds')
+                            dl.dl-horizontal(ng-if='vm.ddrDetails.childIds.length === 1')
+                              dt Child logs
+                              dd(ng-repeat='childId in vm.ddrDetails.childIds')
+                                a(href="/#/logs?ddrId={{childId}}") {{childId}}
+                            .dl-horizontal.collapse-list(ng-if='vm.ddrDetails.childIds.length > 1')
+                              dt
+                                a.collapsed(data-toggle='collapse', href='#drr-children')
+                                  | Child logs 
+                            .collapse(id='drr-children')
+                                ul.child-logs-collapsible
+                                  li(ng-repeat='childId in vm.ddrDetails.childIds')
+                                    a(href="/#/logs?ddrId={{childId}}") {{childId}}
                             
                         .col-sm-12
                           div(ng-show='vm.logs')
