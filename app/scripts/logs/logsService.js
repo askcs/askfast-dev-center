@@ -31,12 +31,19 @@ define(["require", "exports", 'services/services'], function (require, exports, 
         LogsService.prototype.list = function (limit, period) {
             var _this = this;
             var deferred = this.q.defer();
+            var ddrTypes = this.Store('data').get('ddrTypes');
+            var onlyCommTypeIds = [];
+            angular.forEach(ddrTypes, function (value, key) {
+                if (value.category === 'OUTGOING_COMMUNICATION_COST' || value.category === 'INCOMING_COMMUNICATION_COST') {
+                    onlyCommTypeIds.push(key);
+                }
+            });
             this.AskFast.caller('ddr', {
                 limit: limit,
-                endTime: period
+                endTime: period,
+                typeId: onlyCommTypeIds.join(',')
             })
                 .then(function (ddr) {
-                var ddrTypes = _this.Store('data').get('ddrTypes');
                 var adapterMap = _this.Store('data').get('adapterMap');
                 var logs = {
                     call: [],
