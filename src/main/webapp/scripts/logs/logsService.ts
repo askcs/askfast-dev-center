@@ -49,13 +49,21 @@ class LogsService implements ILogsService{
 
   list(limit:number, period:number){
     var deferred = this.q.defer();
+    var ddrTypes = this.Store('data').get('ddrTypes');
+    var onlyCommTypeIds = [];
+
+    angular.forEach(ddrTypes, (value, key)=>{
+      if (value.category === 'OUTGOING_COMMUNICATION_COST' || value.category === 'INCOMING_COMMUNICATION_COST') {
+          onlyCommTypeIds.push(key);
+      }
+    });
 
     this.AskFast.caller('ddr', {
       limit: limit,
-      endTime: period
+      endTime: period,
+      typeId: onlyCommTypeIds.join(',')
     })
     .then( (ddr) => {
-      var ddrTypes = this.Store('data').get('ddrTypes');
 
       var adapterMap = this.Store('data').get('adapterMap');
 
@@ -143,7 +151,7 @@ class LogsService implements ILogsService{
     .then( (resultArray) => {
       var deferred = this.q.defer();
 
-      // empty array means ddr doesn't have http logs, but logs.
+      // empty array could mean ddr doesn't have http logs, but logs.
       if (angular.equals([], resultArray[1])){
         // fetch logs
         this.AskFast.caller('log', {
@@ -194,6 +202,12 @@ class LogsService implements ILogsService{
         }
 
         if (log.requestLog){
+
+          // Process url for view
+          if (log.requestLog.url){
+            //
+            log.url = log.requestLog.url.split("?")[0];
+          }
 
           // Process request body for view
           if (canParseAsJSON(log.requestLog.requestBody) &&
@@ -290,7 +304,7 @@ class LogsService implements ILogsService{
       ddrLog.endString = '-';
     }
     ddrLog.fromAddress = ddrLog.fromAddress || '-';
-    ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString))[0] : '-';
+    ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString)).join(', ') : '-';
     ddrLog.ddrTypeString = ddrLog.ddrTypeId ? this.getDdrTypeString(ddrLog.ddrTypeId, ddrTypes) : '-';
     // there's no way to get the index from ng-repeat, make an object out of it
     if(ddrLog.statusPerAddress){

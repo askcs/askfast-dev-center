@@ -175,16 +175,19 @@ module.exports = function(grunt) {
       }
     },
 
-    rev: {
+    filerev: {
       dist: {
-        files: {
-          src: [
-            '<%= paths.dist %>/scripts/main.js',
-            '<%= paths.dist %>/styles/{,*/}*.css',
-            '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= paths.dist %>/styles/fonts/*'
-          ]
-        }
+        src: [
+          '<%= paths.dist %>/scripts/main.js',
+          '<%= paths.dist %>/styles/{,*/}*.css',
+          '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= paths.dist %>/styles/fonts/*'
+        ]
+      },
+      js: {
+        src: [
+          '<%= paths.dist %>/scripts/configAskFast.js'
+        ]
       }
     },
 
@@ -198,8 +201,14 @@ module.exports = function(grunt) {
     usemin: {
       html: ['<%= paths.dist %>/{,*/}*.html'],
       css: ['<%= paths.dist %>/styles/{,*/}*.css'],
+      js: ['<%= paths.dist %>/scripts/*.js'],
       options: {
-        dirs: ['<%= paths.dist %>']
+        assetsDirs: ['<%= paths.dist %>','<%= paths.dist %>/scripts'],
+        patterns:{
+          js: [
+            [ /(configAskFast)/, 'Replacing config', function(path){ return path + '.js' }, function(path){ return path.slice(0, -3) }]
+          ]
+        }
       }
     },
 
@@ -274,17 +283,18 @@ module.exports = function(grunt) {
         dest: ".tmp/styles/",
         src: "{,*/}*.css"
       },
+      vendors: {
+        expand: true,
+        cwd: "<%= paths.app %>/vendors",
+        dest: ".tmp/vendors/",
+        src: "{,**/}*"
+      },
       js: {
         files: [
           {
             expand: true,
             cwd: "<%= paths.app %>/scripts",
             dest: ".tmp/scripts/",
-            src: "{,**/}*"
-          }, {
-            expand: true,
-            cwd: "<%= paths.app %>/scripts",
-            dest: "<%= paths.dist %>/scripts/",
             src: "{,**/}*"
           }
         ]
@@ -364,11 +374,16 @@ module.exports = function(grunt) {
           baseUrl: '.',
           dir: '<%= paths.dist %>/scripts/',
           optimize: 'uglify',
+          skipDirOptimize: true,
+          paths: {
+            config: 'empty:'
+          },
           mainConfigFile: './.tmp/scripts/main.js',
           logLevel: 0,
-          findNestedDependencies: true,
           fileExclusionRegExp: /^\./,
-          inlineText: true
+          modules: [
+            {name: 'main'}
+          ]
         }
       }
     },
@@ -415,7 +430,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
-            src: ['<%= paths.dist %>/scripts/config.js'],
+            src: ['<%= paths.dist %>/scripts/configAskFast.*.js'],
             dest: '<%= paths.dist %>/scripts/'
           }
         ]
@@ -505,8 +520,11 @@ module.exports = function(grunt) {
     'ngAnnotate',
     'cssmin',
     'requirejs',
-    'rev',
-    'usemin',
+    'filerev:js',
+    'usemin:js',
+    'filerev:dist',
+    'usemin:html',
+    'usemin:css',
     'replace'
   ]);
 

@@ -1,1 +1,173 @@
-define(["require","exports","controllers/controllers"],function(e,t,n){"use strict";var r=n.controller("credits",["$scope","$rootScope","$routeParams","$timeout","$location","$filter","AskFast","Session","Store","DTOptionsBuilder","DTColumnDefBuilder",function(e,t,n,r,i,s,o,u,a,f,l){function h(){o.caller("info").then(function(n){e.paypal.link=t.config.host+"/paymentserver/paypal?accountId="+n.id+"&redirect_url="+encodeURIComponent(i.absUrl()+"?redirect=successfulpaypal"),a("app").save({user:n}),t.user=n})}function p(){e.loading=!0,o.caller("getPayments").then(function(t){e.payments=t,e.loading=!1})}function d(t,n){e.infomessage=t,n!==!0&&r(function(){e.infomessage=""},5e3)}e.loading=!0,e.paypal={showButton:!1,link:""},e.payment={showCreditButton:!1,showCreditForm:!1,showCheckoutButton:!1,showConfirm:!1},e.infomessage="",e.order={},e.creditBuyOptions=function(){var e=[],t=100,n=10,r=n;while(r<=t)e.push({value:r,name:s("currency")(r,"€")}),r+=n;return e}();var c={};n.redirect==="successfulpaypal"&&d("Congratulations, your PayPal account is verified!"),h(),o.caller("paymentMethods").then(function(n){var r=[];angular.forEach(n,function(e){c[e.type]=e.id}),typeof c.PAYPAL!="undefined"?t.config.feature.paypal===!0&&r.push({name:"PayPal",value:"PAYPAL"}):e.paypal.showButton=!0,e.methods=r,r.length!==0&&(e.payment.showCreditButton=!0)}),p(),e.dtOptions=f.newOptions().withTableTools("../scripts/libs/datatables/1.10.4/extensions/TableTools/swf/copy_csv_xls_pdf.swf").withTableToolsButtons(["copy","print",{sExtends:"collection",sButtonText:"Save",aButtons:["csv","xls","pdf"]}]).withOption("order",[[0,"desc"]]),e.dtColumnDefs=[l.newColumnDef(0),l.newColumnDef(1),l.newColumnDef(2)],e.paymentform=function(){e.payment.showCreditButton=!1,e.payment.showCreditForm=!0,e.payment.showCheckoutButton=!0},e.proceedToCheckOut=function(){e.order&&e.order.amount&&e.order.method?(e.payment.showCheckoutButton=!1,angular.element(".order-option").attr("disabled","disabled"),e.payment.showConfirm=!0):d("Please select both an amount and a payment method.")},e.buycredits=function(t){d("Processing your request...",!0);var n=e.user.id;t&&typeof t.amount=="number"&&typeof t.method=="string"?o.caller("newPayment",null,{paymentMethodId:c[t.method],amount:t.amount}).then(function(t){angular.isDefined(t.id)&&angular.isDefined(t.amount)&&angular.isDefined(t.type)?(d("Your payment of "+s("currency")(t.amount,"€")+" was successful, thank you."),h(),p(),e.abortSale()):(d("Something went wrong with the transaction"),h(),p(),e.abortSale())},function(t){d("Something went wrong with the transaction"),h(),p(),e.abortSale()}):d("Please select both an amount and a payment method.")},e.abortSale=function(){angular.element(".order-option").removeAttr("disabled").val(null),e.order={},e.payment.showCreditButton=!0,e.payment.showCreditForm=!1,e.payment.showCheckoutButton=!1,e.payment.showConfirm=!1}}]);return r});
+define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+    'use strict';
+    var creditsController = controllers.controller('credits', ["$scope", "$rootScope", "$routeParams", "$timeout", "$location", "$filter", "AskFast", "Session", "Store", "DTOptionsBuilder", "DTColumnDefBuilder", function ($scope, $rootScope, $routeParams, $timeout, $location, $filter, AskFast, Session, Store, DTOptionsBuilder, DTColumnDefBuilder) {
+        //Set all the proper hide and show for all the html elements
+        $scope.loading = true;
+        $scope.paypal = {
+            showButton: false,
+            link: ''
+        };
+        $scope.payment = {
+            showCreditButton: false,
+            showCreditForm: false,
+            showCheckoutButton: false,
+            showConfirm: false
+        };
+        $scope.infomessage = '';
+        $scope.order = {};
+        $scope.creditBuyOptions = (function () {
+            // will go from increment up to and including max
+            var options = [], max = 100, increment = 10, i = increment;
+            while (i <= max) {
+                options.push({ value: i,
+                    name: $filter('currency')(i, '€') });
+                i = i + increment;
+            }
+            return options;
+        }());
+        var paymentMap = {};
+        if ($routeParams.redirect === 'successfulpaypal') {
+            infoMessage('Congratulations, your PayPal account is verified!');
+        }
+        /**
+         * refresh the user info and save this in the store
+         *
+         */
+        function refreshInfo() {
+            AskFast.caller('info')
+                .then(function (info) {
+                $scope.paypal.link = $rootScope.config.host +
+                    '/paymentserver/paypal?accountId=' + info.id +
+                    '&redirect_url=' + encodeURIComponent($location.absUrl() + '?redirect=successfulpaypal');
+                Store('app').save({
+                    user: info
+                });
+                $rootScope.user = info;
+            });
+        }
+        //Refresh the data when page is loaded
+        refreshInfo();
+        //Get all the posible payment methods for the checkout
+        AskFast.caller('paymentMethods')
+            .then(function (result) {
+            var methods = [];
+            // If no authorized payment methods, empty array
+            // Only authorized methods are given.
+            angular.forEach(result, function (paymentMethod) {
+                paymentMap[paymentMethod.type] = paymentMethod.id;
+            });
+            if (typeof paymentMap.PAYPAL !== 'undefined') {
+                if ($rootScope.config.feature.paypal === true) {
+                    methods.push({ name: 'PayPal', value: 'PAYPAL' });
+                }
+            }
+            else {
+                // PayPal isn't authorized, make it possible to do so
+                $scope.paypal.showButton = true;
+            }
+            $scope.methods = methods;
+            if (methods.length !== 0) {
+                $scope.payment.showCreditButton = true;
+            }
+        });
+        // Load all the previous payments and load these in the tabel
+        function getPayments() {
+            $scope.loading = true;
+            AskFast.caller('getPayments')
+                .then(function (result) {
+                $scope.payments = result;
+                $scope.loading = false;
+            });
+        }
+        getPayments();
+        $scope.dtOptions = DTOptionsBuilder
+            .newOptions()
+            .withTableTools('../scripts/libs/datatables/1.10.4/extensions/TableTools/swf/copy_csv_xls_pdf.swf')
+            .withTableToolsButtons([
+            'copy',
+            'print', {
+                'sExtends': 'collection',
+                'sButtonText': 'Save',
+                'aButtons': ['csv', 'xls', 'pdf']
+            }
+        ])
+            .withOption('order', [[0, 'desc']]);
+        $scope.dtColumnDefs = [
+            DTColumnDefBuilder.newColumnDef(0),
+            DTColumnDefBuilder.newColumnDef(1),
+            DTColumnDefBuilder.newColumnDef(2)
+        ];
+        //Show the payment form
+        $scope.paymentform = function () {
+            $scope.payment.showCreditButton = false;
+            $scope.payment.showCreditForm = true;
+            $scope.payment.showCheckoutButton = true;
+        };
+        //Show the final buy and cancel button
+        $scope.proceedToCheckOut = function () {
+            // use falsiness, options could have value of '' or undefined
+            if ($scope.order && $scope.order.amount && $scope.order.method) {
+                $scope.payment.showCheckoutButton = false;
+                angular.element('.order-option').attr('disabled', 'disabled');
+                $scope.payment.showConfirm = true;
+            }
+            else {
+                infoMessage('Please select both an amount and a payment method.');
+            }
+        };
+        //buy credits and give users proper feedback
+        $scope.buycredits = function (order) {
+            infoMessage('Processing your request...', true);
+            var id = $scope.user.id;
+            if (order && typeof order.amount === 'number' && typeof order.method === 'string') {
+                AskFast.caller('newPayment', null, {
+                    paymentMethodId: paymentMap[order.method],
+                    amount: order.amount
+                }).then(function (result) {
+                    if (angular.isDefined(result.id) &&
+                        angular.isDefined(result.amount) &&
+                        angular.isDefined(result.type)) {
+                        infoMessage('Your payment of ' + $filter('currency')(result.amount, '€') + ' was successful, thank you.');
+                        refreshInfo();
+                        getPayments();
+                        $scope.abortSale(); // Just to reset everything
+                    }
+                    else {
+                        infoMessage('Something went wrong with the transaction');
+                        refreshInfo();
+                        getPayments();
+                        $scope.abortSale();
+                    }
+                }, function (result) {
+                    infoMessage('Something went wrong with the transaction');
+                    refreshInfo();
+                    getPayments();
+                    $scope.abortSale();
+                });
+            }
+            else {
+                infoMessage('Please select both an amount and a payment method.');
+            }
+        };
+        //hide the buy form when the buy is canceled
+        $scope.abortSale = function () {
+            // reset options
+            angular.element('.order-option').removeAttr('disabled').val(null);
+            $scope.order = {};
+            $scope.payment.showCreditButton = true;
+            $scope.payment.showCreditForm = false;
+            $scope.payment.showCheckoutButton = false;
+            $scope.payment.showConfirm = false;
+        };
+        //generic function to show the user a message, which will disapear after 5 seconds
+        function infoMessage(message, permanent) {
+            $scope.infomessage = message;
+            if (permanent !== true) {
+                $timeout(function () {
+                    $scope.infomessage = '';
+                }, 5000);
+            }
+        }
+    }]);
+    return creditsController;
+});

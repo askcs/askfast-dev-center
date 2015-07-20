@@ -1,1 +1,269 @@
-define(["require","exports","services/services"],function(e,t,n){var r=function(){function e(e,t,n,r){this.adapterTypes={call:{label:"Phone",ids:[]},xmpp:{label:"Gtalk",ids:[]},email:{label:"Email",ids:[]},twitter:{label:"Twitter",ids:[]},sms:{label:"SMS",ids:[]}},this.q=e,this.AskFast=t,this.Store=n,this.moment=r}return e.prototype.list=function(e,t){var n=this,r=this.q.defer();return this.AskFast.caller("ddr",{limit:e,endTime:t}).then(function(e){var t=n.Store("data").get("ddrTypes"),i=n.Store("data").get("adapterMap"),s={call:[],email:[],sms:[],xmpp:[],twitter:[],other:[]},o=[];angular.forEach(e,function(e){o.push(n.processDdr(e,t,i))}),angular.forEach(o,function(e){var t=!1;angular.forEach(i,function(n,r){e.adapterId==r&&s[i[e.adapterId]]&&(s[i[e.adapterId]].push(e),t=!0)}),t||s.other.push(e)}),n.data=s,r.resolve(n.categorize())}).catch(function(e){r.reject(e)}),r.promise},e.prototype.categorize=function(e){if(e&&e!=="all")return this.data[e];var t=[],n=this.data;return angular.forEach(n,function(e){angular.forEach(e,function(e){t.push(e)})}),t},e.prototype.detail=function(e){var t=this,n=this.q.defer(),r=this.Store("data").get("ddrTypes"),i=this.Store("data").get("adapterMap");return this.q.all([this.AskFast.caller("ddrRecord",{second:e}),this.AskFast.caller("httpLog",{second:e})]).then(function(n){var r=t.q.defer();return angular.equals([],n[1])?t.AskFast.caller("log",{ddrRecordId:e}).then(function(e){n[1]=e,r.resolve(n)}).catch(function(e){console.warn("error ",e),r.reject(e)}):r.resolve(n),r.promise}).then(function(e){function u(e){function t(e){switch(e){case null:return"null";case undefined:return"undefined";default:return e}}function n(e){var t;try{t=JSON.parse(e),e=JSON.stringify(t,null,2)}catch(n){}return e}function r(e){try{JSON.parse(e)}catch(t){return!1}return!0}e.timestamp?e.timeString=this.moment(e.timestamp).format("HH:mm:ss Z YYYY-MM-DD"):e.requestLog&&e.requestLog.timestamp?(e.timestamp=e.requestLog.timestamp,e.timeString=this.moment(e.requestLog.timestamp).format("HH:mm:ss Z YYYY-MM-DD")):e.timeString="Missing timestamp",e.message&&r(e.message)&&(e.jsonMessage=n(e.message)),e.requestLog&&(r(e.requestLog.requestBody)&&e.requestLog.requestBody===t(e.requestLog.requestBody)?e.requestLog.jsonBody=n(e.requestLog.requestBody):e.requestLog.requestBody=t(e.requestLog.requestBody),e.responseLog&&(r(e.responseLog.responseBody)&&e.responseLog.responseBody===t(e.responseLog.responseBody)?e.responseLog.jsonBody=n(e.responseLog.responseBody):e.responseLog.responseBody=t(e.responseLog.responseBody)),angular.equals({},e.requestLog.headers)&&(e.requestLog.headers=null),angular.forEach(e.requestLog.parameters,function(n,r){e.requestLog.parameters[r]=t(n)}))}var s=t.processDdr(e[0],r,i),o=e[1];angular.forEach(o,function(e){u(e)}),n.resolve([s,o])}).catch(function(e){console.warn(e),n.reject(e)}),n.promise},e.prototype.processDdr=function(e,t,n){return e.start?(e.startString=this.moment(e.start).format("HH:mm:ss Z YYYY-MM-DD"),e.duration!==null?e.endString=this.moment(e.start+e.duration).format("HH:mm:ss Z YYYY-MM-DD"):e.endString="-"):(e.startString="-",e.endString="-"),e.fromAddress=e.fromAddress||"-",e.toAddress=e.toAddressString?Object.keys(angular.fromJson(e.toAddressString))[0]:"-",e.ddrTypeString=e.ddrTypeId?this.getDdrTypeString(e.ddrTypeId,t):"-",e.statusPerAddress&&angular.forEach(e.statusPerAddress,function(t,n){e.statusPerAddress[n]={index:n,status:t}}),e.adapterTypeString=e.adapterId?this.getAdapterTypeString(e.adapterId,n):"-",e},e.prototype.getDdrTypeString=function(e,t){return typeof t[e]!="undefined"&&typeof t[e].categoryString!="undefined"?t[e].categoryString:"Unknown"},e.prototype.getAdapterTypeString=function(e,t){return typeof t[e]!="undefined"?this.adapterTypes[t[e]].label:"Unknown"},e.$inject=["$q","AskFast","Store","moment"],e}();n.service("LogsService",r)});
+define(["require", "exports", 'services/services'], function (require, exports, services) {
+    var LogsService = (function () {
+        function LogsService($q, AskFast, Store, moment) {
+            this.adapterTypes = {
+                call: {
+                    label: 'Phone',
+                    ids: []
+                },
+                xmpp: {
+                    label: 'Gtalk',
+                    ids: []
+                },
+                email: {
+                    label: 'Email',
+                    ids: []
+                },
+                twitter: {
+                    label: 'Twitter',
+                    ids: []
+                },
+                sms: {
+                    label: 'SMS',
+                    ids: []
+                }
+            };
+            this.q = $q;
+            this.AskFast = AskFast;
+            this.Store = Store;
+            this.moment = moment;
+        }
+        LogsService.prototype.list = function (limit, period) {
+            var _this = this;
+            var deferred = this.q.defer();
+            var ddrTypes = this.Store('data').get('ddrTypes');
+            var onlyCommTypeIds = [];
+            angular.forEach(ddrTypes, function (value, key) {
+                if (value.category === 'OUTGOING_COMMUNICATION_COST' || value.category === 'INCOMING_COMMUNICATION_COST') {
+                    onlyCommTypeIds.push(key);
+                }
+            });
+            this.AskFast.caller('ddr', {
+                limit: limit,
+                endTime: period,
+                typeId: onlyCommTypeIds.join(',')
+            })
+                .then(function (ddr) {
+                var adapterMap = _this.Store('data').get('adapterMap');
+                var logs = {
+                    call: [],
+                    email: [],
+                    sms: [],
+                    xmpp: [],
+                    twitter: [],
+                    other: []
+                };
+                var allLogs = [];
+                angular.forEach(ddr, function (ddrLog) {
+                    allLogs.push(_this.processDdr(ddrLog, ddrTypes, adapterMap));
+                });
+                angular.forEach(allLogs, function (ddrLog) {
+                    var gotPushed = false;
+                    angular.forEach(adapterMap, function (adapterType, adapterId) {
+                        if (ddrLog.adapterId == adapterId) {
+                            if (logs[adapterMap[ddrLog.adapterId]]) {
+                                logs[adapterMap[ddrLog.adapterId]].push(ddrLog);
+                                gotPushed = true;
+                            }
+                        }
+                    });
+                    if (!gotPushed) {
+                        logs.other.push(ddrLog);
+                    }
+                });
+                _this.data = logs;
+                deferred.resolve(_this.categorize());
+            })
+                .catch(function (err) {
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        };
+        LogsService.prototype.categorize = function (category) {
+            if (category && category !== 'all') {
+                return this.data[category];
+            }
+            else {
+                // vm.query.category is ALL
+                var logs = [], data = this.data;
+                angular.forEach(data, function (segment) {
+                    angular.forEach(segment, function (log) {
+                        logs.push(log);
+                    });
+                });
+                return logs;
+            }
+        };
+        LogsService.prototype.detail = function (ddrId) {
+            var _this = this;
+            var deferred = this.q.defer();
+            var ddrTypes = this.Store('data').get('ddrTypes');
+            var adapterMap = this.Store('data').get('adapterMap');
+            this.q.all([this.AskFast.caller('ddrRecord', {
+                    second: ddrId
+                }),
+                this.AskFast.caller('httpLog', {
+                    second: ddrId
+                })])
+                .then(function (resultArray) {
+                var deferred = _this.q.defer();
+                // empty array could mean ddr doesn't have http logs, but logs.
+                if (angular.equals([], resultArray[1])) {
+                    // fetch logs
+                    _this.AskFast.caller('log', {
+                        ddrRecordId: ddrId
+                    })
+                        .then(function (result) {
+                        resultArray[1] = result;
+                        deferred.resolve(resultArray);
+                    })
+                        .catch(function (result) {
+                        console.warn('error ', result);
+                        deferred.reject(result);
+                    });
+                }
+                else {
+                    deferred.resolve(resultArray);
+                }
+                return deferred.promise;
+            })
+                .then(function (resultArray) {
+                var ddrDetails = _this.processDdr(resultArray[0], ddrTypes, adapterMap);
+                var logs = resultArray[1];
+                angular.forEach(logs, function (log) {
+                    processLog(log);
+                });
+                deferred.resolve([ddrDetails, logs]);
+                function processLog(log) {
+                    if (log.timestamp) {
+                        log.timeString = this.moment(log.timestamp).format('HH:mm:ss Z YYYY-MM-DD');
+                    }
+                    else if (log.requestLog && log.requestLog.timestamp) {
+                        // there was no timestamp, add it for sorting purposes
+                        log.timestamp = log.requestLog.timestamp;
+                        log.timeString = this.moment(log.requestLog.timestamp).format('HH:mm:ss Z YYYY-MM-DD');
+                    }
+                    else {
+                        log.timeString = 'Missing timestamp';
+                    }
+                    if (log.message && canParseAsJSON(log.message)) {
+                        log.jsonMessage = formatJSON(log.message);
+                    }
+                    if (log.requestLog) {
+                        // Process url for view
+                        if (log.requestLog.url) {
+                            //
+                            log.url = log.requestLog.url.split("?")[0];
+                        }
+                        // Process request body for view
+                        if (canParseAsJSON(log.requestLog.requestBody) &&
+                            log.requestLog.requestBody === nullOrUndefinedToString(log.requestLog.requestBody)) {
+                            log.requestLog.jsonBody = formatJSON(log.requestLog.requestBody);
+                        }
+                        else {
+                            log.requestLog.requestBody = nullOrUndefinedToString(log.requestLog.requestBody);
+                        }
+                        if (log.responseLog) {
+                            // Process response body for view
+                            if (canParseAsJSON(log.responseLog.responseBody) &&
+                                log.responseLog.responseBody === nullOrUndefinedToString(log.responseLog.responseBody)) {
+                                log.responseLog.jsonBody = formatJSON(log.responseLog.responseBody);
+                            }
+                            else {
+                                log.responseLog.responseBody = nullOrUndefinedToString(log.responseLog.responseBody);
+                            }
+                        }
+                        if (angular.equals({}, log.requestLog.headers)) {
+                            log.requestLog.headers = null;
+                        }
+                        // check the parameters for values that might not display in view because of falsiness
+                        angular.forEach(log.requestLog.parameters, function (value, key) {
+                            log.requestLog.parameters[key] = nullOrUndefinedToString(value);
+                        });
+                    } // end if log.requestLog
+                    function nullOrUndefinedToString(value) {
+                        switch (value) {
+                            case null:
+                                return 'null';
+                                break;
+                            case undefined:
+                                return 'undefined';
+                                break;
+                            default:
+                                return value;
+                        }
+                    }
+                    function formatJSON(content) {
+                        var parsed;
+                        try {
+                            parsed = JSON.parse(content);
+                            content = JSON.stringify(parsed, null, 2);
+                        }
+                        catch (err) {
+                        }
+                        return content;
+                    }
+                    function canParseAsJSON(content) {
+                        try {
+                            JSON.parse(content);
+                        }
+                        catch (err) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            })
+                .catch(function (err) {
+                console.warn(err);
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        };
+        LogsService.prototype.processDdr = function (ddrLog, ddrTypes, adapterMap) {
+            if (ddrLog.start) {
+                ddrLog.startString = this.moment(ddrLog.start).format('HH:mm:ss Z YYYY-MM-DD');
+                if (ddrLog.duration !== null) {
+                    ddrLog.endString = this.moment(ddrLog.start + ddrLog.duration).format('HH:mm:ss Z YYYY-MM-DD');
+                }
+                else {
+                    ddrLog.endString = '-';
+                }
+            }
+            else {
+                ddrLog.startString = '-';
+                ddrLog.endString = '-';
+            }
+            ddrLog.fromAddress = ddrLog.fromAddress || '-';
+            ddrLog.toAddress = ddrLog.toAddressString ? Object.keys(angular.fromJson(ddrLog.toAddressString)).join(', ') : '-';
+            ddrLog.ddrTypeString = ddrLog.ddrTypeId ? this.getDdrTypeString(ddrLog.ddrTypeId, ddrTypes) : '-';
+            // there's no way to get the index from ng-repeat, make an object out of it
+            if (ddrLog.statusPerAddress) {
+                angular.forEach(ddrLog.statusPerAddress, function (item, index) {
+                    ddrLog.statusPerAddress[index] = { index: index, status: item };
+                });
+            }
+            ddrLog.adapterTypeString = ddrLog.adapterId ? this.getAdapterTypeString(ddrLog.adapterId, adapterMap) : '-';
+            return ddrLog;
+        };
+        LogsService.prototype.getDdrTypeString = function (ddrTypeId, ddrTypes) {
+            if (typeof ddrTypes[ddrTypeId] !== 'undefined' && typeof ddrTypes[ddrTypeId].categoryString !== 'undefined') {
+                return ddrTypes[ddrTypeId].categoryString;
+            }
+            else {
+                return 'Unknown';
+            }
+        };
+        LogsService.prototype.getAdapterTypeString = function (adapterId, adapterMap) {
+            if (typeof adapterMap[adapterId] !== 'undefined') {
+                return this.adapterTypes[adapterMap[adapterId]].label;
+            }
+            else {
+                return 'Unknown';
+            }
+        };
+        LogsService.$inject = ['$q', 'AskFast', 'Store', 'moment'];
+        return LogsService;
+    })();
+    services.service('LogsService', LogsService);
+});

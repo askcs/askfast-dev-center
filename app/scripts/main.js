@@ -6,6 +6,7 @@ if (window.location.port == '8080')
 require.config (
   {
     paths: {
+      config: 'configAskFast',
       jquery:   '../vendors/jquery/jquery.min',
       domReady: '../vendors/requirejs-domready/domReady',
       datatables: '../scripts/libs/datatables/1.10.4/media/js/jquery.dataTables',
@@ -62,6 +63,7 @@ require (
 
     'directives/navbar',
     'directives/profile',
+    'directives/labelResponseCode',
 
     'filters/all',
 

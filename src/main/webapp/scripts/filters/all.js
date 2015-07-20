@@ -1,1 +1,205 @@
-define(["filters/filters"],function(e){"use strict";e.filter("translateAdapterAddress",["Store",function(e){e=e("data");var t=e.get("adapterTypes"),n={};return function(e){if(e&&e.adapterType)switch(e.adapterType){case"call":return/@/.test(e.myAddress)?e.myAddress.split("@")[0]:e.myAddress;default:return e.myAddress}}}]),e.filter("translateAdapterType",[function(){return function(e){var t=e.adapterType;switch(t){case"call":return"Phone";case"xmpp":return"Gtalk";case"email":return"Email";default:return t}}}]),e.filter("parseTimeStamp",["moment",function(e){return function(t){return e(t).format("dddd, MMMM Do YYYY, h:mm:ss a")}}]),e.filter("filterAdapters",[function(){return function(e,t){if(e&&t){var n=[];return angular.forEach(e,function(e){e.dialogId==t.id&&n.push(e)}),n}}}]),e.filter("dashboardLogs",[function(){return function(e){var t=0;if(e){var n=[];return angular.forEach(e,function(e){e.level=="SEVERE"&&(e.logId=t,t+=1,n.push(e))}),n}}}]),e.filter("mediumToType",[function(){return function(e){switch(e){case"call":return"Phone";case"xmpp":return"Gtalk";case"email":return"Email";case"email":return"SMS";default:return e}}}]),e.filter("accountType",function(){return function(e){switch(e){case"TRIAL":return"Trial";case"PRE_PAID":return"Pre-paid";case"POST_PAID":return"Post-paid";default:return e}}}),e.filter("paymentType",function(){return function(e){switch(e){case"PAYPAL":return"Paypal";case"CC":return"Credit Card";default:return e}}}),e.filter("ownCurrency",["$filter",function(e){return function(t,n){var r=e("currency");return t<0?r(t,n).replace("(","-").replace(")",""):r(t,n)}}])});
+define(
+  ['filters/filters'],
+  function (filters)
+  {
+    'use strict';
+
+    filters.filter('translateAdapterAddress',
+      [
+        'Store',
+        function (Store)
+        {
+          Store = Store('data');
+
+          var adapters = Store.get('adapterTypes');
+
+          var adapterTypes = {};
+
+//          angular.forEach(adapters, function (adp)
+//          {
+//            if (adp.configId == adapter.adapterID)
+//            {
+//              _adapter = '==> ' + adp.myAddress;
+//            }
+//          });
+//
+//          console.log('adapters ->', adapters);
+
+          return function (adapter)
+          {
+            if (adapter && adapter.adapterType)
+            {
+              switch (adapter.adapterType)
+              {
+                case 'call':
+
+                  if (/@/.test(adapter.myAddress)){
+                    return adapter.myAddress.split('@')[0];
+                  }
+                  else {
+                    return adapter.myAddress;
+                  }
+
+                  break;
+                default:
+                  return adapter.myAddress;
+              }
+            }
+          }
+        }
+      ]
+    );
+
+    filters.filter('translateAdapterType',
+      [
+        function ()
+        {
+          return function (adapter)
+          {
+            var address = adapter.adapterType;
+
+            switch (address)
+            {
+              case 'call':
+                return 'Phone';
+              case 'xmpp':
+                return 'Gtalk';
+              case 'email':
+                return 'Email';
+              default:
+                return address;
+            }
+          }
+        }
+      ]
+    );
+
+    filters.filter('parseTimeStamp',
+      ['moment',
+        function (moment)
+        {
+          return function (stamp)
+          {
+            return moment(stamp).format("dddd, MMMM Do YYYY, h:mm:ss a");
+          }
+        }
+      ]
+    );
+
+    filters.filter('filterAdapters',
+      [
+        function ()
+        {
+          return function (adapters, dialog)
+          {
+            if (adapters && dialog)
+            {
+              var _adapters = [];
+
+              angular.forEach(adapters, function (adapter)
+              {
+                if (adapter.dialogId == dialog.id) _adapters.push(adapter);
+              });
+
+              return _adapters;
+            }
+          }
+        }
+      ]
+    );
+
+    filters.filter('dashboardLogs',
+      [
+        function ()
+        {
+          return function (logs)
+          {
+            var i = 0;
+            if (logs)
+            {
+              var _logs = [];
+
+              angular.forEach(logs, function (log)
+              {
+                if (log.level == 'SEVERE'){
+                  log.logId = i;
+                  i += 1;
+                  _logs.push(log);
+                }
+              });
+
+              return _logs;
+            }
+          }
+        }
+      ]
+    );
+
+    filters.filter('mediumToType',
+      [
+        function() {
+          return function(medium) {
+            switch (medium)
+            {
+              case 'call':
+                return 'Phone';
+              case 'xmpp':
+                return 'Gtalk';
+              case 'email':
+                return 'Email';
+              case 'email':
+                return 'SMS';
+              default:
+                return medium;
+            }
+          }
+        }
+      ]
+    );
+
+    filters.filter('accountType', function(){
+      return function(type){
+        switch (type)
+        {
+          case 'TRIAL':
+            return 'Trial';
+          case 'PRE_PAID':
+            return 'Pre-paid';
+          case 'POST_PAID':
+            return 'Post-paid';
+          default:
+            return type;
+        }
+      };
+    });
+
+    filters.filter('paymentType', function(){
+      return function(type){
+        switch (type)
+        {
+          case 'PAYPAL':
+            return 'Paypal';
+          case 'CC':
+            return 'Credit Card';
+          default:
+            return type;
+        }
+      };
+    });
+
+    filters.filter('ownCurrency',[
+      '$filter',
+      function($filter){
+      // http://stackoverflow.com/a/22348267
+      return function(amount, symbol){
+        var currency = $filter('currency');
+
+        if(amount < 0){
+            return currency(amount, symbol).replace('(', '-').replace(')', '');
+        }
+
+        return currency(amount, symbol);
+      };
+    }]);
+  }
+);

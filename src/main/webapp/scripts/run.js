@@ -1,1 +1,47 @@
-define(["app","localization","config"],function(e,t,n){"use strict";e.run(["$rootScope","$location","Offline","Session","Store","$http",function(e,r,i,s,o,u){new i,e.$on("connection",function(){console.log(arguments[1]?"connection lost :[":"connection restored")}),e.app=e.app||{},e.user=e.user||o("app").get("user"),e.setLanguage=function(n){e.app.language=n,e.ui=t.ui[n]},e.setLanguage(n.app.defaults.language),e.config=n.app,u.defaults.headers.common["X-SESSION_ID"]||(u.defaults.headers.common["X-SESSION_ID"]=s.get()),e.$on("$routeChangeStart",function(){}),e.$on("$routeChangeSuccess",function(){}),e.$on("$routeChangeError",function(){})}])});
+define(
+  ['app', 'localization', 'config'],
+  function (app, locals, config)
+  {
+    'use strict';
+
+    app.run(
+      [
+        '$rootScope', '$location', 'Offline', 'Session', 'Store', '$http',
+        function($rootScope, $location, Offline, Session, Store, $http)
+        {
+          new Offline();
+
+          $rootScope.$on('connection', function ()
+          {
+            console.log((!arguments[1]) ? 'connection restored' : 'connection lost :[');
+          });
+
+          $rootScope.app  = $rootScope.app  || {};
+          $rootScope.user = $rootScope.user || Store('app').get('user');
+
+          $rootScope.setLanguage = function (language)
+          {
+            $rootScope.app.language = language;
+            $rootScope.ui = locals.ui[language];
+          };
+
+          $rootScope.setLanguage(config.app.defaults.language);
+
+          $rootScope.config = config.app;
+
+          if (!$http.defaults.headers.common['X-SESSION_ID'])
+            $http.defaults.headers.common['X-SESSION_ID'] = Session.get();
+
+          /**
+           * TODO: Take it to a directive
+           */
+          $rootScope.$on('$routeChangeStart', function () {});
+
+          $rootScope.$on('$routeChangeSuccess', function () {});
+
+          $rootScope.$on('$routeChangeError', function () {});
+        }
+      ]
+    );
+  }
+);

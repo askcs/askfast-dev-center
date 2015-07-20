@@ -1,1 +1,44 @@
-define(["require","exports","directives/directives"],function(e,t,n){"use strict";function r(e,t){return e.filter(function(e){return e.contactInfoTag===t&&e.verified===!0?!0:!1})}var i=n.directive("userContact",function(){return{restrict:"A",scope:{type:"@",userContact:"="},link:function(e,t,n){var i;if(e.userContact){i=r(e.userContact,e.type);if(i.length===1)t.html(i[0].contactInfo);else if(i.length===0)switch(e.type){case"PHONE":t.text("No verified phone number found.");break;case"EMAIL":t.text("No verified email address found.")}}}}});return i});
+define(["require", "exports", 'directives/directives'], function (require, exports, directives) {
+    'use strict';
+    function filterInfoByTag(targetArray, typeString) {
+        return targetArray.filter(function (infoObject) {
+            if (infoObject.contactInfoTag === typeString &&
+                infoObject.verified === true) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        });
+    }
+    var profileDirective = directives.directive('userContact', function () {
+        return {
+            restrict: 'A',
+            scope: {
+                type: '@',
+                userContact: '='
+            },
+            link: function (scope, element, attrs) {
+                var filtered;
+                if (scope.userContact) {
+                    filtered = filterInfoByTag(scope.userContact, scope.type);
+                    if (filtered.length === 1) {
+                        element.html(filtered[0].contactInfo);
+                    }
+                    else if (filtered.length === 0) {
+                        switch (scope.type) {
+                            case 'PHONE':
+                                element.text("No verified phone number found.");
+                                break;
+                            case 'EMAIL':
+                                element.text("No verified email address found.");
+                        }
+                    }
+                    else {
+                    }
+                } // end if (scope.userContact)
+            }
+        };
+    });
+    return profileDirective;
+});

@@ -22,6 +22,7 @@
         "./app/scripts/controllers/user.ts",
         "./app/scripts/directives/appVersion.ts",
         "./app/scripts/directives/directives.ts",
+        "./app/scripts/directives/labelResponseCode.ts",
         "./app/scripts/directives/navbar.ts",
         "./app/scripts/directives/profile.ts",
         "./app/scripts/logs/logsController.ts",

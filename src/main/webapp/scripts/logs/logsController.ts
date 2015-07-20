@@ -104,8 +104,13 @@ var logsController = controllers.controller('logs',
         LogsService.detail(ddrId)
         .then(function(results){
           vm.ddrDetails = results[0];
-
-          vm.logs = results[1];
+          
+          if (angular.equals([], results[1])) {
+            vm.logs = null;
+          }
+          else {
+            vm.logs = results[1];
+          }
 
           $timeout(function(){
             // makes sure that first call to collapse doesn't toggle.

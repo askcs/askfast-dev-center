@@ -1,1 +1,14 @@
-define(["require","exports","directives/directives"],function(e,t,n){"use strict";var r=n.directive("navbar",["$rootScope","$location",function(e,t){return{restrict:"E",rep1ace:!0,templateUrl:"views/navbar.html",link:function(e,n,r){e.current=t.path()}}}]);return r});
+define(["require", "exports", 'directives/directives'], function (require, exports, directives) {
+    'use strict';
+    var navbarDirective = directives.directive('navbar', ["$rootScope", "$location", function ($rootScope, $location) {
+        return {
+            restrict: 'E',
+            rep1ace: true,
+            templateUrl: 'views/navbar.html',
+            link: function (scope, element, attrs) {
+                scope.current = $location.path();
+            }
+        };
+    }]);
+    return navbarDirective;
+});
