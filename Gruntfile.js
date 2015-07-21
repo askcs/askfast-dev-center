@@ -430,7 +430,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
-            src: ['<%= paths.dist %>/scripts/config.js'],
+            src: ['<%= paths.dist %>/scripts/configAskFast.*.js'],
             dest: '<%= paths.dist %>/scripts/'
           }
         ]
