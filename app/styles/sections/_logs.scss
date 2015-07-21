@@ -54,6 +54,34 @@
   }
 }
 
+.logs-table {
+  table-layout: fixed;
+
+  .row-date {
+    width: 20%;
+  }
+  .row-type {
+    width: 15%;
+  }
+  .row-adapter {
+    width: 15%;
+  }
+  .row-from {
+    width: 20%;
+  }
+  .row-to {
+    width: 30%;
+  }
+
+  .td-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+}
+
+
 @media (min-width: 768px) {
 
   .ddr-detail {

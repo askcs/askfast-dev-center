@@ -54,14 +54,14 @@
                     <hr>
                     <p ng-show="vm.loading.logs">Loading logs..</p>
                     <p ng-hide="vm.logs.length &gt; 0 || vm.loading.logs">Your query has no logs..</p>
-                    <table ng-show="vm.logs.length &gt; 0" class="table">
+                    <table ng-show="vm.logs.length &gt; 0" class="table logs-table">
                       <thead>
                         <tr>
-                          <th>Date</th>
-                          <th>Type</th>
-                          <th>Adapter Type</th>
-                          <th>From</th>
-                          <th>To</th>
+                          <th class="row-date">Date</th>
+                          <th class="row-type">Type</th>
+                          <th class="row-adapter">Adapter Type</th>
+                          <th class="row-from">From</th>
+                          <th class="row-to">To</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -69,8 +69,8 @@
                           <td><a href="/#/logs?ddrId={{log._id}}">{{log.startString}}<a></a></a></td>
                           <td>{{log.ddrTypeString}}</td>
                           <td>{{log.adapterTypeString}}</td>
-                          <td>{{log.fromAddress}}</td>
-                          <td>{{log.toAddress}}</td>
+                          <td class="td-overflow">{{log.fromAddress}}</td>
+                          <td class="td-overflow">{{log.toAddress}}</td>
                         </tr>
                       </tbody>
                     </table>
