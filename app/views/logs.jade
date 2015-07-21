@@ -57,21 +57,21 @@ navbar
                       | Loading logs..
                     p(ng-hide='vm.logs.length > 0 || vm.loading.logs')
                       | Your query has no logs..
-                    table.table(ng-show='vm.logs.length > 0')
+                    table.table.logs-table(ng-show='vm.logs.length > 0')
                       thead
                         tr
-                          th Date
-                          th Type
-                          th Adapter Type
-                          th From
-                          th To
+                          th.row-date Date
+                          th.row-type Type
+                          th.row-adapter Adapter Type
+                          th.row-from From
+                          th.row-to To
                       tbody
                         tr(ng-repeat='log in vm.logs | filter:vm.queryLogs | orderBy: "start" : true')
                           td <a href="/#/logs?ddrId={{log._id}}">{{log.startString}}<a>
                           td {{log.ddrTypeString}}
                           td {{log.adapterTypeString}}
-                          td {{log.fromAddress}}
-                          td {{log.toAddress}}
+                          td.td-overflow {{log.fromAddress}}
+                          td.td-overflow {{log.toAddress}}
           #widgets.row(ng-switch-when='details')
             .col-md-12
               .widget
