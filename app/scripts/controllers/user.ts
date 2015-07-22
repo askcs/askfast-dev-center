@@ -83,12 +83,14 @@ var userController = controllers.controller ('user',
                   .then(function(adapters)
                   {
                       var adapterMap =  {};
+                      var adapterDetails = {};
                       angular.forEach(adapters, function (adapter)
                       {
                           adapterMap[adapter.configId] =  adapter.adapterType;
+                          adapterDetails[adapter.configId] = adapter;
                       });
                       Store('data').save(adapterMap, 'adapterMap');
-                      // Store('data').save(adapters, 'adapters');
+                      Store('data').save(adapterDetails, 'adapterDetails');
 
 
                     AskFast.caller('ddrTypes', {
