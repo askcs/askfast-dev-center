@@ -57,11 +57,13 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                             AskFast.caller('getAdapters')
                                 .then(function (adapters) {
                                 var adapterMap = {};
+                                var adapterDetails = {};
                                 angular.forEach(adapters, function (adapter) {
                                     adapterMap[adapter.configId] = adapter.adapterType;
+                                    adapterDetails[adapter.configId] = adapter;
                                 });
                                 Store('data').save(adapterMap, 'adapterMap');
-                                // Store('data').save(adapters, 'adapters');
+                                Store('data').save(adapterDetails, 'adapterDetails');
                                 AskFast.caller('ddrTypes', {}).then(function (ddrTypes) {
                                     var ddrTypeCategories = {
                                         "OUTGOING_COMMUNICATION_COST": "Outgoing",
