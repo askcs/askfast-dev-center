@@ -12,7 +12,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         //Save all the posible adapters in the scope
         var smsAdapters = [];
         var phoneAdapters = [];
-        angular.forEach(Store('adapters').all(), function (value, key) {
+        angular.forEach(Store('data').get('adapterDetails'), function (value, key) {
             if (value.adapterType === 'sms') {
                 smsAdapters.push(value);
             }
