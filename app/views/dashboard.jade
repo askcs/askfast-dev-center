@@ -91,8 +91,11 @@ navbar
                     label(for='SMSTo') To adress
                     input#SMSTo.form-control(type='text', ng-model='sms.to')
                   .form-group
-                    label(for='SMSUrl') Question URL
-                    input#SMSUrl.form-control(type='text', ng-model='sms.url')
+                    label(for='SMSUrl') Dialog
+                    .form-inline
+                      select#SMSUrl.form-control(ng-model='sms.url',ng-options='dialog.url as dialog.name for dialog in dialogs')
+                        option(value='')
+                          | -- no dialog attached --
                   .form-group
                     label(for='SMSfrom') From number
                     select#SMSFrom.form-control( ng-model='sms.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters")
@@ -105,8 +108,11 @@ navbar
                     label(for='CallTo') To adress
                     input#CallTo.form-control(type='text', ng-model='call.to')
                   .form-group
-                    label(for='CallUrl') Question URL
-                    input#CallUrl.form-control(type='text', ng-model='call.url')
+                    label(for='CallUrl') Dialog
+                    .form-inline
+                      select#CallUrl.form-control(ng-model='call.url',ng-options='dialog.url as dialog.name for dialog in dialogs')
+                        option(value='')
+                          | -- no dialog attached --
                   .form-group
                     label(for='Callfrom') From number
                     select#SMSFrom.form-control( ng-model='call.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters")
