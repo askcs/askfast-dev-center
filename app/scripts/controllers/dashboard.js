@@ -22,6 +22,9 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         });
         $scope.smsAdapters = smsAdapters;
         $scope.phoneAdapters = phoneAdapters;
+        //grab dialogs to show  list
+        AskFast.caller('getDialog')
+            .then(function (dialogs) { $scope.dialogs = dialogs; });
         $scope.sendSMS = function () {
             var message = {
                 type: 'sms',
