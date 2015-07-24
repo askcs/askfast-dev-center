@@ -96,6 +96,8 @@ navbar
                       select#SMSUrl.form-control(ng-model='sms.url',ng-options='dialog.url as dialog.name for dialog in dialogs')
                         option(value='')
                           | -- no dialog attached --
+                      a.btn.btn-default(href='/#/developer')
+                        | Create dialog
                   .form-group
                     label(for='SMSfrom') From number
                     select#SMSFrom.form-control( ng-model='sms.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters")
@@ -113,6 +115,8 @@ navbar
                       select#CallUrl.form-control(ng-model='call.url',ng-options='dialog.url as dialog.name for dialog in dialogs')
                         option(value='')
                           | -- no dialog attached --
+                      a.btn.btn-default(href='/#/developer')
+                        | Create dialog
                   .form-group
                     label(for='Callfrom') From number
                     select#SMSFrom.form-control( ng-model='call.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters")
