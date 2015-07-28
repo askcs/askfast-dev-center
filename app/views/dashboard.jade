@@ -101,6 +101,8 @@ navbar
                   .form-group
                     label(for='SMSfrom') From number
                     select#SMSFrom.form-control( ng-model='sms.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters")
+                      option(value='')
+                        | -- use default number --
                   .form-group
                       a.btn.btn-default(ng-click='sendSMS()') Send SMS
                   hr
@@ -120,11 +122,8 @@ navbar
                   .form-group
                     label(for='Callfrom') From number
                     select#SMSFrom.form-control( ng-model='call.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters")
+                      option(value='')
+                        | -- use default number --
                   .form-group
                     a.btn.btn-default(ng-click='startCall()') Start call
                   pre(ng-show="request != null") {{request}}
-
-
-
-
-
