@@ -22,6 +22,9 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         });
         $scope.smsAdapters = smsAdapters;
         $scope.phoneAdapters = phoneAdapters;
+        //grab dialogs to show  list
+        AskFast.caller('getDialog')
+            .then(function (dialogs) { $scope.dialogs = dialogs; });
         $scope.sendSMS = function () {
             var message = {
                 type: 'sms',
@@ -56,14 +59,15 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         function sendMessage(message) {
             var deferd = $q.defer();
             var dialog = {
-                "method": "outboundCall",
-                "params": {
-                    "adapterID": message.from.configId,
-                    "address": message.to,
-                    "url": message.url,
-                    "bearerToken": bearerToken
-                }
+                address: message.to,
+                url: message.url,
             };
+            if (message.from) {
+                dialog.adapterID = message.from.configId;
+            }
+            else {
+                dialog.adapterType = message.type;
+            }
             // Set auth header
             Session.auth('Bearer ' + bearerToken);
             AskFast.caller('startDialog', null, dialog)
@@ -80,7 +84,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                     host: $rootScope.config.host,
                     path: 'startDialog/outbound',
                     header: {
-                        Authrorization: 'Bearer ' + bearerToken
+                        Authorization: 'Bearer ' + bearerToken
                     },
                     payload: dialog
                 };

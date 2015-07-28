@@ -81,12 +81,16 @@
                   <h4>Send SMS message or start a call</h4>
                   <form role="form"></form>
                   <div class="form-group">
-                    <label for="SMSTo">To adress</label>
+                    <label for="SMSTo">To address</label>
                     <input id="SMSTo" type="text" ng-model="sms.to" class="form-control">
                   </div>
                   <div class="form-group">
-                    <label for="SMSUrl">Question URL</label>
-                    <input id="SMSUrl" type="text" ng-model="sms.url" class="form-control">
+                    <label for="SMSUrl">Dialog</label>
+                    <div class="form-inline">
+                      <select id="SMSUrl" ng-model="sms.url" ng-options="dialog.url as dialog.name for dialog in dialogs" class="form-control">
+                        <option value="">-- no dialog attached --</option>
+                      </select><a href="/#/developer" class="btn btn-default">Create dialog</a>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="SMSfrom">From number</label>
@@ -97,12 +101,16 @@
                   <h4>Start phone call</h4>
                   <form role="form"></form>
                   <div class="form-group">
-                    <label for="CallTo">To adress</label>
+                    <label for="CallTo">To address</label>
                     <input id="CallTo" type="text" ng-model="call.to" class="form-control">
                   </div>
                   <div class="form-group">
-                    <label for="CallUrl">Question URL</label>
-                    <input id="CallUrl" type="text" ng-model="call.url" class="form-control">
+                    <label for="CallUrl">Dialog</label>
+                    <div class="form-inline">
+                      <select id="CallUrl" ng-model="call.url" ng-options="dialog.url as dialog.name for dialog in dialogs" class="form-control">
+                        <option value="">-- no dialog attached --</option>
+                      </select><a href="/#/developer" class="btn btn-default">Create dialog</a>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="Callfrom">From number</label>
