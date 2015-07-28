@@ -210,13 +210,6 @@ define(["require", "exports", 'modals/modals'], function (require, exports, moda
                     first: 'payment'
                 },
                 isArray: true
-            },
-            startDialog: {
-                method: 'POST',
-                params: {
-                    first: 'startDialog',
-                    second: 'outbound',
-                }
             }
         });
         AskFast.prototype.caller = function (proxy, params, data, callback) {
