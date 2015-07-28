@@ -5,7 +5,7 @@ import controllers = require('controllers/controllers');
 'use strict';
 
 var dashboardController = controllers.controller('dashboard',
-  function($scope, $rootScope, $timeout, AskFast, Session, Store, dashboardLogsFilter,$q) {
+  function($scope, $rootScope, $timeout, $http, AskFast, Session, Store, dashboardLogsFilter,$q) {
     var keyRevealTimeoutPromise = null;
     var bearerToken = '';
     $scope.keyRevealTypeString = 'password';
@@ -83,30 +83,51 @@ var dashboardController = controllers.controller('dashboard',
       else {
         dialog.adapterType = message.type;
       }
-      // Set auth header
-      Session.auth('Bearer '+bearerToken);
 
-      AskFast.caller('startDialog', null, dialog)
-        .then(function(response){
-          if(response.error){
-            deferd.reject(response)
-            $scope.alert="Something went wrong, please try again later. Check the logs and request below"
+      var req = {
+        method: 'POST',
+        url: $rootScope.config.host + '/startDialog/outbound',
+        headers: {
+          'Authorization': 'Bearer ' +bearerToken
+        },
+        data: dialog
+      };
 
-          }else{
-            deferd.resolve(response)
-            $scope.alert= "Successful request, see your request below"
-          }
-          var request ={
-              host:$rootScope.config.host,
-              path:'startDialog/outbound',
-              header:{
-                Authorization: 'Bearer '+bearerToken
-              },
-              payload:dialog
-            }
-          $scope.request =  JSON.stringify(request,null,2);
-        })
-        return deferd.promise
+      $http(req)
+      .success(function(data, status, headers, config){
+
+        deferd.resolve(data)
+        $scope.alert= "Successful request, see your request below";
+
+        var request ={
+          host:$rootScope.config.host,
+          path:'startDialog/outbound',
+          header:{
+            Authorization: 'Bearer '+bearerToken
+          },
+          payload:dialog
+        }
+
+        $scope.request =  JSON.stringify(request,null,2);
+      })
+      .error(function(data, status, headers, config){
+
+        deferd.reject(data);
+        $scope.alert="Something went wrong, please try again later. Check the logs and request below";
+
+        var request ={
+          host:$rootScope.config.host,
+          path:'startDialog/outbound',
+          header:{
+            Authorization: 'Bearer '+bearerToken
+          },
+          payload:dialog
+        }
+
+        $scope.request =  JSON.stringify(request,null,2);
+      });
+
+      return deferd.promise;
     }
 
     // check if there is a bear token, if there is: send message. If there is no bearer, fetch bearer and send message

@@ -222,13 +222,6 @@ var AskFastService = modals.factory('AskFast',
                         first: 'payment'
                     },
                     isArray: true
-                },
-                startDialog:{
-                    method:'POST',
-                    params:{
-                        first: 'startDialog',
-                        second: 'outbound',
-                    }
                 }
             }
         );

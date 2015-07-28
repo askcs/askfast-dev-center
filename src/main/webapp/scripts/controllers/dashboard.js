@@ -1,6 +1,6 @@
 define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
     'use strict';
-    var dashboardController = controllers.controller('dashboard', ["$scope", "$rootScope", "$timeout", "AskFast", "Session", "Store", "dashboardLogsFilter", "$q", function ($scope, $rootScope, $timeout, AskFast, Session, Store, dashboardLogsFilter, $q) {
+    var dashboardController = controllers.controller('dashboard', ["$scope", "$rootScope", "$timeout", "$http", "AskFast", "Session", "Store", "dashboardLogsFilter", "$q", function ($scope, $rootScope, $timeout, $http, AskFast, Session, Store, dashboardLogsFilter, $q) {
         var keyRevealTimeoutPromise = null;
         var bearerToken = '';
         $scope.keyRevealTypeString = 'password';
@@ -68,18 +68,31 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
             else {
                 dialog.adapterType = message.type;
             }
-            // Set auth header
-            Session.auth('Bearer ' + bearerToken);
-            AskFast.caller('startDialog', null, dialog)
-                .then(function (response) {
-                if (response.error) {
-                    deferd.reject(response);
-                    $scope.alert = "Something went wrong, please try again later. Check the logs and request below";
-                }
-                else {
-                    deferd.resolve(response);
-                    $scope.alert = "Successful request, see your request below";
-                }
+            var req = {
+                method: 'POST',
+                url: $rootScope.config.host + '/startDialog/outbound',
+                headers: {
+                    'Authorization': 'Bearer ' + bearerToken
+                },
+                data: dialog
+            };
+            $http(req)
+                .success(function (data, status, headers, config) {
+                deferd.resolve(data);
+                $scope.alert = "Successful request, see your request below";
+                var request = {
+                    host: $rootScope.config.host,
+                    path: 'startDialog/outbound',
+                    header: {
+                        Authorization: 'Bearer ' + bearerToken
+                    },
+                    payload: dialog
+                };
+                $scope.request = JSON.stringify(request, null, 2);
+            })
+                .error(function (data, status, headers, config) {
+                deferd.reject(data);
+                $scope.alert = "Something went wrong, please try again later. Check the logs and request below";
                 var request = {
                     host: $rootScope.config.host,
                     path: 'startDialog/outbound',
