@@ -2,7 +2,7 @@
 import services = require('services/services');
 
 export interface ILogsService {
-  list(limit:number, period:number)
+  list(limit:number, period:number, category:string)
   categorize(category?:string)
   detail(ddrId:string)
 }
@@ -47,7 +47,7 @@ class LogsService implements ILogsService{
     this.moment = moment;
   }
 
-  list(limit:number, period:number){
+  list(limit:number, period:number, category: string){
     var deferred = this.q.defer();
     var ddrTypes = this.Store('data').get('ddrTypes');
     var onlyCommTypeIds = [];
@@ -58,10 +58,15 @@ class LogsService implements ILogsService{
       }
     });
 
+    if (category === 'all') {
+      category = null;
+    }
+
     this.AskFast.caller('ddr', {
       limit: limit,
       endTime: period,
-      typeId: onlyCommTypeIds.join(',')
+      typeId: onlyCommTypeIds.join(','),
+      adapterTypes: category
     })
     .then( (ddr) => {
 

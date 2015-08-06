@@ -14,8 +14,8 @@
                   <section>
                     <form role="form" class="form-inline">
                       <div class="form-group">
-                        <label>Adapter Type:</label>
-                        <select ng-model="vm.query.category" ng-change="vm.Log.categorize()" class="form-control">
+                        <label>Adapter Type</label>
+                        <select ng-model="vm.query.category" class="form-control">
                           <option value="all">All</option>
                           <option value="call">Phone</option>
                           <option value="email">Email</option>
@@ -24,9 +24,9 @@
                           <option value="twitter">Twitter</option>
                         </select>
                       </div>
-                      <div style="margin-left: 15px" class="form-group">
-                        <label>Limit:</label>
-                        <select ng-model="vm.query.limit" ng-change="vm.Log.list()" class="form-control">
+                      <div class="form-group">
+                        <label>Limit</label>
+                        <select ng-model="vm.query.limit" class="form-control">
                           <option value="100">100</option>
                           <option value="250">250</option>
                           <option value="500">500</option>
@@ -36,21 +36,26 @@
                       <div class="form-group">
                         <label>Logs until 
                         </label>
-                        <input ng-model="vm.query.until" ng-change="vm.Log.list()" data-date-type="string" data-date-format="dd/MM/yyyy" bs-datepicker="" class="form-control">
+                        <input ng-model="vm.query.until" data-date-type="string" data-date-format="dd/MM/yyyy" bs-datepicker="" class="form-control">
                       </div>
-                      <div class="form-group">
-                        <label>From </label>
-                        <input type="text" ng-model="vm.queryLogs.fromAddress" class="form-control">
-                      </div>
-                      <div class="form-group">
-                        <label>To </label>
-                        <input type="text" ng-model="vm.queryLogs.toAddress" class="form-control">
-                      </div>
-                      <div class="form-group">
-                        <label>Any </label>
-                        <input type="text" ng-model="vm.queryLogs.$" class="form-control">
-                      </div>
+                      <button ng-click="vm.Log.list()" class="form-control btn btn-default">Query</button>
                     </form>
+                    <hr>
+                    <div class="form-inline">
+                      <label>Filter</label>
+                      <div class="form-group">
+                        <label class="sr-only">From</label>
+                        <input type="text" placeholder="From" ng-model="vm.queryLogs.fromAddress" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label class="sr-only">To </label>
+                        <input type="text" placeholder="To" ng-model="vm.queryLogs.toAddress" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label class="sr-only">Any </label>
+                        <input type="text" placeholder="Any" ng-model="vm.queryLogs.$" class="form-control">
+                      </div>
+                    </div>
                     <hr>
                     <p ng-show="vm.loading.logs">Loading logs..</p>
                     <p ng-hide="vm.logs.length &gt; 0 || vm.loading.logs">Your query has no logs..</p>

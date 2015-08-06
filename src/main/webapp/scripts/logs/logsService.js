@@ -28,7 +28,7 @@ define(["require", "exports", 'services/services'], function (require, exports, 
             this.Store = Store;
             this.moment = moment;
         }
-        LogsService.prototype.list = function (limit, period) {
+        LogsService.prototype.list = function (limit, period, category) {
             var _this = this;
             var deferred = this.q.defer();
             var ddrTypes = this.Store('data').get('ddrTypes');
@@ -38,10 +38,14 @@ define(["require", "exports", 'services/services'], function (require, exports, 
                     onlyCommTypeIds.push(key);
                 }
             });
+            if (category === 'all') {
+                category = null;
+            }
             this.AskFast.caller('ddr', {
                 limit: limit,
                 endTime: period,
-                typeId: onlyCommTypeIds.join(',')
+                typeId: onlyCommTypeIds.join(','),
+                adapterTypes: category
             })
                 .then(function (ddr) {
                 var adapterMap = _this.Store('data').get('adapterMap');

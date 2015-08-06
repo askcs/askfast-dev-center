@@ -53,7 +53,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                     _period = moment().endOf('day').valueOf();
                 }
                 vm.loading.logs = true;
-                LogsService.list(vm.query.limit, _period)
+                LogsService.list(vm.query.limit, _period, vm.query.category)
                     .then(function (logs) {
                     vm.logs = logs;
                     vm.loading.logs = false;
