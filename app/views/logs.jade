@@ -15,19 +15,17 @@ navbar
                   section
                     form.form-inline(role='form')
                       .form-group
-                        label Adapter Type:
-                        select.form-control(ng-model='vm.query.category',
-                        ng-change='vm.Log.categorize()')
+                        label Adapter Type
+                        select.form-control(ng-model='vm.query.category')
                           option(value='all') All
                           option(value='call') Phone
                           option(value='email') Email
                           option(value='sms') SMS
                           option(value='xmpp') Gtalk
                           option(value='twitter') Twitter
-                      .form-group(style='margin-left: 15px;')
-                        label Limit:
-                        select.form-control(ng-model='vm.query.limit',
-                        ng-change='vm.Log.list()')
+                      .form-group
+                        label Limit
+                        select.form-control(ng-model='vm.query.limit')
                           option(value='100') 100
                           option(value='250') 250
                           option(value='500') 500
@@ -36,21 +34,27 @@ navbar
                         label Logs until 
                           //- span.small.text-muted dd/mm/yyyy
                         input.form-control(ng-model='vm.query.until',
-                        ng-change='vm.Log.list()',
                         data-date-type='string',
                         data-date-format='dd/MM/yyyy',
                         bs-datepicker='')
+                      button.form-control.btn.btn-default(ng-click='vm.Log.list()') Query
+                    hr
+                    .form-inline
+                      label Filter
                       .form-group
-                        label From 
+                        label.sr-only From
                         input.form-control(type='text',
+                        placeholder='From',
                         ng-model='vm.queryLogs.fromAddress')
                       .form-group
-                        label To 
+                        label.sr-only To 
                         input.form-control(type='text',
+                        placeholder='To',
                         ng-model='vm.queryLogs.toAddress')
                       .form-group
-                        label Any 
+                        label.sr-only Any 
                         input.form-control(type='text',
+                        placeholder='Any',
                         ng-model='vm.queryLogs.$')
                     hr
                     p(ng-show='vm.loading.logs')
