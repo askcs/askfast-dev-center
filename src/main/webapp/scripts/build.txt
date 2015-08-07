@@ -25,6 +25,7 @@ D:/Projects/askfast-dev-center/.tmp/vendors/jquery/jquery.min.js
 libs/datatables/1.10.4/media/js/jquery.dataTables.js
 D:/Projects/askfast-dev-center/.tmp/vendors/angular/angular.js
 D:/Projects/askfast-dev-center/.tmp/vendors/requirejs-domready/domReady.js
+D:/Projects/askfast-dev-center/.tmp/vendors/jquery.browser/dist/jquery.browser.min.js
 D:/Projects/askfast-dev-center/.tmp/vendors/angular-resource/angular-resource.min.js
 D:/Projects/askfast-dev-center/.tmp/vendors/angular-route/angular-route.min.js
 D:/Projects/askfast-dev-center/.tmp/vendors/angular-datatables/dist/angular-datatables.js

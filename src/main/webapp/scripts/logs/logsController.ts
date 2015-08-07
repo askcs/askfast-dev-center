@@ -104,7 +104,7 @@ var logsController = controllers.controller('logs',
         LogsService.detail(ddrId)
         .then(function(results){
           vm.ddrDetails = results[0];
-          
+
           if (angular.equals([], results[1])) {
             vm.logs = null;
           }
@@ -140,6 +140,11 @@ var logsController = controllers.controller('logs',
     vm.collapseAll = function(){
       $('.ddr-detail .panel-collapse').collapse('hide');
     };
+
+    if($.browser.msie && ($.browser.versionNumber === 10 || 11)) {
+      // Disable the clear control ('X')
+      vm.disableMsClear = true;
+    }
 
   }
 );

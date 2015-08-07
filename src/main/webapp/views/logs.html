@@ -41,7 +41,7 @@
                       <button ng-click="vm.Log.list()" class="form-control btn btn-default">Query</button>
                     </form>
                     <hr>
-                    <div class="form-inline">
+                    <div ng-class="{&quot;disable-ms-clear&quot;: vm.disableMsClear}" class="form-inline log-filters">
                       <label>Filter</label>
                       <div class="form-group">
                         <label class="sr-only">From</label>

@@ -99,6 +99,10 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
         vm.collapseAll = function () {
             $('.ddr-detail .panel-collapse').collapse('hide');
         };
+        if ($.browser.msie && ($.browser.versionNumber === 10 || 11)) {
+            // Disable the clear control ('X')
+            vm.disableMsClear = true;
+        }
     }]);
     return logsController;
 });
