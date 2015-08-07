@@ -39,7 +39,7 @@ navbar
                         bs-datepicker='')
                       button.form-control.btn.btn-default(ng-click='vm.Log.list()') Query
                     hr
-                    .form-inline
+                    .form-inline.log-filters(ng-class='{"disable-ms-clear": vm.disableMsClear}')
                       label Filter
                       .form-group
                         label.sr-only From

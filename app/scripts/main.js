@@ -8,6 +8,7 @@ require.config (
     paths: {
       config: 'configAskFast',
       jquery:   '../vendors/jquery/jquery.min',
+      'jquery.browser':   '../vendors/jquery.browser/dist/jquery.browser.min',
       domReady: '../vendors/requirejs-domready/domReady',
       datatables: '../scripts/libs/datatables/1.10.4/media/js/jquery.dataTables',
       angular:  '../vendors/angular/angular',
@@ -24,6 +25,7 @@ require.config (
       },
     shim: {
       angular:            { deps: ['jquery','datatables'], exports:  'angular' },
+      'jquery.browser' :  {deps:['jquery'],exports: 'jquery.browser'},
       datatables :        {deps:['jquery'],exports: 'jquery.datatables'},
       'angular-resource': { deps: ['angular'] },
       'angular-route':    { deps: ['angular'] },
@@ -44,6 +46,7 @@ require (
     'angular',
     'domReady',
     'jquery',
+    'jquery.browser',
     'angular-resource',
     'angular-route',
     'datatables',

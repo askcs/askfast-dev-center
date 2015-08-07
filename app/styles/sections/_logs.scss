@@ -81,6 +81,10 @@
 
 }
 
+.log-filters.disable-ms-clear input::-ms-clear {
+    display: none;
+}
+
 
 @media (min-width: 768px) {
 
