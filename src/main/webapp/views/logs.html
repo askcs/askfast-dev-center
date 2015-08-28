@@ -71,7 +71,7 @@
                       </thead>
                       <tbody>
                         <tr ng-repeat="log in vm.logs | filter:vm.queryLogs | orderBy: &quot;start&quot; : true">
-                          <td><a href="/#/logs?ddrId={{log._id}}">{{log.startString}}<a></a></a></td>
+                          <td><a href="/#/logs/{{log._id}}">{{log.startString}}<a></a></a></td>
                           <td>{{log.ddrTypeString}}</td>
                           <td>{{log.adapterTypeString}}</td>
                           <td class="td-overflow">{{log.fromAddress}}</td>
@@ -136,20 +136,20 @@
                           <div ng-if="vm.ddrDetails.parentId">
                             <dl class="dl-horizontal">
                               <dt>Parent log</dt>
-                              <dd> <a href="/#/logs?ddrId={{vm.ddrDetails.parentId}}">{{vm.ddrDetails.parentId}}</a></dd>
+                              <dd> <a href="/#/logs/{{vm.ddrDetails.parentId}}">{{vm.ddrDetails.parentId}}</a></dd>
                             </dl>
                           </div>
                           <div ng-if="vm.ddrDetails.childIds">
                             <dl ng-if="vm.ddrDetails.childIds.length === 1" class="dl-horizontal">
                               <dt>Child logs</dt>
-                              <dd ng-repeat="childId in vm.ddrDetails.childIds"><a href="/#/logs?ddrId={{childId}}">{{childId}}</a></dd>
+                              <dd ng-repeat="childId in vm.ddrDetails.childIds"><a href="/#/logs/{{childId}}">{{childId}}</a></dd>
                             </dl>
                             <div ng-if="vm.ddrDetails.childIds.length &gt; 1" class="dl-horizontal collapse-list">
                               <dt><a data-toggle="collapse" href="#drr-children" class="collapsed">Child logs </a></dt>
                             </div>
                             <div id="drr-children" class="collapse">
                               <ul class="child-logs-collapsible">
-                                <li ng-repeat="childId in vm.ddrDetails.childIds"><a href="/#/logs?ddrId={{childId}}">{{childId}}</a></li>
+                                <li ng-repeat="childId in vm.ddrDetails.childIds"><a href="/#/logs/{{childId}}">{{childId}}</a></li>
                               </ul>
                             </div>
                           </div>
