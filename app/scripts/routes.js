@@ -53,8 +53,14 @@ define(
               templateUrl:    'views/logs.html',
               controller:     'logs',
               controllerAs:   'vm',
-              resolve:        { redirect: redirect },
-              reloadOnSearch: false
+              resolve:        { redirect: redirect }
+            })
+            .when('/logs/:ddrId',
+            {
+              templateUrl:    'views/logs.html',
+              controller:     'logs',
+              controllerAs:   'vm',
+              resolve:        { redirect: redirect }
             })
             .when('/profile',
             {

@@ -71,7 +71,7 @@ navbar
                           th.row-to To
                       tbody
                         tr(ng-repeat='log in vm.logs | filter:vm.queryLogs | orderBy: "start" : true')
-                          td <a href="/#/logs?ddrId={{log._id}}">{{log.startString}}<a>
+                          td <a href="/#/logs/{{log._id}}">{{log.startString}}<a>
                           td {{log.ddrTypeString}}
                           td {{log.adapterTypeString}}
                           td.td-overflow {{log.fromAddress}}
@@ -120,12 +120,12 @@ navbar
                             dl.dl-horizontal
                               dt Parent log
                               dd 
-                                a(href="/#/logs?ddrId={{vm.ddrDetails.parentId}}") {{vm.ddrDetails.parentId}}
+                                a(href="/#/logs/{{vm.ddrDetails.parentId}}") {{vm.ddrDetails.parentId}}
                           div(ng-if='vm.ddrDetails.childIds')
                             dl.dl-horizontal(ng-if='vm.ddrDetails.childIds.length === 1')
                               dt Child logs
                               dd(ng-repeat='childId in vm.ddrDetails.childIds')
-                                a(href="/#/logs?ddrId={{childId}}") {{childId}}
+                                a(href="/#/logs/{{childId}}") {{childId}}
                             .dl-horizontal.collapse-list(ng-if='vm.ddrDetails.childIds.length > 1')
                               dt
                                 a.collapsed(data-toggle='collapse', href='#drr-children')
@@ -133,7 +133,7 @@ navbar
                             .collapse(id='drr-children')
                                 ul.child-logs-collapsible
                                   li(ng-repeat='childId in vm.ddrDetails.childIds')
-                                    a(href="/#/logs?ddrId={{childId}}") {{childId}}
+                                    a(href="/#/logs/{{childId}}") {{childId}}
                             
                         .col-sm-12
                           div(ng-show='vm.logs')
