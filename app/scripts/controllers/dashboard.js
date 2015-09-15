@@ -70,7 +70,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
             }
             var req = {
                 method: 'POST',
-                url: $rootScope.config.host + '/startDialog/outbound',
+                url: $rootScope.config.host + '/startDialog',
                 headers: {
                     'Authorization': 'Bearer ' + bearerToken
                 },
@@ -82,7 +82,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 $scope.alert = "Successful request, see your request below";
                 var request = {
                     host: $rootScope.config.host,
-                    path: 'startDialog/outbound',
+                    path: 'startDialog',
                     header: {
                         Authorization: 'Bearer ' + bearerToken
                     },
@@ -95,7 +95,7 @@ define(["require", "exports", 'controllers/controllers'], function (require, exp
                 $scope.alert = "Something went wrong, please try again later. Check the logs and request below";
                 var request = {
                     host: $rootScope.config.host,
-                    path: 'startDialog/outbound',
+                    path: 'startDialog',
                     header: {
                         Authorization: 'Bearer ' + bearerToken
                     },
