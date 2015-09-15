@@ -21,17 +21,17 @@ libs/datatables/1.10.4/media/css/jquery.dataTables_themeroller.css
 
 main.js
 ----------------
-D:/Projects/askfast-dev-center/.tmp/vendors/jquery/jquery.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/jquery/jquery.min.js
 libs/datatables/1.10.4/media/js/jquery.dataTables.js
-D:/Projects/askfast-dev-center/.tmp/vendors/angular/angular.js
-D:/Projects/askfast-dev-center/.tmp/vendors/requirejs-domready/domReady.js
-D:/Projects/askfast-dev-center/.tmp/vendors/jquery.browser/dist/jquery.browser.min.js
-D:/Projects/askfast-dev-center/.tmp/vendors/angular-resource/angular-resource.min.js
-D:/Projects/askfast-dev-center/.tmp/vendors/angular-route/angular-route.min.js
-D:/Projects/askfast-dev-center/.tmp/vendors/angular-datatables/dist/angular-datatables.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/angular/angular.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/requirejs-domready/domReady.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/jquery.browser/dist/jquery.browser.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/angular-resource/angular-resource.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/angular-route/angular-route.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/angular-datatables/dist/angular-datatables.js
 libs/datatables/1.10.4/extensions/TableTools/js/dataTables.tableTools.min.js
-D:/Projects/askfast-dev-center/.tmp/vendors/angular-strap/dist/angular-strap.min.js
-D:/Projects/askfast-dev-center/.tmp/vendors/angular-strap/dist/angular-strap.tpl.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/angular-strap/dist/angular-strap.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/angular-strap/dist/angular-strap.tpl.min.js
 localization.js
 modals/modals.js
 controllers/controllers.js
@@ -49,7 +49,7 @@ filters/all.js
 services/session.js
 services/md5.js
 services/store.js
-D:/Projects/askfast-dev-center/.tmp/vendors/momentjs/min/moment.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/momentjs/min/moment.min.js
 services/moment.js
 services/offline.js
 services/interceptor.js
@@ -62,7 +62,7 @@ controllers/credits.js
 controllers/uselogs.js
 logs/logsController.js
 logs/logsService.js
-D:/Projects/askfast-dev-center/.tmp/vendors/bootstrap-sass/assets/javascripts/bootstrap.min.js
-D:/Projects/askfast-dev-center/.tmp/vendors/lawnchair/src/Lawnchair.js
-D:/Projects/askfast-dev-center/.tmp/vendors/lawnchair/src/adapters/dom.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/bootstrap-sass/assets/javascripts/bootstrap.min.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/lawnchair/src/Lawnchair.js
+/Users/sven/Documents/workspace/askfast-dev-center/.tmp/vendors/lawnchair/src/adapters/dom.js
 main.js
