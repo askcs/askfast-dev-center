@@ -86,7 +86,7 @@ var dashboardController = controllers.controller('dashboard',
 
       var req = {
         method: 'POST',
-        url: $rootScope.config.host + '/startDialog/outbound',
+        url: $rootScope.config.host + '/startDialog',
         headers: {
           'Authorization': 'Bearer ' +bearerToken
         },
@@ -101,7 +101,7 @@ var dashboardController = controllers.controller('dashboard',
 
         var request ={
           host:$rootScope.config.host,
-          path:'startDialog/outbound',
+          path:'startDialog',
           header:{
             Authorization: 'Bearer '+bearerToken
           },
@@ -117,7 +117,7 @@ var dashboardController = controllers.controller('dashboard',
 
         var request ={
           host:$rootScope.config.host,
-          path:'startDialog/outbound',
+          path:'startDialog',
           header:{
             Authorization: 'Bearer '+bearerToken
           },
