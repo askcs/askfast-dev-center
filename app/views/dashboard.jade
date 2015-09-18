@@ -85,7 +85,7 @@ navbar
                     button.close(type='button',data-dismiss="alert",aria-label='Close' )
                       span( aria-hidden="true") &times;
                     | {{alert}}
-                  h4 Send SMS message or start a call
+                  h4 Send an SMS
                   form(role='form')
                   .form-group
                     label(for='SMSTo') To address
@@ -106,7 +106,7 @@ navbar
                   .form-group
                       a.btn.btn-default(ng-click='sendSMS()') Send SMS
                   hr
-                  h4 Start phone call
+                  h4 Start a phone call
                   form(role='form')
                   .form-group
                     label(for='CallTo') To address
