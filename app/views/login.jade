@@ -31,6 +31,7 @@
                       | Remember me
                 .panel-footer.text-right
                   a.pull-left(ng-click='login.forgot = true') Forgot Password?
+                  a.pull-left.register-link(href='/#/register#step-1') Register
                   button.btn.btn-primary(type='submit',
                   ng-click='auth()') Login
                   p.text-right(ng-show="login.error.state")
