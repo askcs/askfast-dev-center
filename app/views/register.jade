@@ -65,6 +65,9 @@
                     p(ng-show="!data.agreed && data.submitted")
                       small.text-danger Please accept the terms to be able to signup.
               .panel-footer.text-right
+                p.pull-left
+                  | Already have an account? 
+                  a(href="/#/login") Login
                 button.btn.btn-primary(type='submit',
                 ng-click='step.forward()') Sign Up
       #register-step-2.container(ng-show='step.check(2)')
