@@ -1,4 +1,4 @@
-define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+define(["require", "exports", './controllers'], function (require, exports, controllers) {
     'use strict';
     var uselogsController = controllers.controller('uselogs', ["$scope", "$rootScope", "AskFast", "Session", "Store", "DTOptionsBuilder", "DTColumnDefBuilder", function ($scope, $rootScope, AskFast, Session, Store, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.loading = true;

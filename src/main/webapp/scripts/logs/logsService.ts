@@ -1,5 +1,5 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
-import services = require('services/services');
+import services = require('../services/services');
 
 export interface ILogsService {
   list(limit:number, period:number, category:string)

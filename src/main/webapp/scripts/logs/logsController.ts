@@ -1,7 +1,7 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 /// <reference path="../typings/angularjs/angular-route.d.ts"/>
 /// <reference path="../typings/bootstrap/bootstrap.d.ts"/>
-import controllers = require('controllers/controllers')
+import controllers = require('../controllers/controllers')
 import logsService = require('./logsService');
 
 'use strict';

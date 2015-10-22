@@ -1,4 +1,4 @@
-define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+define(["require", "exports", './controllers'], function (require, exports, controllers) {
     'use strict';
     var creditsController = controllers.controller('credits', ["$scope", "$rootScope", "$routeParams", "$timeout", "$location", "$filter", "AskFast", "Session", "Store", "DTOptionsBuilder", "DTColumnDefBuilder", function ($scope, $rootScope, $routeParams, $timeout, $location, $filter, AskFast, Session, Store, DTOptionsBuilder, DTColumnDefBuilder) {
         //Set all the proper hide and show for all the html elements

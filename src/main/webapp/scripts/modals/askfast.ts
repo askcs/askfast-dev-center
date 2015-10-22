@@ -1,4 +1,4 @@
-import modals = require('modals/modals');
+import modals = require('./modals');
 
 'use strict';
 

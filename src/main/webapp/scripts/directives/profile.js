@@ -1,4 +1,4 @@
-define(["require", "exports", 'directives/directives'], function (require, exports, directives) {
+define(["require", "exports", './directives'], function (require, exports, directives) {
     'use strict';
     function filterInfoByTag(targetArray, typeString) {
         return targetArray.filter(function (infoObject) {

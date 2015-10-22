@@ -28,7 +28,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="panel-footer text-right"><a ng-click="login.forgot = true" class="pull-left">Forgot Password?</a>
+                <div class="panel-footer text-right"><a ng-click="login.forgot = true" class="pull-left">Forgot Password?</a><a href="/#/register#step-1" class="pull-left register-link">Register</a>
                   <button type="submit" ng-click="auth()" class="btn btn-primary">Login</button>
                   <p ng-show="login.error.state" class="text-right"><small ng-show="login.error.code == 400" class="text-danger">Wrong username or password!</small><small ng-show="login.error.code == 403" class="text-danger">Wrong username or password!</small><small ng-show="login.error.code == 404" class="text-danger">Something went wrong with login!</small><small ng-show="login.error.code == 500" class="text-danger">Server error!</small></p>
                   <p ng-show="login.notification" class="text-right"><small class="text-primary">{{login.notification}}</small></p>

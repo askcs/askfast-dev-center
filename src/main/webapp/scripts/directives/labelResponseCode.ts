@@ -1,5 +1,5 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
-import directives = require('directives/directives');
+import directives = require('./directives');
     'use strict';
 
 interface ICustomScope extends ng.IScope {
