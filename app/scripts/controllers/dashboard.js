@@ -1,4 +1,4 @@
-define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+define(["require", "exports", './controllers'], function (require, exports, controllers) {
     'use strict';
     var dashboardController = controllers.controller('dashboard', function ($scope, $rootScope, $timeout, $http, AskFast, Session, Store, dashboardLogsFilter, $q) {
         var keyRevealTimeoutPromise = null;

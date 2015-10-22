@@ -1,4 +1,4 @@
-define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+define(["require", "exports", '../controllers/controllers'], function (require, exports, controllers) {
     'use strict';
     var logsController = controllers.controller('logs', function ($scope, $routeParams, $timeout, LogsService, moment) {
         var vm = this;

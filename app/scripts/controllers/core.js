@@ -1,4 +1,4 @@
-define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+define(["require", "exports", './controllers'], function (require, exports, controllers) {
     'use strict';
     var coreController = controllers.controller('core', function ($rootScope, $q, $location, $timeout, AskFast, Store, moment) {
         Store = Store('data');

@@ -1,4 +1,4 @@
-define(["require", "exports", 'modals/modals'], function (require, exports, modals) {
+define(["require", "exports", './modals'], function (require, exports, modals) {
     'use strict';
     var AskFastService = modals.factory('AskFast', function ($resource, $q, $location, $rootScope, Log) {
         var AskFast = $resource($rootScope.config.host + '/:first/:second/:third/:fourth', {}, {

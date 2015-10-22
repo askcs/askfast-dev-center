@@ -1,4 +1,4 @@
-define(["require", "exports", 'directives/directives'], function (require, exports, directives) {
+define(["require", "exports", './directives'], function (require, exports, directives) {
     'use strict';
     var appVersionDirective = directives.directive('appVersion', function (version) {
         return function (scope, elm, attrs) {

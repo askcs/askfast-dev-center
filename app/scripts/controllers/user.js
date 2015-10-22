@@ -1,4 +1,4 @@
-define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+define(["require", "exports", './controllers'], function (require, exports, controllers) {
     'use strict';
     var userController = controllers.controller('user', function ($scope, $rootScope, $routeParams, AskFast, Session, Store, $location, MD5) {
         var chPasswordId, chPasswordCode;

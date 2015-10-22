@@ -1,4 +1,4 @@
-define(["require", "exports", 'controllers/controllers'], function (require, exports, controllers) {
+define(["require", "exports", './controllers'], function (require, exports, controllers) {
     'use strict';
     var profile = controllers.controller('profile', function ($scope, $rootScope, AskFast, Session, Store) {
         AskFast.caller('info')

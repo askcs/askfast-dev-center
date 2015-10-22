@@ -1,4 +1,4 @@
-define(["require", "exports", 'services/services'], function (require, exports, services) {
+define(["require", "exports", '../services/services'], function (require, exports, services) {
     var LogsService = (function () {
         function LogsService($q, AskFast, Store, moment) {
             this.adapterTypes = {
