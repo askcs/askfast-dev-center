@@ -62,6 +62,8 @@ require (
     'routes',
     'run',
 
+    'components/exampleForm/exampleForm',
+
     'modals/askfast',
 
     'directives/navbar',

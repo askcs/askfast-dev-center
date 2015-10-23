@@ -86,44 +86,18 @@ navbar
                       span( aria-hidden="true") &times;
                     | {{alert}}
                   h4 Send an SMS
-                  form(role='form')
-                  .form-group
-                    label(for='SMSTo') To address
-                    input#SMSTo.form-control(type='text', ng-model='sms.to')
-                  .form-group
-                    label(for='SMSUrl') Dialog
-                    .form-inline
-                      select#SMSUrl.form-control(ng-model='sms.url',ng-options='dialog.url as dialog.name for dialog in dialogs')
-                        option(value='')
-                          | -- no dialog attached --
-                      a.btn.btn-default(href='/#/developer')
-                        | Create dialog
-                  .form-group
-                    label(for='SMSfrom') From number
-                    select#SMSFrom.form-control( ng-model='sms.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters")
-                      option(value='')
-                        | -- use default number --
-                  .form-group
-                      a.btn.btn-default(ng-click='sendSMS()') Send SMS
+                  example-form(
+                    subject="SMS",
+                    action="Send",
+                    on-submit='sendSMS',
+                    dialogs="dialogs",
+                    adapters="smsAdapters")
                   hr
                   h4 Start a phone call
-                  form(role='form')
-                  .form-group
-                    label(for='CallTo') To address
-                    input#CallTo.form-control(type='text', ng-model='call.to')
-                  .form-group
-                    label(for='CallUrl') Dialog
-                    .form-inline
-                      select#CallUrl.form-control(ng-model='call.url',ng-options='dialog.url as dialog.name for dialog in dialogs')
-                        option(value='')
-                          | -- no dialog attached --
-                      a.btn.btn-default(href='/#/developer')
-                        | Create dialog
-                  .form-group
-                    label(for='Callfrom') From number
-                    select#SMSFrom.form-control( ng-model='call.from', ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters")
-                      option(value='')
-                        | -- use default number --
-                  .form-group
-                    a.btn.btn-default(ng-click='startCall()') Start call
+                  example-form(
+                    subject="Call",
+                    action="Start",
+                    on-submit='startCall',
+                    dialogs="dialogs",
+                    adapters="phoneAdapters")
                   pre(ng-show="request != null") {{request}}
