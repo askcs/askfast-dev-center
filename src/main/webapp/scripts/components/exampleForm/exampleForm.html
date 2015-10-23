@@ -6,7 +6,7 @@
   <div class="form-group">
     <label for="dialog{{::subject}}"> Dialog </label>
     <div class="form-inline">
-      <select id="dialog{{::subject}}" class="form-control" ng-model="url" ng-options="dialog.url as dialog.name for dialog in dialogs">
+      <select id="dialog{{::subject}}" class="form-control" ng-model="dialog" ng-options="dialog.id as dialog.name for dialog in dialogs">
         <option value=""> -- no dialog attached -- </option>
       </select>
       <a href="/#/developer" class="btn btn-default">Create dialog</a>
@@ -19,6 +19,6 @@
     </select>
   </div>
   <div class="form-group">
-    <a class="btn btn-default" ng-click="submit(destination, url, origin)">{{::action}} {{::subject}}</a>
+    <a class="btn btn-default" ng-click="submit(destination, dialog, origin)">{{::action}} {{::subject}}</a>
   </div>
 </form>

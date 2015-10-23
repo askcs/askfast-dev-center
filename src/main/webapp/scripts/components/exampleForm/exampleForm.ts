@@ -6,8 +6,9 @@ interface ownScope extends ng.IScope {
   subject: string,
   submit(dest: string, url: any, origin: any),
   onSubmit(),
+  dialogs: [any],
   destination: string,
-  url: string,
+  dialog: string,
   origin: string
 }
 
@@ -42,15 +43,15 @@ define(['angular', 'app'], function(angular: ng.IAngularStatic) {
           let savedDetails = JSON.parse(sessionStorage.getItem('exampleForm.' + scope.subject));
 
           savedDetails.destination ? scope.destination = savedDetails.destination : null;
-          savedDetails.url ?         scope.url = savedDetails.url                 : null;
+          savedDetails.dialog ?      scope.dialog = savedDetails.dialog           : null;
           savedDetails.origin ?      scope.origin = savedDetails.origin           : null;
         }
 
-        scope.$watchGroup(['destination', 'url', 'origin'], function(values){
+        scope.$watchGroup(['destination', 'dialog', 'origin'], function(values){
           sessionStorage.setItem('exampleForm.' + scope.subject, JSON.stringify(
             {
               destination: values[0],
-              url: values[1],
+              dialog: values[1],
               origin: values[2]
             }
           ));
@@ -58,8 +59,9 @@ define(['angular', 'app'], function(angular: ng.IAngularStatic) {
 
       } // end if
 
-      function submit(destination, url, origin) {
-        scope.onSubmit()(destination, url, origin);
+      function submit(destination, dialog, origin) {
+        var dialogUrl = scope.dialogs.filter(function(value){ return value.id === dialog; })[0].url;
+        scope.onSubmit()(destination, dialogUrl, origin);
       }
     }
 
