@@ -78,7 +78,7 @@ var dashboardController = controllers.controller('dashboard',
       }
 
       if (message.from) {
-        dialog.adapterID = message.from.configId;
+        dialog.adapterID = message.from;
       }
       else {
         dialog.adapterType = message.type;
