@@ -15,7 +15,7 @@ define(
   ],
   function (angular)
   {
-    return angular.module('DevCen',
+    return angular.module('AskFast',
       [
         'modals',
         'controllers',

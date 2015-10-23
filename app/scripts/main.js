@@ -99,7 +99,7 @@ require (
 
     domReady(function ()
       {
-        angular.bootstrap(document, ['DevCen']);
+        angular.bootstrap(document, ['AskFast']);
       }
     );
   }

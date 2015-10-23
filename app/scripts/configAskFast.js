@@ -2,7 +2,7 @@ define({
   app: {
     version: '@@version',
     released: '@@released',
-    title: 'DevCen',
+    title: 'AskFast',
     feature: {
       payments: false,
       paypal: false
