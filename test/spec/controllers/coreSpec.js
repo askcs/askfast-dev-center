@@ -49,7 +49,7 @@ define(
       }
     });
 
-    beforeEach(module('DevCen'));
+    beforeEach(module('AskFast'));
 
     beforeEach(function(){
       var mockAskFast = {
@@ -62,11 +62,11 @@ define(
           get: function(){},
         };
       };
-      
+
       var mockRoute = {
         current: {
           params: {
-            
+
           }
         }
       };

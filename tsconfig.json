@@ -12,6 +12,7 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "app/scripts/components/exampleForm/exampleForm.ts",
         "app/scripts/controllers/controllers.ts",
         "app/scripts/controllers/core.ts",
         "app/scripts/controllers/credits.ts",
