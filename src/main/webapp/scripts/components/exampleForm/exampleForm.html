@@ -14,7 +14,7 @@
   </div>
   <div class="form-group">
     <label for="adapter{{::subject}}"> From number </label>
-    <select id="adapter{{::subject}}" class="form-control" ng-model="origin" ng-options="'Type: '+item.adapterType+'  number: '+item.myAddress for item in adapters">
+    <select id="adapter{{::subject}}" class="form-control" ng-model="origin" ng-options="item.configId as 'Type: '+item.adapterType+'  number: '+item.myAddress for item in adapters">
       <option value=""> -- use default number -- </option>
     </select>
   </div>

@@ -63,7 +63,7 @@ define(["require", "exports", './controllers'], function (require, exports, cont
                 url: message.url,
             };
             if (message.from) {
-                dialog.adapterID = message.from.configId;
+                dialog.adapterID = message.from;
             }
             else {
                 dialog.adapterType = message.type;

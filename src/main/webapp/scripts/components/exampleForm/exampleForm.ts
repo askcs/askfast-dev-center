@@ -8,7 +8,7 @@ interface ownScope extends ng.IScope {
   onSubmit(),
   destination: string,
   url: string,
-  origin: any
+  origin: string
 }
 
 define(['angular', 'app'], function(angular: ng.IAngularStatic) {
@@ -43,15 +43,15 @@ define(['angular', 'app'], function(angular: ng.IAngularStatic) {
 
           savedDetails.destination ? scope.destination = savedDetails.destination : null;
           savedDetails.url ?         scope.url = savedDetails.url                 : null;
-          // savedDetails.origin ?      scope.origin = savedDetails.origin           : null;
+          savedDetails.origin ?      scope.origin = savedDetails.origin           : null;
         }
 
-        scope.$watchGroup(['destination', 'url'/*, 'origin'*/], function(values){
+        scope.$watchGroup(['destination', 'url', 'origin'], function(values){
           sessionStorage.setItem('exampleForm.' + scope.subject, JSON.stringify(
             {
               destination: values[0],
-              url: values[1]
-              // origin: values[2]
+              url: values[1],
+              origin: values[2]
             }
           ));
         });

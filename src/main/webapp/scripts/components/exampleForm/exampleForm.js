@@ -24,11 +24,13 @@ define(['angular', 'app'], function (angular) {
                     var savedDetails = JSON.parse(sessionStorage.getItem('exampleForm.' + scope.subject));
                     savedDetails.destination ? scope.destination = savedDetails.destination : null;
                     savedDetails.url ? scope.url = savedDetails.url : null;
+                    savedDetails.origin ? scope.origin = savedDetails.origin : null;
                 }
-                scope.$watchGroup(['destination', 'url' /*, 'origin'*/], function (values) {
+                scope.$watchGroup(['destination', 'url', 'origin'], function (values) {
                     sessionStorage.setItem('exampleForm.' + scope.subject, JSON.stringify({
                         destination: values[0],
-                        url: values[1]
+                        url: values[1],
+                        origin: values[2]
                     }));
                 });
             } // end if
