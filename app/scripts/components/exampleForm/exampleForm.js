@@ -19,6 +19,19 @@ define(['angular', 'app'], function (angular) {
         return directive;
         function exampleFormLink(scope, iElement, iAttrs) {
             scope.submit = submit;
+            if (sessionStorage) {
+                if (sessionStorage.getItem('exampleForm.' + scope.subject) !== null) {
+                    var savedDetails = JSON.parse(sessionStorage.getItem('exampleForm.' + scope.subject));
+                    savedDetails.destination ? scope.destination = savedDetails.destination : null;
+                    savedDetails.url ? scope.url = savedDetails.url : null;
+                }
+                scope.$watchGroup(['destination', 'url' /*, 'origin'*/], function (values) {
+                    sessionStorage.setItem('exampleForm.' + scope.subject, JSON.stringify({
+                        destination: values[0],
+                        url: values[1]
+                    }));
+                });
+            } // end if
             function submit(destination, url, origin) {
                 scope.onSubmit()(destination, url, origin);
             }
