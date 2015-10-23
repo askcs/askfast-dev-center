@@ -34,12 +34,12 @@ var dashboardController = controllers.controller('dashboard',
     AskFast.caller('getDialog')
     .then(function (dialogs){$scope.dialogs = dialogs;});
 
-    $scope.sendSMS = function() {
+    $scope.sendSMS = function(to, url, from) {
       var message = {
           type :'sms',
-          to: $scope.sms.to,
-          url: $scope.sms.url,
-          from: $scope.sms.from
+          to: to,
+          url: url,
+          from: from
         }
         //check if there is a bearer token present before sending
       checkToken(message)
@@ -50,12 +50,12 @@ var dashboardController = controllers.controller('dashboard',
     };
 
     //Phone widget
-    $scope.startCall = function(){
+    $scope.startCall = function(to, url, from){
       var message = {
         type:'call',
-        from: $scope.call.from,
-        url: $scope.call.url,
-        to: $scope.call.to
+        to: to,
+        url: url,
+        from: from
       }
       //check if there is a bearer token present before sending
       checkToken(message).then(function(result){

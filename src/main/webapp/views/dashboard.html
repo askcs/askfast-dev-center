@@ -79,48 +79,10 @@
                     <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>{{alert}}
                   </div>
                   <h4>Send an SMS</h4>
-                  <form role="form"></form>
-                  <div class="form-group">
-                    <label for="SMSTo">To address</label>
-                    <input id="SMSTo" type="text" ng-model="sms.to" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="SMSUrl">Dialog</label>
-                    <div class="form-inline">
-                      <select id="SMSUrl" ng-model="sms.url" ng-options="dialog.url as dialog.name for dialog in dialogs" class="form-control">
-                        <option value="">-- no dialog attached --</option>
-                      </select><a href="/#/developer" class="btn btn-default">Create dialog</a>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="SMSfrom">From number</label>
-                    <select id="SMSFrom" ng-model="sms.from" ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in smsAdapters" class="form-control">
-                      <option value="">-- use default number --</option>
-                    </select>
-                  </div>
-                  <div class="form-group"><a ng-click="sendSMS()" class="btn btn-default">Send SMS</a></div>
+                  <example-form subject="SMS" action="Send" on-submit="sendSMS" dialogs="dialogs" adapters="smsAdapters"></example-form>
                   <hr>
                   <h4>Start a phone call</h4>
-                  <form role="form"></form>
-                  <div class="form-group">
-                    <label for="CallTo">To address</label>
-                    <input id="CallTo" type="text" ng-model="call.to" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="CallUrl">Dialog</label>
-                    <div class="form-inline">
-                      <select id="CallUrl" ng-model="call.url" ng-options="dialog.url as dialog.name for dialog in dialogs" class="form-control">
-                        <option value="">-- no dialog attached --</option>
-                      </select><a href="/#/developer" class="btn btn-default">Create dialog</a>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="Callfrom">From number</label>
-                    <select id="SMSFrom" ng-model="call.from" ng-options="'Type: '+item.adapterType+'     number:'+item.myAddress for item in phoneAdapters" class="form-control">
-                      <option value="">-- use default number --</option>
-                    </select>
-                  </div>
-                  <div class="form-group"><a ng-click="startCall()" class="btn btn-default">Start call</a></div>
+                  <example-form subject="Call" action="Start" on-submit="startCall" dialogs="dialogs" adapters="phoneAdapters"></example-form>
                   <pre ng-show="request != null">{{request}}</pre>
                 </section>
               </div>

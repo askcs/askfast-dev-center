@@ -1,8 +1,8 @@
 define({
   app: {
     version: '1.8.2',
-    released: 'Thursday, October 22nd, 2015, 4:36:02 PM',
-    title: 'DevCen',
+    released: 'Friday, October 23rd, 2015, 2:50:48 PM',
+    title: 'AskFast',
     feature: {
       payments: false,
       paypal: false
